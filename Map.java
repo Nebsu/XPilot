@@ -25,15 +25,21 @@ public class Map {
         this.img=new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
         g=img.createGraphics();
         g2=img_map.createGraphics();
+        /*
         metObstacleRectangle();
         metObstacletriangle();
-        metObstacleconbine();
+        metObstacleconbine();*/
+        createMap();
         g.drawImage(img_map,0,0,null);
     }
 
     public void createMap(){
         //generateur pour les obstacle
-        
+        int x[]={0,600,800,1500,1500,1800,1800,2400,2400,0,0};          
+        int y[]={600,600,800,800,1500,1500,300,300,2400,2400,600};
+        Obstacle map=new Obstacle(x, y);
+        ListeObstacle.add(map);
+        map.draw(g2);
     }
     public void metObstacleRectangle(){
         int x[]={100,200,200,100,100};
