@@ -1,42 +1,61 @@
-package Movement;
-
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
+import java.awt.event.KeyListener;
 
-public class SpaceShip extends Sprite {
+public class SpaceShip extends Sprite implements KeyListener {
 
-    private int dx;
-    private int dy;
     private List<Missile> missiles;
-    private String direction = "right";
+    boolean timerStartFlag = true;
+    static int rotation;
+    int rotOneInc = 4;
+    private int SPEED = 2;
 
-    public SpaceShip(int x, int y) {
+
+    public SpaceShip(double x, double y) {
         super(x, y);
-
         initCraft();
     }
 
     private void initCraft() {
-        
         missiles = new ArrayList<>();
         loadImage("img/player_right.png");
         getImageDimensions();
     }
 
-    public void move() {
-
-        x += dx;
-        y += dy;
-
-        if (x < 1) {
-            x = 1;
-        }
-
-        if (y < 1) {
-            y = 1;
+    public void rotateRight(boolean canRotate)
+    {
+        if(canRotate)
+        {
+           rotation += rotOneInc;
+           if(rotation > 360) { rotation = rotOneInc;}
         }
     }
+
+    public void rotateLeft(boolean canRotate)
+    {
+        if(canRotate)
+        {
+           rotation -= rotOneInc;
+           if(rotation == rotOneInc) { rotation = rotOneInc;}
+        }
+    }
+
+    public void move(boolean canMove) {
+        if(canMove){
+            x += SPEED * Math.cos(Math.toRadians(rotation));
+            y += SPEED * Math.sin(Math.toRadians(rotation));
+    
+            if (x < 1) {
+                x = 1;
+            }
+    
+            if (y < 1) {
+                y = 1;
+            }
+        }
+    }
+
 
     public List<Missile> getMissiles() {
         return missiles;
@@ -46,41 +65,32 @@ public class SpaceShip extends Sprite {
 
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_SPACE) {
+        if (key == KeyEvent.VK_SPACE){
+            Board.timer.start();
             fire();
         }
 
+        if (key == KeyEvent.VK_UP){
+            Board.timer.start();
+            if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
+            Board.moveFlag = true;
+        }
+
         if (key == KeyEvent.VK_LEFT) {
-            direction = "left";
-            loadImage("img/player_left.png");
-            dx = -2;
+            if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
+            Board.leftRotationFlag = true;
         }
 
         if (key == KeyEvent.VK_RIGHT) {
-            direction = "right";
-            loadImage("img/player_right.png");
-            dx = 2;
-        }
-
-        if (key == KeyEvent.VK_UP) {
-            direction = "up";
-            loadImage("img/player_up.png");
-            dy = -2;
-        }
-
-        if (key == KeyEvent.VK_DOWN) {
-            direction = "down";
-            loadImage("img/player_down.png");
-            dy = 2;
-        }
-        if (key == KeyEvent.VK_UP && key == KeyEvent.VK_RIGHT){
-            System.out.println("Yes");
+            if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
+            Board.rightRotationFlag = true;
         }
     }
 
     public void fire() {
-        if(direction.equals("right") || direction.equals("left"))missiles.add(new Missile(x + width, y + height / 2, direction));
-        if(direction.equals("up") || direction.equals("down"))missiles.add(new Missile(x + width/2, y + height / 2, direction));
+        // if(direction.equals("right") || direction.equals("left"))
+        missiles.add(new Missile(x + width, y + height / 2));
+        // if(direction.equals("up") || direction.equals("down"))missiles.add(new Missile(x + width/2, y + height / 2, direction));
 
     }
 
@@ -88,20 +98,23 @@ public class SpaceShip extends Sprite {
 
         int key = e.getKeyCode();
 
-        if (key == KeyEvent.VK_LEFT) {
-            dx = 0;
+        if (key == KeyEvent.VK_RIGHT) {
+            Board.rightRotationFlag = false;
         }
 
-        if (key == KeyEvent.VK_RIGHT) {
-            dx = 0;
+        if (key == KeyEvent.VK_LEFT) {
+            Board.leftRotationFlag = false;
         }
 
         if (key == KeyEvent.VK_UP) {
-            dy = 0;
+            Board.moveFlag = false;
         }
 
-        if (key == KeyEvent.VK_DOWN) {
-            dy = 0;
-        }
+    }
+
+    @Override
+    public void keyTyped(KeyEvent e) {
+        // TODO Auto-generated method stub
+        
     }
 }
