@@ -20,7 +20,9 @@ public class Board extends JPanel implements ActionListener{
 
     static Timer timer;
     private SpaceShip spaceship;
-    // private List<Alien> aliens;
+    private Ball ball;
+    private final int BALL_X = 50;
+    private final int BALL_Y = 70;
     private boolean ingame;
     private final int ICRAFT_X = 40;
     private final int ICRAFT_Y = 60;
@@ -32,36 +34,18 @@ public class Board extends JPanel implements ActionListener{
     BufferedImage bgImage;
     static boolean rightRotationFlag = false, leftRotationFlag = false, moveFlag = false;
 
-    // private final int[][] pos = {
-    //     {2380, 29}, {2500, 59}, {1380, 89},
-    //     {780, 109}, {580, 139}, {680, 239},
-    //     {790, 259}, {760, 50}, {790, 150},
-    //     {980, 209}, {560, 45}, {510, 70},
-    //     {930, 159}, {590, 80}, {530, 60},
-    //     {940, 59}, {990, 30}, {920, 200},
-    //     {900, 259}, {660, 50}, {540, 90},
-    //     {810, 220}, {860, 20}, {740, 180},
-    //     {820, 128}, {490, 170}, {700, 30}
-    // };
-
     public Board() {
-
         initBoard();
     }
 
     private void initBoard() {
-
         addKeyListener(new TAdapter());
         setFocusable(true);
         setBackground(Color.BLACK);
         ingame = true;
-
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-
         spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
-
-        // initAliens();
-
+        this.ball = new Ball(BALL_X,BALL_Y);
         timer = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e)
@@ -77,15 +61,6 @@ public class Board extends JPanel implements ActionListener{
         });
     }
 
-    // public void initAliens() {
-        
-    //     aliens = new ArrayList<>();
-
-    //     for (int[] p : pos) {
-    //         aliens.add(new Alien(p[0], p[1]));
-    //     }
-    // }
-
     @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
@@ -98,29 +73,23 @@ public class Board extends JPanel implements ActionListener{
 
             drawGameOver(g);
         }
-
-        //Toolkit.getDefaultToolkit().sync();
     }
 
     private void drawObjects(Graphics g) {
-
         bgImage = new BufferedImage(840,680,BufferedImage.TYPE_INT_RGB);
         g2dbf = bgImage.createGraphics();
         if (spaceship.isVisible()) {
             g2dbf.setPaint(Color.BLACK);
             g2dbf.fillRect(0,0,getWidth(),getHeight());
-             
             g2dbf.setTransform(identityTrans);
             af.setToIdentity();
             af.translate(spaceship.getX(), spaceship.getY());
             af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
             g2dbf.drawImage(spaceship.getImage(),af,this);
-
+            g2dbf.drawImage(ball.getImage(), BALL_X, BALL_Y, this);
             g.drawImage(bgImage,0,0,this);
         }
-
         List<Missile> ms = spaceship.getMissiles();
-
         for (Missile missile : ms) {
             if (missile.isVisible()) {
                 g.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(), this);
@@ -130,11 +99,9 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void drawGameOver(Graphics g) {
-
         String msg = "Game Over";
         Font small = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics fm = getFontMetrics(small);
-
         g.setColor(Color.white);
         g.setFont(small);
         g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2,
@@ -142,28 +109,22 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void inGame() {
-
         if (!ingame) {
             timer.stop();
         }
     }
 
     private void updateShip() {
-
         if (spaceship.isVisible()) {
-            
             spaceship.move(moveFlag);
         }
     }
 
     private void updateMissiles() {
-
         List<Missile> ms = spaceship.getMissiles();
-
         for (int i = 0; i < ms.size(); i++) {
 
             Missile m = ms.get(i);
-
             if (m.isVisible()) {
                 m.move();
             } else {
@@ -175,18 +136,14 @@ public class Board extends JPanel implements ActionListener{
 
 
     public void checkCollisions() {
-
         Rectangle r3 = spaceship.getBounds();
-
         List<Missile> ms = spaceship.getMissiles();
-
         for (Missile m : ms) {
             Rectangle r1 = m.getBounds();
         }
     }
 
     private class TAdapter extends KeyAdapter {
-
         @Override
         public void keyReleased(KeyEvent e) {
             spaceship.keyReleased(e);
@@ -200,6 +157,7 @@ public class Board extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-
+        // TODO Auto-generated method stub
     }
+
 }

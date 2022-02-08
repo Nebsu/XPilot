@@ -12,20 +12,17 @@ public class Sprite {
     protected Image image;
 
     public Sprite(double x, double y) {
-
         this.x = x;
         this.y = y;
         visible = true;
     }
 
     protected void getImageDimensions() {
-
         width = image.getWidth(null);
         height = image.getHeight(null);
     }
 
     protected void loadImage(String imageName) {
-
         ImageIcon ii = new ImageIcon(imageName);
         image = ii.getImage();
     }
@@ -53,4 +50,5 @@ public class Sprite {
     public Rectangle getBounds() {
         return new Rectangle((int)x, (int)y, width, height);
     }
+
 }

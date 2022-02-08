@@ -10,8 +10,6 @@ public class SpaceShip extends Sprite implements KeyListener {
     static int rotation;
     int rotOneInc = 4;
     private int SPEED = 2;
-
-
     public SpaceShip(double x, double y) {
         super(x, y);
         initCraft();
@@ -45,11 +43,9 @@ public class SpaceShip extends Sprite implements KeyListener {
         if(canMove){
             x += SPEED * Math.cos(Math.toRadians(rotation));
             y += SPEED * Math.sin(Math.toRadians(rotation));
-    
             if (x < 1) {
                 x = 1;
             }
-    
             if (y < 1) {
                 y = 1;
             }
@@ -62,25 +58,20 @@ public class SpaceShip extends Sprite implements KeyListener {
     }
 
     public void keyPressed(KeyEvent e) {
-
         int key = e.getKeyCode();
-
         if (key == KeyEvent.VK_SPACE){
             Board.timer.start();
             fire();
         }
-
         if (key == KeyEvent.VK_UP){
             Board.timer.start();
             if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
             Board.moveFlag = true;
         }
-
         if (key == KeyEvent.VK_LEFT) {
             if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
             Board.leftRotationFlag = true;
         }
-
         if (key == KeyEvent.VK_RIGHT) {
             if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
             Board.rightRotationFlag = true;
@@ -88,33 +79,25 @@ public class SpaceShip extends Sprite implements KeyListener {
     }
 
     public void fire() {
-        // if(direction.equals("right") || direction.equals("left"))
         missiles.add(new Missile(x + width, y + height / 2));
-        // if(direction.equals("up") || direction.equals("down"))missiles.add(new Missile(x + width/2, y + height / 2, direction));
-
     }
 
     public void keyReleased(KeyEvent e) {
-
         int key = e.getKeyCode();
-
         if (key == KeyEvent.VK_RIGHT) {
             Board.rightRotationFlag = false;
         }
-
         if (key == KeyEvent.VK_LEFT) {
             Board.leftRotationFlag = false;
         }
-
         if (key == KeyEvent.VK_UP) {
             Board.moveFlag = false;
         }
-
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
-        
     }
+    
 }

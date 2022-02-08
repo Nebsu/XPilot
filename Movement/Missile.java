@@ -19,8 +19,8 @@ public class Missile extends Sprite {
     public void move() {
         x += MISSILE_SPEED * Math.cos(Math.toRadians(direction));
         y += MISSILE_SPEED * Math.sin(Math.toRadians(direction));
-        
         if (x > BOARD_WIDTH || x < 0 || y > 390 || x < 0)
             visible = false;
     }
+    
 }
