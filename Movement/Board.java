@@ -117,7 +117,6 @@ public class Board extends JPanel implements ActionListener{
             g2dbf.drawImage(spaceship.getImage(),af,this);
 
             g.drawImage(bgImage,0,0,this);
-            //g.drawImage(spaceship.getImage(), spaceship.getX(), spaceship.getY(),this);
         }
 
         List<Missile> ms = spaceship.getMissiles();
@@ -127,15 +126,7 @@ public class Board extends JPanel implements ActionListener{
                 g.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(), this);
             }
         }
-
-        // for (Alien alien : aliens) {
-        //     if (alien.isVisible()) {
-        //         g.drawImage(alien.getImage(), alien.getX(), alien.getY(), this);
-        //     }
-        // }
-
         g.setColor(Color.WHITE);
-        // g.drawString("Aliens left: " + aliens.size(), 5, 15);
     }
 
     private void drawGameOver(Graphics g) {
@@ -149,20 +140,6 @@ public class Board extends JPanel implements ActionListener{
         g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2,
                 B_HEIGHT / 2);
     }
-
-    // @Override
-    // public void actionPerformed(ActionEvent e) {
-
-    //     inGame();
-
-    //     updateShip();
-    //     updateMissiles();
-    //     // updateAliens();
-
-    //     checkCollisions();
-
-    //     repaint();
-    // }
 
     private void inGame() {
 
@@ -201,38 +178,10 @@ public class Board extends JPanel implements ActionListener{
 
         Rectangle r3 = spaceship.getBounds();
 
-        // for (Alien alien : aliens) {
-            
-        //     Rectangle r2 = alien.getBounds();
-
-        //     if (r3.intersects(r2)) {
-                
-        //         spaceship.setVisible(false);
-        //         alien.setVisible(false);
-        //         ingame = false;
-        //     }
-        // }
-
         List<Missile> ms = spaceship.getMissiles();
 
         for (Missile m : ms) {
-
             Rectangle r1 = m.getBounds();
-
-            // for (Alien alien : aliens) {
-
-            //     Rectangle r2 = alien.getBounds();
-
-            //     if (r1.intersects(r2)) {
-                    
-            //         m.setVisible(false);
-            //         alien.setVisible(false);
-            //     }
-            // }
-            // if(r1.intersects(r3)){
-            //     spaceship.setVisible(false);
-            //     ingame = false;
-            // }
         }
     }
 
