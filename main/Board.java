@@ -80,6 +80,7 @@ public class Board extends JPanel implements ActionListener{
             af.rotate(Math.toRadians(SpaceShip.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
             g2dbf.drawImage(spaceship.getImage(),af,this);
             g2dbf.drawImage(ball.getImage(), BALL_X, BALL_Y, this);
+            //image de map
             g.drawImage(bgImage,0,0,this);
         }
         List<Missile> ms = spaceship.getMissiles();
@@ -132,6 +133,7 @@ public class Board extends JPanel implements ActionListener{
         for (Missile m : ms) {
             Rectangle r1 = m.getBounds();
         }
+        
     }
 
     private class TAdapter extends KeyAdapter {
