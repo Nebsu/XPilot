@@ -13,6 +13,7 @@ import java.awt.geom.AffineTransform;
 
 public class Board extends JPanel implements ActionListener{
 
+    public static long moveTime;
     public static Timer timer;
     private SpaceShip spaceship;
     private Ball ball;
@@ -30,7 +31,7 @@ public class Board extends JPanel implements ActionListener{
     BufferedImage bgImage;
     public static boolean rightRotationFlag = false;
     public static boolean leftRotationFlag = false;
-    public static boolean moveFlag = false;
+    public static boolean moveFlag = false,  canAccelerate = false;
 
     public Board() {
         addKeyListener(new TAdapter());
@@ -45,12 +46,17 @@ public class Board extends JPanel implements ActionListener{
             @Override
             public void actionPerformed(ActionEvent e)
             {
+                if(spaceship.SPEED > spaceship.MAX_SPEED){
+                    Board.canAccelerate = false; 
+                }
+                moveTime = System.currentTimeMillis();
                 inGame();
                 updateShip();
                 updateMissiles();
                 checkCollisions();
                 spaceship.rotateRight(rightRotationFlag);
                 spaceship.rotateLeft(leftRotationFlag);
+                spaceship.acceleration(moveFlag);
                 repaint();
             }
         });
