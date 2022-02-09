@@ -1,8 +1,10 @@
-package Xpilot;
+package map;
+
+import spaceship.SpaceShip;
+
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
-//import java.util.LinkedList;
 import java.util.LinkedList;
 
 import javax.imageio.*;
@@ -15,10 +17,10 @@ public class Map {
     public SpaceShip ship;
     public Graphics2D g;
     public Graphics2D g2;
-    public Map(){
-        ship=new SpaceShip();
+    public Map(SpaceShip ship){
+        this.ship=ship;
         try{
-            this.img_map=ImageIO.read(new File("E://background.png"));
+            this.img_map=ImageIO.read(new File("ressources/background.png"));
         }catch(IOException e){
             e.printStackTrace();
         }

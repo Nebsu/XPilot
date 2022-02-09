@@ -1,44 +1,38 @@
-import java.awt.Color;
-import java.awt.Dimension;
-import java.awt.Font;
-import java.awt.FontMetrics;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Rectangle;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
+package main;
+
+import spaceship.*;
+import map.*;
+
+import java.awt.*;
+import java.awt.event.*;
+import java.awt.image.*;
 import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.geom.AffineTransform;
-import java.awt.image.*;
-
 
 public class Board extends JPanel implements ActionListener{
 
-    static Timer timer;
+    public static Timer timer;
     private SpaceShip spaceship;
     private Ball ball;
+    private Map map;
     private final int BALL_X = 50;
     private final int BALL_Y = 70;
     private boolean ingame;
     private final int ICRAFT_X = 40;
     private final int ICRAFT_Y = 60;
-    private final int B_WIDTH = 400;
-    private final int B_HEIGHT = 300;
+    private final int B_WIDTH = 800;
+    private final int B_HEIGHT = 600;
     AffineTransform identityTrans = new AffineTransform();
     AffineTransform af = new AffineTransform();
     Graphics2D g2dbf;
     BufferedImage bgImage;
-    static boolean rightRotationFlag = false, leftRotationFlag = false, moveFlag = false;
+    public static boolean rightRotationFlag = false;
+    public static boolean leftRotationFlag = false;
+    public static boolean moveFlag = false;
 
     public Board() {
-        initBoard();
-    }
-
-    private void initBoard() {
         addKeyListener(new TAdapter());
         setFocusable(true);
         setBackground(Color.BLACK);
@@ -46,6 +40,7 @@ public class Board extends JPanel implements ActionListener{
         setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
         spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
         this.ball = new Ball(BALL_X,BALL_Y);
+        this.map = new Map(spaceship);
         timer = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e)
@@ -76,15 +71,13 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void drawObjects(Graphics g) {
-        bgImage = new BufferedImage(840,680,BufferedImage.TYPE_INT_RGB);
+        bgImage = new BufferedImage(B_WIDTH, B_HEIGHT, BufferedImage.TYPE_INT_RGB);
         g2dbf = bgImage.createGraphics();
         if (spaceship.isVisible()) {
             g2dbf.setPaint(Color.BLACK);
-            g2dbf.fillRect(0,0,getWidth(),getHeight());
-            g2dbf.setTransform(identityTrans);
             af.setToIdentity();
             af.translate(spaceship.getX(), spaceship.getY());
-            af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
+            af.rotate(Math.toRadians(SpaceShip.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
             g2dbf.drawImage(spaceship.getImage(),af,this);
             g2dbf.drawImage(ball.getImage(), BALL_X, BALL_Y, this);
             g.drawImage(bgImage,0,0,this);
@@ -132,8 +125,6 @@ public class Board extends JPanel implements ActionListener{
             }
         }
     }
-
-
 
     public void checkCollisions() {
         Rectangle r3 = spaceship.getBounds();

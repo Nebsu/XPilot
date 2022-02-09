@@ -1,3 +1,4 @@
+package spaceship;
 public class Ball extends Sprite {
     
     public Ball(double x, double y) {
@@ -6,7 +7,7 @@ public class Ball extends Sprite {
     }
 
     private void initCraft() {
-        loadImage("img/ball.png");
+        loadImage("ressources/ball.png");
         getImageDimensions();
     }
 

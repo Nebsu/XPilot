@@ -1,3 +1,7 @@
+package spaceship;
+
+import main.Board;
+
 import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +11,7 @@ public class SpaceShip extends Sprite implements KeyListener {
 
     private List<Missile> missiles;
     boolean timerStartFlag = true;
-    static int rotation;
+    public static int rotation;
     int rotOneInc = 4;
     private int SPEED = 2;
     public SpaceShip(double x, double y) {
@@ -17,7 +21,7 @@ public class SpaceShip extends Sprite implements KeyListener {
 
     private void initCraft() {
         missiles = new ArrayList<>();
-        loadImage("img/player_right.png");
+        loadImage("ressources/player_right.png");
         getImageDimensions();
     }
 

@@ -1,3 +1,4 @@
+package spaceship;
 public class Missile extends Sprite {
 
     private final int BOARD_WIDTH = 390;
@@ -12,7 +13,7 @@ public class Missile extends Sprite {
     }
     
     private void initMissile() {
-        loadImage("img/shot_h.png");
+        loadImage("ressources/shot_h.png");
         getImageDimensions();        
     }
 

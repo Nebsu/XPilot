@@ -1,4 +1,4 @@
-package Xpilot;
+package map;
 import java.awt.*;
 
 public class Obstacle {
