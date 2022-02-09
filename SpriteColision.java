@@ -11,7 +11,7 @@ public class SpriteColision {
     protected boolean visible;
     protected Image image;
 
-    public Sprite(int x, int y) {
+    public SpriteColision(int x, int y) {
 
         this.x = x;
         this.y = y;
@@ -53,6 +53,4 @@ public class SpriteColision {
     public Rectangle getBounds() {
         return new Rectangle(x, y, width, height);
     }
-}
-    
 }
