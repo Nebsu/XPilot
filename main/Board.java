@@ -18,14 +18,14 @@ public class Board extends JPanel implements ActionListener{
     private SpaceShip spaceship;
     private Ball ball;
     private Map map;
-    private final int BALL_X = 50;
-    private final int BALL_Y = 70;
+    private final int BALL_X = 100;
+    private final int BALL_Y = 200;
     private boolean ingame;
     private final int ICRAFT_X = 40;
     private final int ICRAFT_Y = 60;
     private final int B_WIDTH = 800;
     private final int B_HEIGHT = 600;
-    AffineTransform identityTrans = new AffineTransform();
+    AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
     Graphics2D g2dbf;
     BufferedImage bgImage;
@@ -53,6 +53,7 @@ public class Board extends JPanel implements ActionListener{
                 inGame();
                 updateShip();
                 updateMissiles();
+                updateBall();
                 checkCollisions();
                 spaceship.rotateRight(rightRotationFlag);
                 spaceship.rotateLeft(leftRotationFlag);
@@ -67,11 +68,8 @@ public class Board extends JPanel implements ActionListener{
         super.paintComponent(g);
 
         if (ingame) {
-
             drawObjects(g);
-
         } else {
-
             drawGameOver(g);
         }
     }
@@ -84,8 +82,10 @@ public class Board extends JPanel implements ActionListener{
             af.setToIdentity();
             af.translate(spaceship.getX(), spaceship.getY());
             af.rotate(Math.toRadians(SpaceShip.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
+            af2.setToIdentity();
+            af2.translate(ball.getX(), ball.getY());
             g2dbf.drawImage(spaceship.getImage(),af,this);
-            g2dbf.drawImage(ball.getImage(), BALL_X, BALL_Y, this);
+            g2dbf.drawImage(ball.getImage(), af2, this);
             //image de map
             g.drawImage(bgImage,0,0,this);
         }
@@ -120,6 +120,12 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 
+    private void updateBall(){
+        if (ball.isTaken()){
+            ball.move(spaceship.getX(), spaceship.getY());
+        }
+    }
+
     private void updateMissiles() {
         List<Missile> ms = spaceship.getMissiles();
         for (int i = 0; i < ms.size(); i++) {
@@ -135,9 +141,14 @@ public class Board extends JPanel implements ActionListener{
 
     public void checkCollisions() {
         Rectangle r3 = spaceship.getBounds();
+        Rectangle b = ball.getBounds();
         List<Missile> ms = spaceship.getMissiles();
         for (Missile m : ms) {
             Rectangle r1 = m.getBounds();
+        }
+        if(r3.intersects(b)){
+            System.out.println("oui");
+            ball.take();
         }
         
     }

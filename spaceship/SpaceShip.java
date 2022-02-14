@@ -13,9 +13,9 @@ public class SpaceShip extends Sprite implements KeyListener {
     private List<Missile> missiles;
     boolean timerStartFlag = true;
     public static int rotation;
-    int rotOneInc = 4;
-    public float SPEED = 2;
-    public final float MAX_SPEED = 6, BASE_SPEED = 2;
+    int rotOneInc = 6;
+    public float SPEED = 4;
+    public final float MAX_SPEED = 10, BASE_SPEED = 4;
 
     public SpaceShip(double x, double y) {
         super(x, y);
