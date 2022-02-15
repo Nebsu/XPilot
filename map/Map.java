@@ -33,7 +33,47 @@ public class Map {
         createMap();
         g.drawImage(img_map,0,0,null);
     }
+    
+    public void createinfor(){
+    	try{
+	        File fil = new File("map/infor_map.txt");
+	        FileReader inputFil = new FileReader(fil);
+	        BufferedReader in = new BufferedReader(inputFil);
 
+	        int [][] infor_map=new int[24][24];
+	        
+	        String line;
+	        
+	        int row=0;
+	     
+	        while ((line=in.readLine())!=null){
+	        	for(int i=0;i<24;i++) {
+	        		char c=line.charAt(i);
+	        		int num=Character.getNumericValue(c);
+	        		infor_map[row][i]=num;
+	        	}
+	        	row++;
+	        }
+	        
+	    }catch (IOException e1){
+	        e1.printStackTrace();
+	    	}
+    }
+    
+    public void createInfor() {
+    	for(int i=0;i<infor_map.length;i++) {
+    		for(int j=0;j<infor_map[i].length;j++) {
+    			if(infor_map[i][j]==1) {
+    				int x[]={i*100,(i+1)*100,(i+1)*100,i*100,i*100};
+    		        int y[]={j*100,j*100,(j+1)*100,(j+1)*100,j*100};
+    		        Obstacle carre=new Obstacle(x,y);
+    		        ListeObstacle.add(carre);
+    		        carre.draw(g2);
+    			}
+    		}
+    	}
+    }
+    
     public void createMap(){
         //generateur pour les obstacle
         int x[]={0,600,800,1500,1500,1800,1800,2400,2400,0,0};          
