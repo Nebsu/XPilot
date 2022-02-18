@@ -60,7 +60,7 @@ public class Map {
 	    	}
     }
     
-    public void createInfor() {
+    public void createInforAMap() {
     	for(int i=0;i<infor_map.length;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
