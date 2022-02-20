@@ -2,7 +2,6 @@ package main;
 
 import spaceship.*;
 import map.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -13,51 +12,41 @@ import java.awt.geom.AffineTransform;
 
 public class Board extends JPanel implements ActionListener{
 
-    public static long moveTime;
-    public static Timer timer;
     private SpaceShip spaceship;
     private Ball ball;
     private Map map;
-    private final int BALL_X = 100;
-    private final int BALL_Y = 200;
     private boolean ingame;
-    private final int ICRAFT_X = 40;
-    private final int ICRAFT_Y = 60;
-    private final int B_WIDTH = 800;
-    private final int B_HEIGHT = 600;
     AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
-    Graphics2D g2dbf;
+    Graphics2D g2d;
     BufferedImage bgImage;
-    public static boolean rightRotationFlag = false;
-    public static boolean leftRotationFlag = false;
-    public static boolean moveFlag = false,  canAccelerate = false;
 
     public Board() {
         addKeyListener(new TAdapter());
         setFocusable(true);
         setBackground(Color.BLACK);
         ingame = true;
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-        spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
-        this.ball = new Ball(BALL_X,BALL_Y);
+        setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+        spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
+        this.ball = new Ball(Constants.BALL_X,Constants.BALL_Y);
         this.map = new Map(spaceship);
-        timer = new Timer(20,new ActionListener(){
+        Constants.timer = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e)
             {
                 if(spaceship.SPEED > spaceship.MAX_SPEED){
-                    Board.canAccelerate = false; 
+                    Constants.canAccelerate = false; 
                 }
-                moveTime = System.currentTimeMillis();
+                Constants.moveTime = System.currentTimeMillis();
                 inGame();
                 updateShip();
                 updateMissiles();
                 updateBall();
                 checkCollisions();
-                spaceship.rotateRight(rightRotationFlag);
-                spaceship.rotateLeft(leftRotationFlag);
-                spaceship.acceleration(moveFlag);
+                spaceship.rotateRight(Constants.rightRotationFlag);
+                spaceship.rotateLeft(Constants.leftRotationFlag);
+                spaceship.acceleration(Constants.moveFlag);
+                spaceship.deceleration();
                 repaint();
             }
         });
@@ -75,17 +64,17 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void drawObjects(Graphics g) {
-        bgImage = new BufferedImage(B_WIDTH, B_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g2dbf = bgImage.createGraphics();
+        bgImage = new BufferedImage(Constants.B_WIDTH, Constants.B_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        g2d = bgImage.createGraphics();
         if (spaceship.isVisible()) {
-            g2dbf.setPaint(Color.BLACK);
+            g2d.setPaint(Color.BLACK);
             af.setToIdentity();
             af.translate(spaceship.getX(), spaceship.getY());
             af.rotate(Math.toRadians(SpaceShip.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
             af2.setToIdentity();
             af2.translate(ball.getX(), ball.getY());
-            g2dbf.drawImage(spaceship.getImage(),af,this);
-            g2dbf.drawImage(ball.getImage(), af2, this);
+            g2d.drawImage(spaceship.getImage(),af,this);
+            g2d.drawImage(ball.getImage(), af2, this);
             //image de map
             g.drawImage(bgImage,0,0,this);
         }
@@ -104,19 +93,19 @@ public class Board extends JPanel implements ActionListener{
         FontMetrics fm = getFontMetrics(small);
         g.setColor(Color.white);
         g.setFont(small);
-        g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2,
-                B_HEIGHT / 2);
+        g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
+        Constants.B_HEIGHT / 2);
     }
 
     private void inGame() {
         if (!ingame) {
-            timer.stop();
+            Constants.timer.stop();
         }
     }
 
     private void updateShip() {
         if (spaceship.isVisible()) {
-            spaceship.move(moveFlag);
+            spaceship.move(Constants.moveFlag);
         }
     }
 
@@ -146,11 +135,6 @@ public class Board extends JPanel implements ActionListener{
         for (Missile m : ms) {
             Rectangle r1 = m.getBounds();
         }
-        if(r3.intersects(b)){
-            System.out.println("oui");
-            ball.take();
-        }
-        
     }
 
     private class TAdapter extends KeyAdapter {
