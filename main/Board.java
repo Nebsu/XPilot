@@ -20,6 +20,7 @@ public class Board extends JPanel implements ActionListener{
     AffineTransform af = new AffineTransform();
     Graphics2D g2d;
     BufferedImage bgImage;
+    private Keys k;
 
     public Board() {
         addKeyListener(new TAdapter());
@@ -30,6 +31,7 @@ public class Board extends JPanel implements ActionListener{
         spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         this.ball = new Ball(Constants.BALL_X,Constants.BALL_Y);
         this.map = new Map(spaceship);
+        this.k = new Keys(spaceship);
         Constants.timer = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e)
@@ -135,17 +137,20 @@ public class Board extends JPanel implements ActionListener{
         for (Missile m : ms) {
             Rectangle r1 = m.getBounds();
         }
+        if(r3.intersects(b)){
+            ball.take();
+        }
     }
 
     private class TAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
-            spaceship.keyReleased(e);
+            k.keyReleased(e);
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-            spaceship.keyPressed(e);
+            k.keyPressed(e);
         }
     }
 
