@@ -1,15 +1,13 @@
 package spaceship;
 
-import main.Board;
-
-import java.awt.event.KeyEvent;
 import java.util.ArrayList;
 import java.util.List;
-import java.awt.event.KeyListener;
 
-public class SpaceShip extends Sprite implements KeyListener {
+import main.Constants;
 
-    private long moveTime;
+public class SpaceShip extends Sprite {
+
+    long moveTime;
     private List<Missile> missiles;
     boolean timerStartFlag = true;
     public static int rotation;
@@ -47,13 +45,23 @@ public class SpaceShip extends Sprite implements KeyListener {
     }
 
     public void acceleration(boolean canMove){
-        if(canMove && Board.canAccelerate){
-            SPEED = (((float)(Board.moveTime-moveTime)/1000)+BASE_SPEED);
+        if(canMove && Constants.canAccelerate){
+            SPEED = (((float)(Constants.moveTime-moveTime)/1000)+BASE_SPEED);
+        }
+    }
+
+    public void deceleration(){
+        if(Constants.canDecelerate){
+            SPEED -= 0.2;
+        }
+        if(SPEED <= BASE_SPEED){
+            SPEED = BASE_SPEED;
+            Constants.canDecelerate = false;
         }
     }
 
     public void move(boolean canMove) {
-        if(canMove){
+        if(canMove || Constants.canDecelerate){
             x += SPEED * Math.cos(Math.toRadians(rotation));
             y += SPEED * Math.sin(Math.toRadians(rotation));
             if (x < 1) {
@@ -70,51 +78,8 @@ public class SpaceShip extends Sprite implements KeyListener {
         return missiles;
     }
 
-    public void keyPressed(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_SPACE){
-            Board.timer.start();
-            fire();
-        }
-        if (key == KeyEvent.VK_UP){
-            Board.timer.start();
-            if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
-            if(Board.moveFlag == false)moveTime = System.currentTimeMillis();
-            Board.moveFlag = true;
-            Board.canAccelerate = true;
-        }
-        if (key == KeyEvent.VK_LEFT) {
-            if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
-            Board.leftRotationFlag = true;
-        }
-        if (key == KeyEvent.VK_RIGHT) {
-            if(timerStartFlag){timerStartFlag = false; Board.timer.start();}
-            Board.rightRotationFlag = true;
-        }
-    }
-
     public void fire() {
         missiles.add(new Missile(x + width, y + height / 2));
     }
 
-    public void keyReleased(KeyEvent e) {
-        int key = e.getKeyCode();
-        if (key == KeyEvent.VK_RIGHT) {
-            Board.rightRotationFlag = false;
-        }
-        if (key == KeyEvent.VK_LEFT) {
-            Board.leftRotationFlag = false;
-        }
-        if (key == KeyEvent.VK_UP) {
-            Board.canAccelerate = false;
-            Board.moveFlag = false;
-            SPEED = BASE_SPEED;
-        }
-    }
-
-    @Override
-    public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
-    }
-    
 }
