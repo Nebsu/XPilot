@@ -7,7 +7,7 @@ import main.Constants;
 
 public class SpaceShip extends Sprite {
 
-    long moveTime;
+    public long moveTime;
     private List<Missile> missiles;
     boolean timerStartFlag = true;
     public int rotation;
@@ -16,6 +16,10 @@ public class SpaceShip extends Sprite {
     public final float MAX_SPEED = 10, BASE_SPEED = 4;
     public double hitX, hitY;
     public boolean collision = false;
+    public boolean rightRotationFlag = false;
+    public boolean leftRotationFlag = false;
+    public boolean moveFlag = false,  canAccelerate = false, canDecelerate = false;
+    public long moveTime2;
 
     public SpaceShip(double x, double y) {
         super(x, y);
@@ -47,23 +51,23 @@ public class SpaceShip extends Sprite {
     }
 
     public void acceleration(boolean canMove){
-        if(canMove && Constants.canAccelerate){
-            SPEED = (((float)(Constants.moveTime-moveTime)/1000)+BASE_SPEED);
+        if(canMove && canAccelerate){
+            SPEED = (((float)(moveTime2-moveTime)/1000)+BASE_SPEED);
         }
     }
 
     public void deceleration(){
-        if(Constants.canDecelerate){
+        if(canDecelerate){
             SPEED -= 0.2;
         }
         if(SPEED <= BASE_SPEED){
             SPEED = BASE_SPEED;
-            Constants.canDecelerate = false;
+            canDecelerate = false;
         }
     }
 
     public void move(boolean canMove) {
-        if(canMove || Constants.canDecelerate){
+        if(canMove || canDecelerate){
             x += SPEED * Math.cos(Math.toRadians(rotation));
             y += SPEED * Math.sin(Math.toRadians(rotation));
             if (x < 1) {

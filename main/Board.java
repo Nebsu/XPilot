@@ -37,17 +37,17 @@ public class Board extends JPanel implements ActionListener{
             public void actionPerformed(ActionEvent e)
             {
                 if(spaceship.SPEED > spaceship.MAX_SPEED){
-                    Constants.canAccelerate = false; 
+                    spaceship.canAccelerate = false; 
                 }
-                Constants.moveTime = System.currentTimeMillis();
+                spaceship.moveTime2 = System.currentTimeMillis();
                 inGame();
                 updateShip();
                 updateMissiles();
                 updateBall();
                 checkCollision();
-                spaceship.rotateRight(Constants.rightRotationFlag);
-                spaceship.rotateLeft(Constants.leftRotationFlag);
-                spaceship.acceleration(Constants.moveFlag);
+                spaceship.rotateRight(spaceship.rightRotationFlag);
+                spaceship.rotateLeft(spaceship.leftRotationFlag);
+                spaceship.acceleration(spaceship.moveFlag);
                 spaceship.deceleration();
                 repaint();
             }
@@ -104,7 +104,7 @@ public class Board extends JPanel implements ActionListener{
 
     private void updateShip() {
         if (spaceship.isVisible()) {
-            spaceship.move(Constants.moveFlag);
+            spaceship.move(spaceship.moveFlag);
         }
     }
 
