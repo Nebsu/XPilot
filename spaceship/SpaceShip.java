@@ -10,10 +10,12 @@ public class SpaceShip extends Sprite {
     long moveTime;
     private List<Missile> missiles;
     boolean timerStartFlag = true;
-    public static int rotation;
+    public int rotation;
     int rotOneInc = 6;
     public float SPEED = 4;
     public final float MAX_SPEED = 10, BASE_SPEED = 4;
+    public double hitX, hitY;
+    public boolean collision = false;
 
     public SpaceShip(double x, double y) {
         super(x, y);
@@ -79,7 +81,7 @@ public class SpaceShip extends Sprite {
     }
 
     public void fire() {
-        missiles.add(new Missile(x + width, y + height / 2));
+        missiles.add(new Missile(400, 300, rotation));
     }
 
 }

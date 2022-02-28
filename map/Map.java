@@ -1,7 +1,5 @@
 package map;
 
-import spaceship.SpaceShip;
-
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
@@ -10,47 +8,65 @@ import javax.imageio.*;
 
 
 public class Map {
-    public BufferedImage img; // image
+	
     public BufferedImage img_map; //image map
-    private LinkedList<Obstacle> ListeObstacle=new LinkedList<>();
-    public SpaceShip ship;
-    public Graphics2D g;
+    public LinkedList<Obstacle> ListeObstacle=new LinkedList<>();
+    public final int MAP_SIZE = 24;
+    public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
-    public Map(SpaceShip ship){
-        this.ship=ship;
+
+    public Map(){
         try{
             this.img_map=ImageIO.read(new File("ressources/background.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
-        this.img=new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
-        g=img.createGraphics();
         g2=img_map.createGraphics();
-        /*
-        metObstacleRectangle();
-        metObstacletriangle();
-        metObstacleconbine();*/
-        createMap();
-        g.drawImage(img_map,0,0,null);
+        createinfor();
+        createInforAMap();
+        g2.drawImage(img_map,0,0,null);
     }
-    
-    public void createinfor(){
+
+    // public void loadMap() {
+    //     try {
+    //         InputStream is = getClass().getResourceAsStream("/ressources/infor_map.txt");
+    //         BufferedReader br = new BufferedReader(new InputStreamReader(is));
+    //         int col = 0;
+    //         int row = 0;
+    //         while (col < 50 && row < 50) {
+    //             String line = br.readLine();
+    //             while (col < 50) {
+    //                 String numbers[] = line.split("");
+    //                 int num = Integer.parseInt(numbers[col]);
+    //                 mapInfo[col][row] = num;
+    //                 col++;
+    //             }
+    //             if (col == 50) {
+    //                 col = 0;
+    //                 row++;
+    //             }
+    //         }
+    //         br.close();
+    //     } catch (Exception e) {
+
+    //     }
+    // }
+
+  public void createinfor(){
     	try{
-	        File fil = new File("map/infor_map.txt");
+	        File fil = new File("ressources/infor_map.txt");
 	        FileReader inputFil = new FileReader(fil);
 	        BufferedReader in = new BufferedReader(inputFil);
-
-	        int [][] infor_map=new int[24][24];
 	        
 	        String line;
 	        
 	        int row=0;
 	     
 	        while ((line=in.readLine())!=null){
-	        	for(int i=0;i<24;i++) {
+	        	for(int i=0;i<MAP_SIZE;i++) {
 	        		char c=line.charAt(i);
 	        		int num=Character.getNumericValue(c);
-	        		infor_map[row][i]=num;
+	        		this.infor_map[row][i]=num;
 	        	}
 	        	row++;
 	        }
@@ -64,8 +80,8 @@ public class Map {
     	for(int i=0;i<infor_map.length;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
-    				int x[]={i*100,(i+1)*100,(i+1)*100,i*100,i*100};
-    		        int y[]={j*100,j*100,(j+1)*100,(j+1)*100,j*100};
+    				int x[]={i*50,(i+1)*50,(i+1)*50,i*50,i*50};
+    		        int y[]={j*50,j*50,(j+1)*50,(j+1)*50,j*50};
     		        Obstacle carre=new Obstacle(x,y);
     		        ListeObstacle.add(carre);
     		        carre.draw(g2);
@@ -73,34 +89,41 @@ public class Map {
     		}
     	}
     }
-    
-    public void createMap(){
-        //generateur pour les obstacle
-        int x[]={0,600,800,1500,1500,1800,1800,2400,2400,0,0};          
-        int y[]={600,600,800,800,1500,1500,300,300,2400,2400,600};
-        Obstacle map=new Obstacle(x, y);
-        ListeObstacle.add(map);
-        map.draw(g2);
-    }
-    public void metObstacleRectangle(){
-        int x[]={100,200,200,100,100};
-        int y[]={100,100,200,200,100};
-        Obstacle rectangle=new Obstacle(x, y);
-        ListeObstacle.add(rectangle);
-        rectangle.draw(g2);
-    }
-    public void metObstacletriangle(){
-        int x[]={400,500,400,400};
-        int y[]={300,400,400,300};
-        Obstacle triangle=new Obstacle(x, y);
-        ListeObstacle.add(triangle);
-        triangle.draw(g2);
-    }
-    public void metObstacleconbine(){
-        int x[]={200,300,400,200,200};
-        int y[]={100,100,200,200,100};
-        Obstacle poly=new Obstacle(x, y);
-        ListeObstacle.add(poly);
-        poly.draw(g2);
-    }
+
+    public double distanceDeuxPoint(double x,double y,double x1,double y1) {
+		double D=Math.sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
+		return D;
+	}
+
+    public double PointToLine(double x0,double y0,double x1,double y1,double x2,double y2) {
+		double d;
+		double a,b,c;
+		a=distanceDeuxPoint(x1, y1, x2, y2);
+	    b=distanceDeuxPoint(x1, y1, x0, y0);
+	    c=distanceDeuxPoint(x2, y2, x0, y0);
+	    	//cas 0
+	      if (c <= 0.000001 || b <= 0.000001) {
+	        d = 0;
+	        return d;
+	      }
+	      //deux point superpose
+	      if (a <= 0.000001) {
+	        d = b;
+	        return d;
+	      }
+	      //triangle rectangle en c ou b
+	      if (c * c >= a * a + b * b) {
+	        d = b;
+	        return d;
+	      }
+	      if (b * b >= a * a + c * c) {
+	        d = c;
+	        return d;
+	      }
+	      //cas normal obtenir la hauteur
+	      double p = (a + b + c) / 2;//demi perimetre
+	      double s = Math.sqrt(p * (p - a) * (p - b) * (p - c));//aire d'un triangle
+	      d = 2 * s / a;//hauteur
+	      return d;
+	}
 }

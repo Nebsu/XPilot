@@ -30,7 +30,7 @@ public class Board extends JPanel implements ActionListener{
         setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
         spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         this.ball = new Ball(Constants.BALL_X,Constants.BALL_Y);
-        this.map = new Map(spaceship);
+        this.map = new Map();
         this.k = new Keys(spaceship);
         Constants.timer = new Timer(20,new ActionListener(){
             @Override
@@ -44,7 +44,7 @@ public class Board extends JPanel implements ActionListener{
                 updateShip();
                 updateMissiles();
                 updateBall();
-                checkCollisions();
+                checkCollision();
                 spaceship.rotateRight(Constants.rightRotationFlag);
                 spaceship.rotateLeft(Constants.leftRotationFlag);
                 spaceship.acceleration(Constants.moveFlag);
@@ -66,27 +66,24 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void drawObjects(Graphics g) {
-        bgImage = new BufferedImage(Constants.B_WIDTH, Constants.B_HEIGHT, BufferedImage.TYPE_INT_RGB);
+        //g.drawImage(map.img_map, 0, 0, null);
+        bgImage = new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
         g2d = bgImage.createGraphics();
         if (spaceship.isVisible()) {
-            g2d.setPaint(Color.BLACK);
-            af.setToIdentity();
-            af.translate(spaceship.getX(), spaceship.getY());
-            af.rotate(Math.toRadians(SpaceShip.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
-            af2.setToIdentity();
-            af2.translate(ball.getX(), ball.getY());
-            g2d.drawImage(spaceship.getImage(),af,this);
-            g2d.drawImage(ball.getImage(), af2, this);
-            //image de map
-            g.drawImage(bgImage,0,0,this);
-        }
-        List<Missile> ms = spaceship.getMissiles();
-        for (Missile missile : ms) {
-            if (missile.isVisible()) {
-                g.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(), this);
+            g2d.drawImage(map.img_map,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+            List<Missile> ms = spaceship.getMissiles();
+            for (Missile missile : ms) {
+                if (missile.isVisible()) {
+                    g2d.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(), this);
+                }
             }
+            af.setToIdentity();
+            af.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2);
+            af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
+            g2d.drawImage(spaceship.getImage(),af,null);
+            g.setColor(Color.WHITE);
+            g.drawImage(bgImage, 0, 0, null);
         }
-        g.setColor(Color.WHITE);
     }
 
     private void drawGameOver(Graphics g) {
@@ -130,17 +127,27 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 
-    public void checkCollisions() {
-        Rectangle r3 = spaceship.getBounds();
-        Rectangle b = ball.getBounds();
+    public boolean checkCollision(){
         List<Missile> ms = spaceship.getMissiles();
-        for (Missile m : ms) {
-            Rectangle r1 = m.getBounds();
+        for (Obstacle obstacle : map.ListeObstacle) {
+            Rectangle o=new Rectangle(obstacle.x[0],obstacle.y[0],obstacle.x[1]-obstacle.x[0],obstacle.y[2]-obstacle.y[1]);
+            if(spaceship.getBounds().intersects(o)){
+                spaceship.hitX = spaceship.getX();
+                spaceship.hitY = spaceship.getY();
+                spaceship.collision = true;
+                return true;
+            }
+            for (Missile m : ms) {
+                Rectangle r1 = m.getBounds();
+                if(r1.getBounds().intersects(o)){
+                    m.rebounce++;
+                    return true;
+                }
+            }
         }
-        if(r3.intersects(b)){
-            ball.take();
-        }
+        return false;
     }
+
 
     private class TAdapter extends KeyAdapter {
         @Override
