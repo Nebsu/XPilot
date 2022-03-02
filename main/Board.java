@@ -41,7 +41,11 @@ public class Board extends JPanel implements ActionListener{
                 }
                 spaceship.moveTime2 = System.currentTimeMillis();
                 inGame();
-                updateShip();
+                
+                //checkcollision avant de move avec les ordonnees de move
+                if(!checkCollision()){
+                    updateShip();
+                }
                 updateMissiles();
                 updateBall();
                 checkCollision();
@@ -131,10 +135,9 @@ public class Board extends JPanel implements ActionListener{
         List<Missile> ms = spaceship.getMissiles();
         for (Obstacle obstacle : map.ListeObstacle) {
             Rectangle o=new Rectangle(obstacle.x[0],obstacle.y[0],obstacle.x[1]-obstacle.x[0],obstacle.y[2]-obstacle.y[1]);
-            if(spaceship.getBounds().intersects(o)){
-                spaceship.hitX = spaceship.getX();
-                spaceship.hitY = spaceship.getY();
-                spaceship.collision = true;
+            //ship apres le movement
+            Rectangle s=new Rectangle((int)(spaceship.getX()+spaceship.SPEED * Math.cos(Math.toRadians(spaceship.rotation))),(int)(spaceship.getY()+spaceship.SPEED*Math.sin(Math.toRadians(spaceship.rotation))),16,16);
+            if(s.intersects(o)){
                 return true;
             }
             for (Missile m : ms) {
