@@ -3,8 +3,6 @@ package spaceship;
 import java.util.ArrayList;
 import java.util.List;
 
-import main.Constants;
-
 public class SpaceShip extends Sprite {
 
     public long moveTime;
@@ -50,17 +48,17 @@ public class SpaceShip extends Sprite {
         }
     }
 
-    public void acceleration(boolean canMove){
-        if(canMove && canAccelerate){
-            SPEED = (((float)(moveTime2-moveTime)/1000)+BASE_SPEED);
+    public void acceleration(){
+        if(canAccelerate){
+            SPEED = (float)Math.exp(((double)((double)moveTime2/1000-(double)moveTime/1000))+BASE_SPEED)/10;
         }
     }
 
     public void deceleration(){
         if(canDecelerate){
-            SPEED -= 0.2;
+            SPEED -= 1/SPEED;
         }
-        if(SPEED <= BASE_SPEED){
+        if(SPEED <= 1){
             SPEED = BASE_SPEED;
             canDecelerate = false;
         }

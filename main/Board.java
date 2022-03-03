@@ -46,12 +46,13 @@ public class Board extends JPanel implements ActionListener{
                 if(!checkCollision()){
                     updateShip();
                 }
+                System.out.println(spaceship.SPEED);
                 updateMissiles();
                 updateBall();
                 checkCollision();
                 spaceship.rotateRight(spaceship.rightRotationFlag);
                 spaceship.rotateLeft(spaceship.leftRotationFlag);
-                spaceship.acceleration(spaceship.moveFlag);
+                spaceship.acceleration();
                 spaceship.deceleration();
                 repaint();
             }
