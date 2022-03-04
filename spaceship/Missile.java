@@ -9,13 +9,9 @@ public class Missile extends Sprite {
 
     public Missile(double x, double y, int rotation) {
         super(x, y);
-        initMissile();
-        direction = rotation;
-    }
-    
-    private void initMissile() {
         loadImage("ressources/shot_h.png");
-        getImageDimensions();        
+        getImageDimensions();    
+        direction = rotation;
     }
 
     public void move() {

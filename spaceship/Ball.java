@@ -4,10 +4,6 @@ public class Ball extends Sprite {
     
     public Ball(double x, double y) {
         super(x, y);
-        initBall();
-    }
-
-    private void initBall() {
         loadImage("ressources/ball.png");
         getImageDimensions();
     }

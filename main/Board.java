@@ -34,18 +34,13 @@ public class Board extends JPanel implements ActionListener{
         this.k = new Keys(spaceship);
         Constants.timer = new Timer(20,new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                if(spaceship.SPEED > spaceship.MAX_SPEED){
-                    spaceship.canAccelerate = false; 
-                }
+            public void actionPerformed(ActionEvent e){
                 spaceship.moveTime2 = System.currentTimeMillis();
                 inGame();
-                
                 //checkcollision avant de move avec les ordonnees de move
                 if(!checkCollision()){
                     updateShip();
-                }
+                }   
                 System.out.println(spaceship.SPEED);
                 updateMissiles();
                 updateBall();
@@ -109,7 +104,12 @@ public class Board extends JPanel implements ActionListener{
 
     private void updateShip() {
         if (spaceship.isVisible()) {
-            spaceship.move(spaceship.moveFlag);
+            spaceship.move();
+            spaceship.acceleration();
+            spaceship.deceleration();
+            // System.out.println("CanMove = " + spaceship.moveFlag);
+            // System.out.println("CanAccelerate = " + spaceship.canAccelerate);
+            // System.out.println("CanDecelerate = " + spaceship.canDecelerate);
         }
     }
 

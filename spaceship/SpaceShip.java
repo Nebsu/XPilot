@@ -7,11 +7,11 @@ public class SpaceShip extends Sprite {
 
     public long moveTime;
     private List<Missile> missiles;
-    boolean timerStartFlag = true;
+    public boolean timerStartFlag = true;
     public int rotation;
-    int rotOneInc = 6;
+    public int rotationRate = 6;
     public float SPEED = 4;
-    public final float MAX_SPEED = 10, BASE_SPEED = 4;
+    public final float MAX_SPEED = 15, BASE_SPEED = 4;
     public double hitX, hitY;
     public boolean collision = false;
     public boolean rightRotationFlag = false;
@@ -19,53 +19,51 @@ public class SpaceShip extends Sprite {
     public boolean moveFlag = false,  canAccelerate = false, canDecelerate = false;
     public long moveTime2;
 
-    public SpaceShip(double x, double y) {
+    public SpaceShip(double x, double y){
         super(x, y);
-        initCraft();
-    }
-
-    private void initCraft() {
         missiles = new ArrayList<>();
         loadImage("ressources/player_right.png");
         getImageDimensions();
     }
 
-    public void rotateRight(boolean canRotate)
-    {
-        if(canRotate)
-        {
-           rotation += rotOneInc;
-           if(rotation > 360) { rotation = rotOneInc;}
+    public void rotateRight(boolean canRotate){
+        if(canRotate){
+           rotation += rotationRate;
+           if(rotation > 360) rotation = rotationRate;
         }
     }
 
-    public void rotateLeft(boolean canRotate)
-    {
-        if(canRotate)
-        {
-           rotation -= rotOneInc;
-           if(rotation == rotOneInc) { rotation = rotOneInc;}
+    public void rotateLeft(boolean canRotate){
+        if(canRotate){
+           rotation -= rotationRate;
+           if(rotation == rotationRate) rotation = rotationRate;
         }
     }
 
     public void acceleration(){
         if(canAccelerate){
-            SPEED = (float)Math.exp(((double)((double)moveTime2/1000-(double)moveTime/1000))+BASE_SPEED)/10;
+            if(SPEED < BASE_SPEED)SPEED = BASE_SPEED;
+            if(SPEED < MAX_SPEED)SPEED += (float)((double)moveTime2/1000-(double)moveTime/1000)/2;
+            else SPEED = MAX_SPEED;
         }
     }
 
     public void deceleration(){
         if(canDecelerate){
-            SPEED -= 1/SPEED;
-        }
-        if(SPEED <= 1){
-            SPEED = BASE_SPEED;
-            canDecelerate = false;
+            if(SPEED <= 1){
+                SPEED = BASE_SPEED;
+                canDecelerate = false;
+            }
+            if(SPEED <= 6){
+                SPEED -= 0.1;
+            }else{
+                SPEED -= 0.6;
+            }
         }
     }
 
-    public void move(boolean canMove) {
-        if(canMove || canDecelerate){
+    public void move() {
+        if(moveFlag || canDecelerate){
             x += SPEED * Math.cos(Math.toRadians(rotation));
             y += SPEED * Math.sin(Math.toRadians(rotation));
             if (x < 1) {

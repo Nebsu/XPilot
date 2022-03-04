@@ -26,6 +26,7 @@ public class Keys implements KeyListener{
             Constants.timer.start();
             if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.timer.start();}
             if(spaceship.moveFlag == false)spaceship.moveTime = System.currentTimeMillis();
+            spaceship.canDecelerate = false;
             spaceship.moveFlag = true;
             spaceship.canAccelerate = true;
         }
