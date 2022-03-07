@@ -11,7 +11,7 @@ public class SpaceShip extends Sprite {
     public int rotation;
     public int rotationRate = 6;
     public float SPEED = 4;
-    public final float MAX_SPEED = 15, BASE_SPEED = 4;
+    public final float MAX_SPEED = 10, BASE_SPEED = 4;
     public double hitX, hitY;
     public boolean collision = false;
     public boolean rightRotationFlag = false;
@@ -43,7 +43,7 @@ public class SpaceShip extends Sprite {
     public void acceleration(){
         if(canAccelerate){
             if(SPEED < BASE_SPEED)SPEED = BASE_SPEED;
-            if(SPEED < MAX_SPEED)SPEED += (float)((double)moveTime2/1000-(double)moveTime/1000)/2;
+            if(SPEED < MAX_SPEED)SPEED += (float)((double)moveTime2/1000-(double)moveTime/1000)/100;
             else SPEED = MAX_SPEED;
         }
     }
@@ -54,7 +54,9 @@ public class SpaceShip extends Sprite {
                 SPEED = BASE_SPEED;
                 canDecelerate = false;
             }
-            if(SPEED <= 6){
+            if(SPEED <= 2.5){
+                SPEED -= 0.009;
+            }else if(SPEED <= 6){
                 SPEED -= 0.1;
             }else{
                 SPEED -= 0.6;

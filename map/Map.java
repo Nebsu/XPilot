@@ -11,7 +11,7 @@ public class Map {
 	
     public BufferedImage img_map; //image map
     public LinkedList<Obstacle> ListeObstacle=new LinkedList<>();
-    public final int MAP_SIZE = 24;
+    public final int MAP_SIZE = 30;
     public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
 
@@ -54,7 +54,7 @@ public class Map {
 
   public void createinfor(){
     	try{
-	        File fil = new File("ressources/infor_map.txt");
+	        File fil = new File("ressources/infor_map2.txt");
 	        FileReader inputFil = new FileReader(fil);
 	        BufferedReader in = new BufferedReader(inputFil);
 	        
@@ -66,7 +66,7 @@ public class Map {
 	        	for(int i=0;i<MAP_SIZE;i++) {
 	        		char c=line.charAt(i);
 	        		int num=Character.getNumericValue(c);
-	        		this.infor_map[row][i]=num;
+	        		this.infor_map[i][row]=num;
 	        	}
 	        	row++;
 	        }
