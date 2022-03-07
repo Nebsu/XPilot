@@ -6,18 +6,16 @@ import java.util.List;
 public class SpaceShip extends Sprite {
 
     public long moveTime;
+    public long moveTime2;
     private List<Missile> missiles;
     public boolean timerStartFlag = true;
     public int rotation;
-    public int rotationRate = 6;
+    public final int rotationRate = 6;
     public float SPEED = 4;
     public final float MAX_SPEED = 10, BASE_SPEED = 4;
-    public double hitX, hitY;
-    public boolean collision = false;
     public boolean rightRotationFlag = false;
     public boolean leftRotationFlag = false;
     public boolean moveFlag = false,  canAccelerate = false, canDecelerate = false;
-    public long moveTime2;
 
     public SpaceShip(double x, double y){
         super(x, y);

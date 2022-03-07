@@ -11,7 +11,7 @@ public class Map {
 	
     public BufferedImage img_map; //image map
     public LinkedList<Obstacle> ListeObstacle=new LinkedList<>();
-    public final int MAP_SIZE = 30;
+    public final int MAP_SIZE = 50;
     public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
 

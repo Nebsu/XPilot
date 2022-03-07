@@ -1,16 +1,21 @@
 package main;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
+
 import java.awt.EventQueue;
 
 public class Game extends JFrame {
-
+    private JPanel principal=new JPanel();
     public Game() {
         initUI();
     }
     
     private void initUI() {
-        add(new Board());
+        this.setContentPane(principal);
+        Board game = new Board();
+        add(game.minimap);
+        add(game);
         setResizable(false);
         pack();
         setTitle("PEWPEW");

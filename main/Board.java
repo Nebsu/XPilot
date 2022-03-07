@@ -21,6 +21,7 @@ public class Board extends JPanel implements ActionListener{
     Graphics2D g2d;
     BufferedImage bgImage;
     private Keys k;
+    public Minimap minimap;
 
     public Board() {
         addKeyListener(new TAdapter());
@@ -32,11 +33,13 @@ public class Board extends JPanel implements ActionListener{
         this.ball = new Ball(Constants.BALL_X,Constants.BALL_Y);
         this.map = new Map();
         this.k = new Keys(spaceship);
+        this.minimap = new Minimap(spaceship, map);
         Constants.timer = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 spaceship.moveTime2 = System.currentTimeMillis();
                 inGame();
+                minimap.repaint();
                 //checkcollision avant de move avec les ordonnees de move
                 if(!checkCollision()){
                     updateShip();
