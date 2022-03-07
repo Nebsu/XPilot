@@ -80,8 +80,8 @@ public class Map {
     	for(int i=0;i<infor_map.length;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
-    				int x[]={i*50,(i+1)*50,(i+1)*50,i*50,i*50};
-    		        int y[]={j*50,j*50,(j+1)*50,(j+1)*50,j*50};
+    				int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+    		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
     		        Obstacle carre=new Obstacle(x,y);
     		        ListeObstacle.add(carre);
     		        carre.draw(g2);
