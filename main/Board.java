@@ -2,7 +2,6 @@ package main;
 
 import spaceship.*;
 import map.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -13,51 +12,46 @@ import java.awt.geom.AffineTransform;
 
 public class Board extends JPanel implements ActionListener{
 
-    public static long moveTime;
-    public static Timer timer;
     private SpaceShip spaceship;
     private Ball ball;
     private Map map;
-    private final int BALL_X = 100;
-    private final int BALL_Y = 200;
     private boolean ingame;
-    private final int ICRAFT_X = 40;
-    private final int ICRAFT_Y = 60;
-    private final int B_WIDTH = 800;
-    private final int B_HEIGHT = 600;
     AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
-    Graphics2D g2dbf;
+    Graphics2D g2d;
     BufferedImage bgImage;
-    public static boolean rightRotationFlag = false;
-    public static boolean leftRotationFlag = false;
-    public static boolean moveFlag = false,  canAccelerate = false;
+    private Keys k;
+    public Minimap minimap;
 
     public Board() {
         addKeyListener(new TAdapter());
         setFocusable(true);
         setBackground(Color.BLACK);
         ingame = true;
-        setPreferredSize(new Dimension(B_WIDTH, B_HEIGHT));
-        spaceship = new SpaceShip(ICRAFT_X, ICRAFT_Y);
-        this.ball = new Ball(BALL_X,BALL_Y);
-        this.map = new Map(spaceship);
-        timer = new Timer(20,new ActionListener(){
+        setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+        spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
+        this.ball = new Ball(Constants.BALL_X,Constants.BALL_Y);
+        this.map = new Map();
+        this.k = new Keys(spaceship);
+        this.minimap = new Minimap(spaceship, map);
+        Constants.timer = new Timer(20,new ActionListener(){
             @Override
-            public void actionPerformed(ActionEvent e)
-            {
-                if(spaceship.SPEED > spaceship.MAX_SPEED){
-                    Board.canAccelerate = false; 
-                }
-                moveTime = System.currentTimeMillis();
+            public void actionPerformed(ActionEvent e){
+                spaceship.moveTime2 = System.currentTimeMillis();
                 inGame();
-                updateShip();
+                minimap.repaint();
+                //checkcollision avant de move avec les ordonnees de move
+                if(!checkCollision()){
+                    updateShip();
+                }   
+                System.out.println(spaceship.SPEED);
                 updateMissiles();
                 updateBall();
-                checkCollisions();
-                spaceship.rotateRight(rightRotationFlag);
-                spaceship.rotateLeft(leftRotationFlag);
-                spaceship.acceleration(moveFlag);
+                checkCollision();
+                spaceship.rotateRight(spaceship.rightRotationFlag);
+                spaceship.rotateLeft(spaceship.leftRotationFlag);
+                spaceship.acceleration();
+                spaceship.deceleration();
                 repaint();
             }
         });
@@ -75,27 +69,24 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void drawObjects(Graphics g) {
-        bgImage = new BufferedImage(B_WIDTH, B_HEIGHT, BufferedImage.TYPE_INT_RGB);
-        g2dbf = bgImage.createGraphics();
+        //g.drawImage(map.img_map, 0, 0, null);
+        bgImage = new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
+        g2d = bgImage.createGraphics();
         if (spaceship.isVisible()) {
-            g2dbf.setPaint(Color.BLACK);
-            af.setToIdentity();
-            af.translate(spaceship.getX(), spaceship.getY());
-            af.rotate(Math.toRadians(SpaceShip.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
-            af2.setToIdentity();
-            af2.translate(ball.getX(), ball.getY());
-            g2dbf.drawImage(spaceship.getImage(),af,this);
-            g2dbf.drawImage(ball.getImage(), af2, this);
-            //image de map
-            g.drawImage(bgImage,0,0,this);
-        }
-        List<Missile> ms = spaceship.getMissiles();
-        for (Missile missile : ms) {
-            if (missile.isVisible()) {
-                g.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(), this);
+            g2d.drawImage(map.img_map,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+            List<Missile> ms = spaceship.getMissiles();
+            for (Missile missile : ms) {
+                if (missile.isVisible()) {
+                    g2d.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(), this);
+                }
             }
+            af.setToIdentity();
+            af.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2);
+            af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
+            g2d.drawImage(spaceship.getImage(),af,null);
+            g.setColor(Color.WHITE);
+            g.drawImage(bgImage, 0, 0, null);
         }
-        g.setColor(Color.WHITE);
     }
 
     private void drawGameOver(Graphics g) {
@@ -104,19 +95,24 @@ public class Board extends JPanel implements ActionListener{
         FontMetrics fm = getFontMetrics(small);
         g.setColor(Color.white);
         g.setFont(small);
-        g.drawString(msg, (B_WIDTH - fm.stringWidth(msg)) / 2,
-                B_HEIGHT / 2);
+        g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
+        Constants.B_HEIGHT / 2);
     }
 
     private void inGame() {
         if (!ingame) {
-            timer.stop();
+            Constants.timer.stop();
         }
     }
 
     private void updateShip() {
         if (spaceship.isVisible()) {
-            spaceship.move(moveFlag);
+            spaceship.move();
+            spaceship.acceleration();
+            spaceship.deceleration();
+            // System.out.println("CanMove = " + spaceship.moveFlag);
+            // System.out.println("CanAccelerate = " + spaceship.canAccelerate);
+            // System.out.println("CanDecelerate = " + spaceship.canDecelerate);
         }
     }
 
@@ -139,29 +135,36 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 
-    public void checkCollisions() {
-        Rectangle r3 = spaceship.getBounds();
-        Rectangle b = ball.getBounds();
+    public boolean checkCollision(){
         List<Missile> ms = spaceship.getMissiles();
-        for (Missile m : ms) {
-            Rectangle r1 = m.getBounds();
+        for (Obstacle obstacle : map.ListeObstacle) {
+            Rectangle o=new Rectangle(obstacle.x[0],obstacle.y[0],obstacle.x[1]-obstacle.x[0],obstacle.y[2]-obstacle.y[1]);
+            //ship apres le movement
+            Rectangle s=new Rectangle((int)(spaceship.getX()+spaceship.SPEED * Math.cos(Math.toRadians(spaceship.rotation))),(int)(spaceship.getY()+spaceship.SPEED*Math.sin(Math.toRadians(spaceship.rotation))),16,16);
+            if(s.intersects(o)){
+                return true;
+            }
+            for (Missile m : ms) {
+                Rectangle r1 = m.getBounds();
+                if(r1.getBounds().intersects(o)){
+                    m.rebounce++;
+                    return true;
+                }
+            }
         }
-        if(r3.intersects(b)){
-            System.out.println("oui");
-            ball.take();
-        }
-        
+        return false;
     }
+
 
     private class TAdapter extends KeyAdapter {
         @Override
         public void keyReleased(KeyEvent e) {
-            spaceship.keyReleased(e);
+            k.keyReleased(e);
         }
 
         @Override
         public void keyPressed(KeyEvent e) {
-            spaceship.keyPressed(e);
+            k.keyPressed(e);
         }
     }
 

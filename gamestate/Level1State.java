@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class Level1State extends GameState {
 
-    private TitleMap titleMap;
+    // private TitleMap titleMap;
 
     public Level1State(GameStateManager gsm) {
         this.gsm = gsm;
@@ -16,10 +16,10 @@ public class Level1State extends GameState {
 
     @Override
     public void init() {
-        this.titleMap = new TitleMap(30);
-        titleMap.loadTiles("/Titlesets/grasstitleset.gif");
-        titleMap.loadMap("/Maps/level1-1.map");
-        titleMap.setPosition(0, 0);
+        // this.titleMap = new TitleMap(30);
+        // titleMap.loadTiles("/Titlesets/grasstitleset.gif");
+        // titleMap.loadMap("/Maps/level1-1.map");
+        // titleMap.setPosition(0, 0);
     }
 
     @Override
@@ -35,7 +35,7 @@ public class Level1State extends GameState {
         g.fillRect(0, 0, GamePanel.WIDTH, GamePanel.HEIGHT);
 
         // draw the map :
-        titleMap.draw(g);
+        // titleMap.draw(g);
     }
 
     @Override
