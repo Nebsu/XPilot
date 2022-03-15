@@ -6,7 +6,6 @@ import java.io.*;
 import java.util.LinkedList;
 import javax.imageio.*;
 
-
 public class Map {
 	
     public BufferedImage img_map; //image map
@@ -14,8 +13,9 @@ public class Map {
     public final int MAP_SIZE = 50;
     public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
+	public Ball ball;
 
-    public Map(){
+    public Map() throws IOException{
         try{
             this.img_map=ImageIO.read(new File("ressources/background.png"));
         }catch(IOException e){
@@ -24,7 +24,7 @@ public class Map {
         g2=img_map.createGraphics();
         createinfor();
         createInforAMap();
-        g2.drawImage(img_map,0,0,null);
+        // g2.drawImage(img_map,0,0,null);
     }
 
     // public void loadMap() {
@@ -77,7 +77,7 @@ public class Map {
 	    	}
     }
     
-    public void createInforAMap() {
+    public void createInforAMap() throws IOException {
     	for(int i=0;i<infor_map.length;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
@@ -86,7 +86,20 @@ public class Map {
     		        Obstacle carre=new Obstacle(x,y);
     		        ListeObstacle.add(carre);
     		        carre.draw(g2);
-    			}
+    			}else if(infor_map[i][j]==2){
+					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+    		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+    		        Goal carre=new Goal(x,y);
+    		        ListeObstacle.add(carre);
+    		        carre.draw(g2);
+				}else if(infor_map[i][j]==3){
+					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+    		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+    		        Ball ball=new Ball(x,y);
+					this.ball = ball;
+    		        ListeObstacle.add(ball);
+					ball.draw(g2);
+				}
     		}
     	}
     }
