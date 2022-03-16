@@ -17,40 +17,14 @@ public class Map {
 
     public Map() throws IOException{
         try{
-            this.img_map=ImageIO.read(new File("ressources/background.png"));
+            this.img_map=ImageIO.read(new File("ressources/background2.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
         g2=img_map.createGraphics();
         createinfor();
         createInforAMap();
-        // g2.drawImage(img_map,0,0,null);
     }
-
-    // public void loadMap() {
-    //     try {
-    //         InputStream is = getClass().getResourceAsStream("/ressources/infor_map.txt");
-    //         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-    //         int col = 0;
-    //         int row = 0;
-    //         while (col < 50 && row < 50) {
-    //             String line = br.readLine();
-    //             while (col < 50) {
-    //                 String numbers[] = line.split("");
-    //                 int num = Integer.parseInt(numbers[col]);
-    //                 mapInfo[col][row] = num;
-    //                 col++;
-    //             }
-    //             if (col == 50) {
-    //                 col = 0;
-    //                 row++;
-    //             }
-    //         }
-    //         br.close();
-    //     } catch (Exception e) {
-
-    //     }
-    // }
 
   public void createinfor(){
     	try{

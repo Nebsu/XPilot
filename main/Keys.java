@@ -1,7 +1,6 @@
-package object;
+package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import main.Board;
 
 public class Keys implements KeyListener{
     Board board;

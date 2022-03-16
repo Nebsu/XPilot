@@ -2,7 +2,6 @@ package main;
 
 import map.*;
 import object.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -18,10 +17,9 @@ public class Board extends JPanel implements ActionListener{
     public SpaceShip spaceship;
     private Map map;
     private boolean ingame;
-    AffineTransform af3 = new AffineTransform();
     AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
-    Graphics2D g2d;
+    Graphics2D g2;
     BufferedImage bgImage;
     private Keys k;
     public Minimap minimap;
@@ -76,29 +74,27 @@ public class Board extends JPanel implements ActionListener{
 
     private void drawObjects(Graphics2D g) throws IOException {
         //g.drawImage(map.img_map, 0, 0, null);
-        bgImage = new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR); 
-        g2d = bgImage.createGraphics();
+        g2 = map.img_map.createGraphics();
         if (spaceship.isVisible()) {
-            // if(map.ball.isTaken()){
-            g.setColor(Color.WHITE);
-            // }
+            //Camera
             g.drawImage(map.img_map,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+            for (Missile missile : this.missiles) {
+            //Missile
+            System.out.println("Missile: " + missile.getX() + " " + missile.getY());
+            g2.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(),null);  
+            }
+            //Vaisseau
             af.setToIdentity();
             af.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2);
             af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
             g.drawImage(spaceship.getImage(),af,null);
-            for (Missile missile : this.missiles) {
-                af3.setToIdentity();
-                af3.translate(missile.getX(),missile.getY());
-                g.drawImage(missile.getImage(), af3, null);  
-            }
+            //Boule
+            if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), af2, null);
             af2.setToIdentity();
             af2.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2+40);
-            if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), af2, null);
             g.drawString("Ball: " + map.ball.isTaken(), 2, 20);
             // g.setColor(Color.WHITE);
         }
-        
     }
 
     private void drawGameOver(Graphics g) {
@@ -107,8 +103,7 @@ public class Board extends JPanel implements ActionListener{
         FontMetrics fm = getFontMetrics(small);
         g.setColor(Color.white);
         g.setFont(small);
-        g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
-        Constants.B_HEIGHT / 2);
+        g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2, Constants.B_HEIGHT / 2);
     }
 
     private void inGame() {
@@ -122,15 +117,6 @@ public class Board extends JPanel implements ActionListener{
             spaceship.move();
             spaceship.acceleration();
             spaceship.deceleration();
-            // System.out.println("CanMove = " + spaceship.moveFlag);
-            // System.out.println("CanAccelerate = " + spaceship.canAccelerate);
-            // System.out.println("CanDecelerate = " + spaceship.canDecelerate);
-        }
-    }
-
-    private void updateBall(){
-        if (map.ball.isTaken()){
-            
         }
     }
 
@@ -146,7 +132,7 @@ public class Board extends JPanel implements ActionListener{
     }
 
     public void fire() {
-        missiles.add(new Missile(Constants.B_WIDTH/2, Constants.B_HEIGHT/2, spaceship.rotation));
+        missiles.add(new Missile(spaceship.getX(), spaceship.getY(), spaceship.rotation));
     }
 
     public boolean checkCollision(){
@@ -157,9 +143,9 @@ public class Board extends JPanel implements ActionListener{
             Rectangle s=new Rectangle((int)(spaceship.getX()+spaceship.SPEED * Math.cos(Math.toRadians(spaceship.rotation))),(int)(spaceship.getY()+spaceship.SPEED*Math.sin(Math.toRadians(spaceship.rotation))),16,16);
             if(s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof Ball)){
                 return true;
-            }else if(s.intersects(o)&& obstacle instanceof Ball){
+            }else if(s.intersects(o) && obstacle instanceof Ball){
                 map.ball.take();
-            }else if(s.intersects(o)&& obstacle instanceof Goal && map.ball.isTaken()){
+            }else if(s.intersects(o) && obstacle instanceof Goal && map.ball.isTaken()){
                 ingame = false;
             }
             // for (Missile m : ms) {

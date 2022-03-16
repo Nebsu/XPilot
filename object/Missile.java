@@ -11,7 +11,6 @@ public class Missile extends Sprite {
         loadImage("ressources/shot_h.png");
         getImageDimensions();    
         direction = rotation;
-        System.out.println("oui");
     }
 
     public void move() {
