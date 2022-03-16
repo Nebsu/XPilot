@@ -1,4 +1,8 @@
 package spaceship;
+
+import menu.*;
+import main.*;
+
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import main.Constants;
@@ -12,12 +16,18 @@ public class Keys implements KeyListener{
     @Override
     public void keyTyped(KeyEvent e) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
+        if (key==KeyEvent.VK_ESCAPE) {
+            Constants.timer.stop();
+            Game.GAME.setVisible(false);
+            Game.GAME = new Game(true);
+            Game.GAME.setVisible(true);
+            return;
+        }
         if (key == KeyEvent.VK_SPACE){
             Constants.timer.start();
             spaceship.fire();

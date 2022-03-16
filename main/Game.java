@@ -1,32 +1,46 @@
 package main;
 
+import menu.*;
+
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
 import java.awt.EventQueue;
 
 public class Game extends JFrame {
-    private JPanel principal=new JPanel();
-    public Game() {
-        initUI();
-    }
-    
-    private void initUI() {
-        this.setContentPane(principal);
-        Board game = new Board();
-        add(game.minimap);
-        add(game);
-        setResizable(false);
-        pack();
-        setTitle("PEWPEW");
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+    public static Game GAME;
+
+    public Game(boolean isMenu) {
+        if (isMenu) {
+            this.setVisible(false);
+            this.dispose();
+            this.setContentPane(new JPanel());
+            MenuPanel menu = new MenuPanel(this);
+            add(menu);
+            setTitle("Xpilot");
+            setResizable(false);
+            pack();
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        } else {
+            GAME.setVisible(false);
+            GAME.dispose();
+            this.setContentPane(new JPanel());
+            Board game = new Board();
+            add(game.minimap);
+            add(game);
+            setResizable(false);
+            pack();
+            setTitle("Xpilot");
+            setLocationRelativeTo(null);
+            setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        }
     }
 
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
-            Game g = new Game();
-            g.setVisible(true);
+            GAME = new Game(true);
+            GAME.setVisible(true);
         });
     }
 
