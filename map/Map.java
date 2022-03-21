@@ -4,8 +4,9 @@ import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
 import java.util.LinkedList;
-import javax.imageio.*;
+import java.util.Random;
 
+import javax.imageio.*;
 
 public class Map {
 	
@@ -14,45 +15,41 @@ public class Map {
     public final int MAP_SIZE = 50;
     public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
+	public Ball ball;
 
-    public Map(){
+    public Map() throws IOException{
         try{
             this.img_map=ImageIO.read(new File("ressources/background.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
         g2=img_map.createGraphics();
+		// this.addBonus();
         createinfor();
         createInforAMap();
-        g2.drawImage(img_map,0,0,null);
+        // g2.drawImage(img_map,0,0,null);
     }
 
-    // public void loadMap() {
-    //     try {
-    //         InputStream is = getClass().getResourceAsStream("/ressources/infor_map.txt");
-    //         BufferedReader br = new BufferedReader(new InputStreamReader(is));
-    //         int col = 0;
-    //         int row = 0;
-    //         while (col < 50 && row < 50) {
-    //             String line = br.readLine();
-    //             while (col < 50) {
-    //                 String numbers[] = line.split("");
-    //                 int num = Integer.parseInt(numbers[col]);
-    //                 mapInfo[col][row] = num;
-    //                 col++;
-    //             }
-    //             if (col == 50) {
-    //                 col = 0;
-    //                 row++;
-    //             }
+	// public void addBonus(){
+    //     Random r1 = new Random();
+	// 	Random r2 = new Random();
+    //     while(true){
+	// 		int i = r1.nextInt(MAP_SIZE);
+	// 		int j = r2.nextInt(MAP_SIZE);
+	// 		System.out.println(i*48 + " " + j*48);
+    //         if(infor_map[i][j] == 0){
+	// 			// infor_map[i][j] = 9;
+	// 			int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+	// 			int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+	// 			Bonus bonus = new Bonus(x,y,i*48, j*48);
+	// 			ListeObstacle.add(bonus);
+	// 			bonus.draw(g2);
+	// 			return;
     //         }
-    //         br.close();
-    //     } catch (Exception e) {
-
     //     }
     // }
 
-  public void createinfor(){
+ 	public void createinfor(){
     	try{
 	        File fil = new File("ressources/infor_map2.txt");
 	        FileReader inputFil = new FileReader(fil);
@@ -77,7 +74,7 @@ public class Map {
 	    	}
     }
     
-    public void createInforAMap() {
+    public void createInforAMap() throws IOException {
     	for(int i=0;i<infor_map.length;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
@@ -86,9 +83,36 @@ public class Map {
     		        Obstacle carre=new Obstacle(x,y);
     		        ListeObstacle.add(carre);
     		        carre.draw(g2);
-    			}
+    			}else if(infor_map[i][j]==2){
+					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+    		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+    		        Goal carre=new Goal(x,y);
+    		        ListeObstacle.add(carre);
+    		        carre.draw(g2);
+				}else if(infor_map[i][j]==3){
+					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+    		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+    		        Ball ball=new Ball(x,y);
+					this.ball = ball;
+    		        ListeObstacle.add(ball);
+					ball.draw(g2);
+				}
     		}
     	}
+
+		Random r1 = new Random();
+		Random r2 = new Random();
+		int i = r1.nextInt(MAP_SIZE);
+		int j = r2.nextInt(MAP_SIZE);
+		System.out.println(i*48 + " " + j*48);
+		if(infor_map[i][j] == 0){
+			// infor_map[i][j] = 9;
+			int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+			int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+			Bonus bonus = new Bonus(x,y,i*48, j*48);
+			ListeObstacle.add(bonus);
+			bonus.draw(g2);
+		}
     }
 
     public double distanceDeuxPoint(double x,double y,double x1,double y1) {

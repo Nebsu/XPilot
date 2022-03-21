@@ -1,25 +1,24 @@
-package spaceship;
-
-import java.util.ArrayList;
-import java.util.List;
+package object;
 
 public class SpaceShip extends Sprite {
 
     public long moveTime;
     public long moveTime2;
-    private List<Missile> missiles;
     public boolean timerStartFlag = true;
     public int rotation;
-    public final int rotationRate = 6;
+    public final int rotationRate = 8;
     public float SPEED = 4;
     public final float MAX_SPEED = 10, BASE_SPEED = 4;
     public boolean rightRotationFlag = false;
     public boolean leftRotationFlag = false;
     public boolean moveFlag = false,  canAccelerate = false, canDecelerate = false;
+    public Shield shield = new Shield();
+    public int health = 100;
+    public long t0, timer = 0;
+    public final long cooldown = 1000;
 
     public SpaceShip(double x, double y){
         super(x, y);
-        missiles = new ArrayList<>();
         loadImage("ressources/player_right.png");
         getImageDimensions();
     }
@@ -53,7 +52,7 @@ public class SpaceShip extends Sprite {
                 canDecelerate = false;
             }
             if(SPEED <= 2.5){
-                SPEED -= 0.009;
+                SPEED -= 0.05;
             }else if(SPEED <= 6){
                 SPEED -= 0.1;
             }else{
@@ -75,13 +74,17 @@ public class SpaceShip extends Sprite {
         }
     }
 
-
-    public List<Missile> getMissiles() {
-        return missiles;
+    public boolean canTakeDamage() {
+        boolean ret;
+        long delta = System.currentTimeMillis() - t0;
+        timer += delta;
+        if (timer > cooldown) {
+            timer = 0;
+            ret = true;
+        } else {
+            ret = false;
+        }
+        t0 = System.currentTimeMillis();
+        return ret;
     }
-
-    public void fire() {
-        missiles.add(new Missile(400, 300, rotation));
-    }
-
 }
