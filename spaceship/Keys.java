@@ -1,51 +1,57 @@
 package spaceship;
 
-import menu.*;
 import main.*;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import main.Constants;
 
-public class Keys implements KeyListener{
+public class Keys implements KeyListener {
+
     SpaceShip spaceship;
+
     public Keys(SpaceShip s){
         this.spaceship = s;
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-        // TODO Auto-generated method stub
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
-            Constants.timer.stop();
-            Game.GAME.setVisible(false);
-            Game.GAME = new Game(true);
-            Game.GAME.setVisible(true);
+            try {
+                Constants.TIMER.stop();
+                Constants.WINDOW.setVisible(false);
+                Constants.GAME.stopMusic();
+                Constants.WINDOW = new Window(true);
+                Constants.WINDOW.setVisible(true);
+                Constants.MENU.playMusic();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
             return;
         }
         if (key == KeyEvent.VK_SPACE){
-            Constants.timer.start();
+            Constants.TIMER.start();
             spaceship.fire();
         }
         if (key == KeyEvent.VK_UP){
-            Constants.timer.start();
-            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.timer.start();}
+            Constants.TIMER.start();
+            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.TIMER.start();}
             if(spaceship.moveFlag == false)spaceship.moveTime = System.currentTimeMillis();
             spaceship.canDecelerate = false;
             spaceship.moveFlag = true;
             spaceship.canAccelerate = true;
         }
         if (key == KeyEvent.VK_LEFT) {
-            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.timer.start();}
+            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.TIMER.start();}
             spaceship.leftRotationFlag = true;
         }
         if (key == KeyEvent.VK_RIGHT) {
-            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.timer.start();}
+            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.TIMER.start();}
             spaceship.rightRotationFlag = true;
         }
     }

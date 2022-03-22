@@ -12,12 +12,11 @@ public class MenuKeys implements KeyListener {
 
     @Override
     public void keyTyped(KeyEvent e) {
-        System.out.println("Key Typed");
+
     }
 
     @Override
     public void keyPressed(KeyEvent e) {
-        System.out.println("Key Pressed");
         int k = e.getKeyCode();
         if (k==KeyEvent.VK_ENTER) {
 			menu.select();
@@ -40,7 +39,7 @@ public class MenuKeys implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
-        System.out.println("Key Released");
+        
     }
     
 }

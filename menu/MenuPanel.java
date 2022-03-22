@@ -1,14 +1,14 @@
 package menu;
 
 import main.*;
+import main.Window;
+import sound.Music;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.io.IOException;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
-// import javax.sound.sampled.AudioSystem;
-// import javax.sound.sampled.Clip;
-// import javax.sound.sampled.AudioInputStream;
-// import java.net.URL;
 
 public class MenuPanel extends JPanel {
 
@@ -17,29 +17,30 @@ public class MenuPanel extends JPanel {
 	private Color titleColor;
 	private Font titleFont;
 	private Font font;
-	private Game game;
 	private MenuKeys keys;
+	private Music menuMusic;
 	
-	public MenuPanel(Game game) {
+	public MenuPanel() {
 		super();
 		addKeyListener(new TAdapter());
 		setFocusable(true);
 		setBackground(Color.BLACK);
-		this.game = game;
 		this.keys = new MenuKeys(this);
 		setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
 		requestFocus();
 		try {
+			this.playMusic();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void playMusic() throws LineUnavailableException, IOException {
+		try {
 			// Music :
-			// URL url = Menu.class.getResource("music.wav");
-			// AudioInputStream audio = AudioSystem.getAudioInputStream(url);
-			// Clip music = AudioSystem.getClip();
-			// music.open(audio);
-			// music.loop(-1);
-			// Fonts :
-			titleColor = new Color(128, 0, 0);
-			titleFont = new Font("Century Gothic", Font.PLAIN, 80);
-			font = new Font("Arial", Font.PLAIN, 50);
+			String filepath = "ressources/pokemon.wav";
+			this.menuMusic = new Music(filepath);
+			menuMusic.playMusic();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -53,6 +54,10 @@ public class MenuPanel extends JPanel {
 	}
 	
 	public void draw(Graphics2D g) {
+		// Fonts :
+		titleColor = new Color(128, 0, 0);
+		titleFont = new Font("Century Gothic", Font.PLAIN, 80);
+		font = new Font("Arial", Font.PLAIN, 50);
 		// draw title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
@@ -72,8 +77,9 @@ public class MenuPanel extends JPanel {
 	public void select() {
 		if (currentChoice == 0) {
 			// start
-			Game.GAME = new Game(false);
-            Game.GAME.setVisible(true);
+			this.menuMusic.stopMusic();
+			Constants.WINDOW = new Window(false);
+            Constants.WINDOW.setVisible(true);
 		}
 		if (currentChoice == 1) {
 			// help

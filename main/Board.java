@@ -2,10 +2,14 @@ package main;
 
 import spaceship.*;
 import map.*;
+import sound.Music;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.io.IOException;
 import java.util.List;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.geom.AffineTransform;
@@ -22,6 +26,7 @@ public class Board extends JPanel implements ActionListener{
     BufferedImage bgImage;
     private Keys k;
     public Minimap minimap;
+    private Music gameMusic;
 
     public Board() {
         addKeyListener(new TAdapter());
@@ -34,7 +39,7 @@ public class Board extends JPanel implements ActionListener{
         this.map = new Map();
         this.k = new Keys(spaceship);
         this.minimap = new Minimap(spaceship, map);
-        Constants.timer = new Timer(20,new ActionListener(){
+        Constants.TIMER = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 spaceship.moveTime2 = System.currentTimeMillis();
@@ -101,7 +106,7 @@ public class Board extends JPanel implements ActionListener{
 
     private void inGame() {
         if (!ingame) {
-            Constants.timer.stop();
+            Constants.TIMER.stop();
         }
     }
 
@@ -155,6 +160,20 @@ public class Board extends JPanel implements ActionListener{
         return false;
     }
 
+    public void playMusic() throws LineUnavailableException, IOException {
+		try {
+			// Music :
+			String filepath = "ressources/gamemusic.wav";
+			this.gameMusic = new Music(filepath);
+			gameMusic.playMusic();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+    public void stopMusic() {
+        this.gameMusic.stopMusic();
+    }
 
     private class TAdapter extends KeyAdapter {
         @Override

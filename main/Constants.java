@@ -1,5 +1,7 @@
 package main;
 
+import menu.*;
+
 import javax.swing.Timer;
 
 public class Constants {
@@ -9,5 +11,8 @@ public class Constants {
     public static final int B_HEIGHT = 600;
     public static final int BALL_X = 100;
     public static final int BALL_Y = 200;
-    public static Timer timer;
+    public static Timer TIMER;
+    public static Window WINDOW;
+    public static final MenuPanel MENU = new MenuPanel();
+    public static final Board GAME = new Board();
 }
