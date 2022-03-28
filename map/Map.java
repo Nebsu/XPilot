@@ -3,6 +3,7 @@ package map;
 import java.awt.*;
 import java.awt.image.*;
 import java.io.*;
+import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
 
@@ -12,10 +13,12 @@ public class Map {
 	
     public BufferedImage img_map; //image map
     public LinkedList<Obstacle> ListeObstacle=new LinkedList<>();
+	public ArrayList<Bonus> bonusList = new ArrayList<>();
     public final int MAP_SIZE = 50;
     public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
 	public Ball ball;
+	public long lastTime;
 
     public Map() throws IOException{
         try{
@@ -30,24 +33,24 @@ public class Map {
         // g2.drawImage(img_map,0,0,null);
     }
 
-	// public void addBonus(){
-    //     Random r1 = new Random();
-	// 	Random r2 = new Random();
-    //     while(true){
-	// 		int i = r1.nextInt(MAP_SIZE);
-	// 		int j = r2.nextInt(MAP_SIZE);
-	// 		System.out.println(i*48 + " " + j*48);
-    //         if(infor_map[i][j] == 0){
-	// 			// infor_map[i][j] = 9;
-	// 			int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
-	// 			int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
-	// 			Bonus bonus = new Bonus(x,y,i*48, j*48);
-	// 			ListeObstacle.add(bonus);
-	// 			bonus.draw(g2);
-	// 			return;
-    //         }
-    //     }
-    // }
+	public void addBonus(){
+		lastTime = System.currentTimeMillis();
+        Random r1 = new Random();
+		Random r2 = new Random();
+        while(true){
+			int i = r1.nextInt(MAP_SIZE);
+			int j = r2.nextInt(MAP_SIZE);
+			System.out.println(i*48 + " " + j*48);
+            if(infor_map[i][j] == 0){
+				// infor_map[i][j] = 9;
+				int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+				int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+				Bonus bonus = new Bonus(x,y,i*48, j*48);
+				bonusList.add(bonus);
+				return;
+            }
+        }
+    }
 
  	public void createinfor(){
     	try{
@@ -75,7 +78,7 @@ public class Map {
     }
     
     public void createInforAMap() throws IOException {
-    	for(int i=0;i<infor_map.length;i++) {
+    	for(int i=0;i<MAP_SIZE;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
     				int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
@@ -99,20 +102,6 @@ public class Map {
 				}
     		}
     	}
-
-		Random r1 = new Random();
-		Random r2 = new Random();
-		int i = r1.nextInt(MAP_SIZE);
-		int j = r2.nextInt(MAP_SIZE);
-		System.out.println(i*48 + " " + j*48);
-		if(infor_map[i][j] == 0){
-			// infor_map[i][j] = 9;
-			int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
-			int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
-			Bonus bonus = new Bonus(x,y,i*48, j*48);
-			ListeObstacle.add(bonus);
-			bonus.draw(g2);
-		}
     }
 
     public double distanceDeuxPoint(double x,double y,double x1,double y1) {
