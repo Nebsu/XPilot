@@ -13,12 +13,12 @@ import javax.swing.JPanel;
 public class MenuPanel extends JPanel {
 
 	int currentChoice = 0;
-	String[] options = {"Start","Help","Quit"};
+	String[] options = {"Start","Settings","Help","Quit"};
 	private Color titleColor;
 	private Font titleFont;
 	private Font font;
 	private MenuKeys keys;
-	private Music menuMusic;
+	protected Music menuMusic;
 	
 	public MenuPanel() {
 		super();
@@ -82,9 +82,13 @@ public class MenuPanel extends JPanel {
             Constants.WINDOW.setVisible(true);
 		}
 		if (currentChoice == 1) {
-			// help
+			// settings :
+
 		}
 		if (currentChoice == 2) {
+			// help
+		}
+		if (currentChoice == 3) {
 			// quit :
 			System.exit(0);
 		}
