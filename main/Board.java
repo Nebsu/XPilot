@@ -1,7 +1,3 @@
-/**
- * The Board class is the main class of the game. It contains the spaceship, the map, the minimap, the
- * missiles, the bonuses, the health bar and the fuel bar. It also contains the main loop of the game
- */
 package main;
 
 import map.*;
@@ -12,9 +8,12 @@ import java.awt.image.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.geom.AffineTransform;
+import sound.Music;
 
 public class Board extends JPanel implements ActionListener{
 
@@ -28,12 +27,13 @@ public class Board extends JPanel implements ActionListener{
     private Keys k;
     public Minimap minimap;
     public List<Missile> missiles;
+    private Music gameMusic;
 
     public Board() throws IOException{
         //Initialisation
         boardInit();
         //Boucle du jeu
-        Constants.timer = new Timer(20,new ActionListener(){
+        Constants.TIMER = new Timer(20,new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent e){
                 inGame();
@@ -59,7 +59,7 @@ public class Board extends JPanel implements ActionListener{
                 repaint();
             }
         });
-        Constants.timer.start();
+        Constants.TIMER.start();
     }
 
     private void boardInit() throws IOException{
@@ -205,7 +205,7 @@ public class Board extends JPanel implements ActionListener{
             ingame = false;
         }
         if (!ingame) {
-            Constants.timer.stop();
+            Constants.TIMER.stop();
         }
     }
 
@@ -267,6 +267,21 @@ public class Board extends JPanel implements ActionListener{
             }
         }
         return false;
+    }
+
+    public void playMusic() throws LineUnavailableException, IOException {
+		try {
+			// Music :
+			String filepath = "ressources/gamemusic.wav";
+			this.gameMusic = new Music(filepath);
+			gameMusic.playMusic();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+
+    public void stopMusic() {
+        this.gameMusic.stopMusic();
     }
 
     //Inputs

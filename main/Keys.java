@@ -1,11 +1,16 @@
 package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import sound.SFX;
+
 
 public class Keys implements KeyListener{
     Board board;
+    private SFX pew;
+
     public Keys(Board b){
         this.board = b;
+        this.pew = new SFX("ressources/pew.wav");
     }
 
     @Override
@@ -15,8 +20,28 @@ public class Keys implements KeyListener{
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_SPACE){
+        if (key==KeyEvent.VK_ESCAPE) {
+            try {
+                Constants.TIMER.stop();
+                Constants.WINDOW.setVisible(false);
+                Constants.GAME.stopMusic();
+                Constants.WINDOW = new Window(true);
+                Constants.WINDOW.setVisible(true);
+                Constants.MENU.playMusic();
+            } catch (Exception e1) {
+                e1.printStackTrace();
+            }
+            return;
+        }
+        if (key == Constants.SHOOT){
+            Constants.TIMER.start();
             board.fire();
+            try {
+                pew.playSound();
+                // pew.stopSound();
+            } catch (Exception e2) {
+                e2.printStackTrace();
+            }
         }
         if (key == KeyEvent.VK_UP){
             if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
@@ -40,6 +65,8 @@ public class Keys implements KeyListener{
                 board.spaceship.shield.disable();
             }
         }
+
+
     }
 
     @Override
