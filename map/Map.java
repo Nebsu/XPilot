@@ -22,7 +22,7 @@ public class Map {
 
     public Map() throws IOException{
         try{
-            this.img_map=ImageIO.read(new File("ressources/background.png"));
+            this.img_map=ImageIO.read(new File("ressources/background2.png"));
         }catch(IOException e){
             e.printStackTrace();
         }

@@ -117,9 +117,6 @@ public class SpaceShip extends Sprite {
         return res;
     }
 
-/**
- * Consume fuel at a rate of CONSUME_RATE every CONSUME_SPEED milliseconds
- */
     public void consumeFuel(){
         long delta = System.currentTimeMillis() - ft0;
         ftimer += delta;

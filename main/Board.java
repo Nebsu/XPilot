@@ -6,7 +6,6 @@ package main;
 
 import map.*;
 import object.*;
-
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
@@ -24,7 +23,7 @@ public class Board extends JPanel implements ActionListener{
     private boolean ingame;
     AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
-    Graphics2D g2d;
+    Graphics2D g2;
     BufferedImage bgImage;
     private Keys k;
     public Minimap minimap;
@@ -82,7 +81,11 @@ public class Board extends JPanel implements ActionListener{
         super.paintComponent(g0);
         Graphics2D g = (Graphics2D) g0;
         if (ingame) {
-            drawObjects(g);
+            try {
+                drawObjects(g);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
             drawHealthBar(g);
             drawFuelBar(g);
         } else {
@@ -90,34 +93,55 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 
-    private void drawObjects(Graphics2D g) {
+    private void drawObjects(Graphics2D g) throws IOException {
+        //create image comme une seconde image de map et renouvelle à chaque repaint
+        BufferedImage image = new BufferedImage(2400,2400,BufferedImage.TYPE_INT_BGR);
+        Graphics2D g3=image.createGraphics();
+        g3.drawImage(map.img_map, 0, 0, null);
+
+        bgImage= new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
+        g2 = bgImage.createGraphics();
+
         if (spaceship.isVisible()) {
-            //Camera
-            g.drawImage(map.img_map,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+            for (Missile missile : this.missiles) {
+                //paint Missile dans la seconde image
+                if(missile instanceof MissileDiffusion){
+                    MissileDiffusion represent=(MissileDiffusion)missile;
+                    for(MissileNormale tmp:represent.getDiffusion()){
+                        g3.drawImage(tmp.getImage(), (int)tmp.getX(), (int)tmp.getY(),null);
+                    }
+                }
+                else{
+                    System.out.println("Missile: " + missile.getX() + " " + missile.getY());
+                    g3.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(),null);
+                }
+            }
+
+            //Camera affiche la position de vaisseau dans le seconde image
+            g2.drawImage(image,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+
             //Vaisseau
             af.setToIdentity();
             af.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2);
             af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
-            g.drawImage(spaceship.getImage(),af,null);
-            //Missiles
-            for (Missile missile : this.missiles) {
-                af2.setToIdentity();
-                af2.translate(missile.getX(),missile.getY());
-                g.drawImage(missile.getImage(), af2, null);  
-            }
-            //Balle
-            if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), Constants.B_WIDTH/2, Constants.B_HEIGHT/2+40, null);
-            //Textes
-            g.setColor(Color.GREEN);
-            g.drawString("Ball: " + map.ball.isTaken(), 2, 20);
-            g.drawString("Shield: " + spaceship.shield.getQuantity(), 2, 35);
-        }
+            g2.drawImage(spaceship.getImage(),af,null);
 
-        if (spaceship.shield.isActive()){
-            g.setColor(Color.WHITE);
-            g.drawOval(Constants.B_WIDTH/2-8, Constants.B_HEIGHT/2-9, 33, 33);
+            //Boule
+            if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), Constants.B_WIDTH/2, Constants.B_HEIGHT/2+40, null);
+
+            //Textes
+            g2.setColor(Color.GREEN);
+            g2.drawString("Ball: " + map.ball.isTaken(), 2, 20);
+            g2.drawString("Shield: " + spaceship.shield.getQuantity(), 2, 35);
+            if (spaceship.shield.isActive()){
+                g2.setColor(Color.WHITE);
+                g2.drawOval(Constants.B_WIDTH/2-8, Constants.B_HEIGHT/2-9, 33, 33);
+            }
+            //afficher dans g
+            g.drawImage(bgImage, 0, 0, null);
         }
     }
+
     //Dessine la barre de vie
     private void drawHealthBar(Graphics2D g){
         //Fond de la barre
@@ -195,12 +219,6 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 
-    private void updateBall(){
-        if (map.ball.isTaken()){
-            
-        }
-    }
-
     private void updateMissiles() {
         List<Missile> ms = this.missiles;
         for (Missile m : this.missiles) {
@@ -222,7 +240,7 @@ public class Board extends JPanel implements ActionListener{
     //Autres fonctions
 
     public void fire() {
-        missiles.add(new Missile(Constants.B_WIDTH/2, Constants.B_HEIGHT/2, spaceship.rotation));
+        missiles.add(new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation));
     }
 
     public boolean checkCollision(){

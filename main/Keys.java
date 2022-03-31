@@ -19,7 +19,6 @@ public class Keys implements KeyListener{
             board.fire();
         }
         if (key == KeyEvent.VK_UP){
-            // Constants.timer.start();
             if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
             if(board.spaceship.moveFlag == false)board.spaceship.moveTime = System.currentTimeMillis();
             board.spaceship.canDecelerate = false;
