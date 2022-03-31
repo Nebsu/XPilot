@@ -27,10 +27,8 @@ public class Map {
             e.printStackTrace();
         }
         g2=img_map.createGraphics();
-		// this.addBonus();
         createinfor();
         createInforAMap();
-        // g2.drawImage(img_map,0,0,null);
     }
 
 	public void addBonus(){
@@ -40,9 +38,7 @@ public class Map {
         while(true){
 			int i = r1.nextInt(MAP_SIZE);
 			int j = r2.nextInt(MAP_SIZE);
-			System.out.println(i*48 + " " + j*48);
             if(infor_map[i][j] == 0){
-				// infor_map[i][j] = 9;
 				int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
 				int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
 				Bonus bonus = new Bonus(x,y,i*48, j*48);

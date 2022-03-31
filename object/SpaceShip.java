@@ -1,13 +1,14 @@
+
 package object;
 
 public class SpaceShip extends Sprite {
 
-    public long moveTime;
     public boolean timerStartFlag = true;
     public Shield shield = new Shield();
     private final int MAX_HEALTH = 1000;
     private int health = MAX_HEALTH;
     //Rotation and Speed
+    public long moveTime;
     public int rotation;
     public float SPEED = 4;
     public boolean rightRotationFlag = false;
@@ -116,6 +117,9 @@ public class SpaceShip extends Sprite {
         return res;
     }
 
+/**
+ * Consume fuel at a rate of CONSUME_RATE every CONSUME_SPEED milliseconds
+ */
     public void consumeFuel(){
         long delta = System.currentTimeMillis() - ft0;
         ftimer += delta;

@@ -11,16 +11,10 @@ public class Missile extends Sprite {
         loadImage("ressources/shot_h.png");
         getImageDimensions();    
         direction = rotation;
-        System.out.println("oui");
     }
 
     public void move() {
-        // if(rebounce%2==0){
-            x += MISSILE_SPEED * Math.cos(Math.toRadians(direction));
-            y += MISSILE_SPEED * Math.sin(Math.toRadians(direction));
-        // }else{
-        //     x -= MISSILE_SPEED * Math.cos(Math.toRadians(direction));
-        //     y -= MISSILE_SPEED * Math.sin(Math.toRadians(direction));
-        // }
+        x += MISSILE_SPEED * Math.cos(Math.toRadians(direction));
+        y += MISSILE_SPEED * Math.sin(Math.toRadians(direction));
     }
 }

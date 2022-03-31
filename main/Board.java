@@ -1,3 +1,7 @@
+/**
+ * The Board class is the main class of the game. It contains the spaceship, the map, the minimap, the
+ * missiles, the bonuses, the health bar and the fuel bar. It also contains the main loop of the game
+ */
 package main;
 
 import map.*;
@@ -18,7 +22,6 @@ public class Board extends JPanel implements ActionListener{
     public SpaceShip spaceship;
     private Map map;
     private boolean ingame;
-    AffineTransform af3 = new AffineTransform();
     AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
     Graphics2D g2d;
@@ -36,10 +39,11 @@ public class Board extends JPanel implements ActionListener{
             public void actionPerformed(ActionEvent e){
                 inGame();
                 minimap.repaint();
-                //checkcollision avant de move avec les ordonnees de move
+                //checkcollision avant de move avec les cordonnees de move
                 if(!checkCollision()){
                     updateShip();
                 }else{
+                    //Quand il y a collision
                     if(spaceship.canTakeDamage()){
                         if(spaceship.shield.isActive()){
                             spaceship.shield.destroy();
@@ -49,10 +53,10 @@ public class Board extends JPanel implements ActionListener{
                         }
                     }
                 }
-                updateMissiles();
-                updateBonus();
                 spaceship.rotateRight(spaceship.rightRotationFlag);
                 spaceship.rotateLeft(spaceship.leftRotationFlag);
+                updateMissiles();
+                updateBonus();
                 repaint();
             }
         });
@@ -97,9 +101,9 @@ public class Board extends JPanel implements ActionListener{
             g.drawImage(spaceship.getImage(),af,null);
             //Missiles
             for (Missile missile : this.missiles) {
-                af3.setToIdentity();
-                af3.translate(missile.getX(),missile.getY());
-                g.drawImage(missile.getImage(), af3, null);  
+                af2.setToIdentity();
+                af2.translate(missile.getX(),missile.getY());
+                g.drawImage(missile.getImage(), af2, null);  
             }
             //Balle
             if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), Constants.B_WIDTH/2, Constants.B_HEIGHT/2+40, null);
@@ -116,25 +120,30 @@ public class Board extends JPanel implements ActionListener{
     }
     //Dessine la barre de vie
     private void drawHealthBar(Graphics2D g){
+        //Fond de la barre
         g.setColor(Color.WHITE);
         g.drawString("HP", Constants.B_WIDTH/4-30, Constants.B_HEIGHT/50+12);
         g.fillRect(Constants.B_WIDTH/4, Constants.B_HEIGHT/50, Constants.B_WIDTH/2, 15);
+        //Barre de vie
         g.setColor(Color.RED);
         float width = (Constants.B_WIDTH/2-4) * ((float)spaceship.getHealth() / (float)spaceship.getMaxHealth());
-        // System.out.println(width);
         g.fillRect(Constants.B_WIDTH/4+2, Constants.B_HEIGHT/50+2, (int)Math.round(width), 15-4);
+        //Nombre
         g.setColor(Color.GRAY);
         g.drawString("" + spaceship.getHealth(), Constants.B_WIDTH/2-10, Constants.B_HEIGHT/50+12);
     }
 
     //Dessine la barre de fuel
     private void drawFuelBar(Graphics2D g){
+        //Fond de la barre
         g.setColor(Color.WHITE);
         g.drawString("Fuel", Constants.B_WIDTH/4-30, Constants.B_HEIGHT/20+12);
         g.fillRect(Constants.B_WIDTH/4, Constants.B_HEIGHT/20, Constants.B_WIDTH/2, 15);
+        //Barre de fuel
         g.setColor(Color.GREEN);
         float width = (Constants.B_WIDTH/2-4) * ((float)spaceship.getFuel() / (float)spaceship.BASE_FUEL);
         g.fillRect(Constants.B_WIDTH/4+2, Constants.B_HEIGHT/20+2, (int)Math.round(width), 15-4);
+        //Nombre
         g.setColor(Color.GRAY);
         g.drawString("" + spaceship.getFuel(), Constants.B_WIDTH/2-10, Constants.B_HEIGHT/20+12);
     }
@@ -157,29 +166,26 @@ public class Board extends JPanel implements ActionListener{
     //Ecran de fin
     private void drawGameOver(Graphics g) {
         String msg = "Game Over";
-        Font small = new Font("Helvetica", Font.BOLD, 14);
-        FontMetrics fm = getFontMetrics(small);
+        Font ft = new Font("Helvetica", Font.BOLD, 14);
+        FontMetrics fm = getFontMetrics(ft);
         g.setColor(Color.white);
-        g.setFont(small);
+        g.setFont(ft);
         g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
         Constants.B_HEIGHT / 2);
     }
 
     //Verifie les conditions d'arrêt du jeu
     private void inGame() {
-        if(spaceship.getFuel() <= 0){
+        if(spaceship.getFuel() <= 0 ||
+           spaceship.getHealth() <= 0){
             ingame = false;
         }
-        if(spaceship.getHealth() <= 0){
-            ingame = false;
-        } 
         if (!ingame) {
             Constants.timer.stop();
         }
     }
 
     //Fonctions Update
-
     private void updateShip() {
         if (spaceship.isVisible()) {
             spaceship.move();
@@ -236,7 +242,7 @@ public class Board extends JPanel implements ActionListener{
             Bonus b = map.bonusList.get(i);
             Rectangle r=new Rectangle(b.x[0],b.y[0],b.x[1]-b.x[0],b.y[2]-b.y[1]);
             if(s.intersects(r)){
-                if(spaceship.getFuel()<spaceship.BASE_FUEL)spaceship.setFuel(spaceship.getFuel()+100);
+                if(spaceship.getFuel()<spaceship.BASE_FUEL)spaceship.setFuel(spaceship.getFuel()+500);
                 spaceship.shield.add();
                 erase(b);
                 map.bonusList.remove(b);
