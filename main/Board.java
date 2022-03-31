@@ -73,27 +73,47 @@ public class Board extends JPanel implements ActionListener{
     }
 
     private void drawObjects(Graphics2D g) throws IOException {
-        //g.drawImage(map.img_map, 0, 0, null);
-        g2 = map.img_map.createGraphics();
+        //create image comme une seconde image de map et renouvelle à chaque repaint
+        BufferedImage image = new BufferedImage(2400,2400,BufferedImage.TYPE_INT_BGR);
+        Graphics2D g3=image.createGraphics();
+        g3.drawImage(map.img_map, 0, 0, null);
+
+        bgImage= new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
+        g2 = bgImage.createGraphics();
+
         if (spaceship.isVisible()) {
-            //Camera
-            g.drawImage(map.img_map,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+
             for (Missile missile : this.missiles) {
-            //Missile
-            System.out.println("Missile: " + missile.getX() + " " + missile.getY());
-            g2.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(),null);  
+                //paint Missile dans la seconde image
+                if(missile instanceof MissileDiffusion){
+                    MissileDiffusion represent=(MissileDiffusion)missile;
+                    for(MissileNormale tmp:represent.getDiffusion()){
+                        g3.drawImage(tmp.getImage(), (int)tmp.getX(), (int)tmp.getY(),null);
+                    }
+                }
+                else{
+                    System.out.println("Missile: " + missile.getX() + " " + missile.getY());
+                    g3.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(),null);
+                }
             }
+
+            //Camera affiche la position de vaisseau dans le seconde image
+            g2.drawImage(image,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+
             //Vaisseau
             af.setToIdentity();
             af.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2);
             af.rotate(Math.toRadians(spaceship.rotation),spaceship.getImage().getWidth(this)/2, spaceship.getImage().getHeight(this)/2);
-            g.drawImage(spaceship.getImage(),af,null);
+            g2.drawImage(spaceship.getImage(),af,null);
             //Boule
             if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), af2, null);
             af2.setToIdentity();
             af2.translate(Constants.B_WIDTH/2, Constants.B_HEIGHT/2+40);
-            g.drawString("Ball: " + map.ball.isTaken(), 2, 20);
+            g2.drawString("Ball: " + map.ball.isTaken(), 2, 20);
             // g.setColor(Color.WHITE);
+
+            //afficher dans g
+            g.drawImage(bgImage, 0, 0, null);
         }
     }
 
@@ -132,7 +152,7 @@ public class Board extends JPanel implements ActionListener{
     }
 
     public void fire() {
-        missiles.add(new Missile(spaceship.getX(), spaceship.getY(), spaceship.rotation));
+        missiles.add(new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation));
     }
 
     public boolean checkCollision(){

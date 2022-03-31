@@ -1,25 +1,14 @@
 package object;
-public class Missile extends Sprite {
+public abstract class Missile extends Sprite {
 
-    private final int MISSILE_SPEED = 7;
     private double direction;
-    public int rebounce = 0;
 
 
-    public Missile(double x, double y, int rotation) {
+    public Missile(double x, double y) {
         super(x, y);
         loadImage("ressources/shot_h.png");
-        getImageDimensions();    
-        direction = rotation;
+        getImageDimensions();
     }
 
-    public void move() {
-        // if(rebounce%2==0){
-            x += MISSILE_SPEED * Math.cos(Math.toRadians(direction));
-            y += MISSILE_SPEED * Math.sin(Math.toRadians(direction));
-        // }else{
-        //     x -= MISSILE_SPEED * Math.cos(Math.toRadians(direction));
-        //     y -= MISSILE_SPEED * Math.sin(Math.toRadians(direction));
-        // }
-    }
+    public abstract void move();
 }
