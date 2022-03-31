@@ -1,6 +1,7 @@
 package object;
 
 public class Shield {
+    
     private boolean active = false;
     private int quantity = 5;
     

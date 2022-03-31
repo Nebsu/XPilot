@@ -1,8 +1,6 @@
 package object;
+
 public abstract class Missile extends Sprite {
-
-    private double direction;
-
 
     public Missile(double x, double y) {
         super(x, y);
@@ -11,4 +9,5 @@ public abstract class Missile extends Sprite {
     }
 
     public abstract void move();
+
 }

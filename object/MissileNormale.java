@@ -1,4 +1,5 @@
 package object;
+
 public class MissileNormale extends Missile{
 
     private final int MISSILE_SPEED = 7;

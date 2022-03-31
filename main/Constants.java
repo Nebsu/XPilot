@@ -22,7 +22,7 @@ public class Constants {
     public static Window WINDOW;
     public static final MenuPanel MENU = new MenuPanel();
     public static final Board GAME = createBoard();
-    public static Board createBoard(){
+    private static Board createBoard(){
         try {
             return new Board();
         } catch (IOException e) {

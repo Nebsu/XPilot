@@ -10,7 +10,7 @@ import javax.sound.sampled.AudioInputStream;
 
 public class SFX {
  
-    private File file;
+    private File file; // fichier
     private AudioInputStream audio;
     private Clip clip;
     private static float volume = 1;
@@ -31,7 +31,6 @@ public class SFX {
     }
 
     public void playSound() throws LineUnavailableException, IOException {
-
         this.setVolume();
         clip.start();
     }

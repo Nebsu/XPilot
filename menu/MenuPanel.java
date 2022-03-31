@@ -12,13 +12,13 @@ import javax.swing.JPanel;
 
 public class MenuPanel extends JPanel {
 
-	int currentChoice = 0;
-	String[] options = {"Start","Settings","Help","Quit"};
-	private Color titleColor;
-	private Font titleFont;
-	private Font font;
-	private MenuKeys keys;
-	protected Music menuMusic;
+	int currentChoice = 0; // choix
+	String[] options = {"Start","Settings","Help","Quit"}; // menu options
+	private Color titleColor; // couleur titre
+	private Font titleFont; // police titre
+	private Font font; // police des options
+	private MenuKeys keys; // touches menu
+	protected Music menuMusic; // music de fond
 	
 	public MenuPanel() {
 		super();

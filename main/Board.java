@@ -1,26 +1,26 @@
 package main;
 
 import map.*;
+import sound.Music;
 import object.*;
+
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 import java.awt.geom.AffineTransform;
-import sound.Music;
+
 
 public class Board extends JPanel implements ActionListener{
 
-    public SpaceShip spaceship;
+    public SpaceShip spaceship; 
     private Map map;
     private boolean ingame;
-    AffineTransform af2 = new AffineTransform();
     AffineTransform af = new AffineTransform();
     Graphics2D g2;
     BufferedImage bgImage;
@@ -74,6 +74,18 @@ public class Board extends JPanel implements ActionListener{
         this.k = new Keys(this);
         this.minimap = new Minimap(spaceship, map);
         map.addBonus();
+    }
+
+    
+    //Verifie les conditions d'arrêt du jeu
+    private void inGame() {
+        if(spaceship.getFuel() <= 0 ||
+            spaceship.getHealth() <= 0){
+            ingame = false;
+        }
+        if (!ingame) {
+            Constants.TIMER.stop();
+        }
     }
 
     @Override
@@ -196,17 +208,6 @@ public class Board extends JPanel implements ActionListener{
         g.setFont(ft);
         g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
         Constants.B_HEIGHT / 2);
-    }
-
-    //Verifie les conditions d'arrêt du jeu
-    private void inGame() {
-        if(spaceship.getFuel() <= 0 ||
-           spaceship.getHealth() <= 0){
-            ingame = false;
-        }
-        if (!ingame) {
-            Constants.TIMER.stop();
-        }
     }
 
     //Fonctions Update

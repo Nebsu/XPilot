@@ -100,40 +100,4 @@ public class Map {
     	}
     }
 
-    public double distanceDeuxPoint(double x,double y,double x1,double y1) {
-		double D=Math.sqrt((x-x1)*(x-x1)+(y-y1)*(y-y1));
-		return D;
-	}
-
-    public double PointToLine(double x0,double y0,double x1,double y1,double x2,double y2) {
-		double d;
-		double a,b,c;
-		a=distanceDeuxPoint(x1, y1, x2, y2);
-	    b=distanceDeuxPoint(x1, y1, x0, y0);
-	    c=distanceDeuxPoint(x2, y2, x0, y0);
-	    	//cas 0
-	      if (c <= 0.000001 || b <= 0.000001) {
-	        d = 0;
-	        return d;
-	      }
-	      //deux point superpose
-	      if (a <= 0.000001) {
-	        d = b;
-	        return d;
-	      }
-	      //triangle rectangle en c ou b
-	      if (c * c >= a * a + b * b) {
-	        d = b;
-	        return d;
-	      }
-	      if (b * b >= a * a + c * c) {
-	        d = c;
-	        return d;
-	      }
-	      //cas normal obtenir la hauteur
-	      double p = (a + b + c) / 2;//demi perimetre
-	      double s = Math.sqrt(p * (p - a) * (p - b) * (p - c));//aire d'un triangle
-	      d = 2 * s / a;//hauteur
-	      return d;
-	}
 }

@@ -43,22 +43,22 @@ public class Keys implements KeyListener{
                 e2.printStackTrace();
             }
         }
-        if (key == KeyEvent.VK_UP){
+        if (key == Constants.UP){
             if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
             if(board.spaceship.moveFlag == false)board.spaceship.moveTime = System.currentTimeMillis();
             board.spaceship.canDecelerate = false;
             board.spaceship.moveFlag = true;
             board.spaceship.canAccelerate = true;
         }
-        if (key == KeyEvent.VK_LEFT) {
+        if (key == Constants.LEFT) {
             if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
             board.spaceship.leftRotationFlag = true;
         }
-        if (key == KeyEvent.VK_RIGHT) {
+        if (key == Constants.RIGHT) {
             if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
             board.spaceship.rightRotationFlag = true;
         }
-        if (key == KeyEvent.VK_C){
+        if (key == Constants.SHIELD){
             if(!board.spaceship.shield.isActive() && board.spaceship.shield.getQuantity() > 0){
                 board.spaceship.shield.enable();
             }else{
@@ -72,13 +72,13 @@ public class Keys implements KeyListener{
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
-        if (key == KeyEvent.VK_RIGHT) {
+        if (key == Constants.RIGHT) {
             board.spaceship.rightRotationFlag = false;
         }
-        if (key == KeyEvent.VK_LEFT) {
+        if (key == Constants.LEFT) {
             board.spaceship.leftRotationFlag = false;
         }
-        if (key == KeyEvent.VK_UP) {
+        if (key == Constants.UP) {
             board.spaceship.canDecelerate = true;
             board.spaceship.canAccelerate = false;
             board.spaceship.moveFlag = false;
