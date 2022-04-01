@@ -1,24 +1,20 @@
-package spaceship;
-
-import main.*;
-import sound.SFX;
-
+package main;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import sound.SFX;
 
-public class Keys implements KeyListener {
 
-    private SpaceShip spaceship;
+public class Keys implements KeyListener{
+    Board board;
     private SFX pew;
 
-    public Keys(SpaceShip s){
-        this.spaceship = s;
+    public Keys(Board b){
+        this.board = b;
         this.pew = new SFX("ressources/pew.wav");
     }
 
     @Override
     public void keyTyped(KeyEvent e) {
-
     }
 
     @Override
@@ -39,45 +35,53 @@ public class Keys implements KeyListener {
         }
         if (key == Constants.SHOOT){
             Constants.TIMER.start();
-            spaceship.fire();
+            board.fire();
             try {
                 pew.playSound();
-                pew.stopSound();
+                // pew.stopSound();
             } catch (Exception e2) {
                 e2.printStackTrace();
             }
         }
         if (key == Constants.UP){
-            Constants.TIMER.start();
-            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.TIMER.start();}
-            if(spaceship.moveFlag == false)spaceship.moveTime = System.currentTimeMillis();
-            spaceship.canDecelerate = false;
-            spaceship.moveFlag = true;
-            spaceship.canAccelerate = true;
+            if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
+            if(board.spaceship.moveFlag == false)board.spaceship.moveTime = System.currentTimeMillis();
+            board.spaceship.canDecelerate = false;
+            board.spaceship.moveFlag = true;
+            board.spaceship.canAccelerate = true;
         }
         if (key == Constants.LEFT) {
-            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.TIMER.start();}
-            spaceship.leftRotationFlag = true;
+            if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
+            board.spaceship.leftRotationFlag = true;
         }
         if (key == Constants.RIGHT) {
-            if(spaceship.timerStartFlag){spaceship.timerStartFlag = false; Constants.TIMER.start();}
-            spaceship.rightRotationFlag = true;
+            if(board.spaceship.timerStartFlag){board.spaceship.timerStartFlag = false;}
+            board.spaceship.rightRotationFlag = true;
         }
+        if (key == Constants.SHIELD){
+            if(!board.spaceship.shield.isActive() && board.spaceship.shield.getQuantity() > 0){
+                board.spaceship.shield.enable();
+            }else{
+                board.spaceship.shield.disable();
+            }
+        }
+
+
     }
 
     @Override
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == Constants.RIGHT) {
-            spaceship.rightRotationFlag = false;
+            board.spaceship.rightRotationFlag = false;
         }
         if (key == Constants.LEFT) {
-            spaceship.leftRotationFlag = false;
+            board.spaceship.leftRotationFlag = false;
         }
         if (key == Constants.UP) {
-            spaceship.canDecelerate = true;
-            spaceship.canAccelerate = false;
-            spaceship.moveFlag = false;
+            board.spaceship.canDecelerate = true;
+            board.spaceship.canAccelerate = false;
+            board.spaceship.moveFlag = false;
         }
     }
     

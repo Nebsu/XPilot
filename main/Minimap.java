@@ -5,8 +5,9 @@ import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import java.awt.image.*;
 import map.Map;
+import object.SpaceShip;
+
 import java.io.*;
-import spaceship.SpaceShip;
 
 public class Minimap extends JPanel{
     public Map minimap;
@@ -39,6 +40,9 @@ public class Minimap extends JPanel{
             for(int j=0;j<minimap.infor_map.length;j++){
                 if(minimap.infor_map[i][j]==1){
                     g.setColor(Color.YELLOW);
+                    g.fillRect(i*4,j*4,4,4);
+                }else if(minimap.infor_map[i][j]==2){
+                    g.setColor(Color.RED);
                     g.fillRect(i*4,j*4,4,4);
                 }
             }
