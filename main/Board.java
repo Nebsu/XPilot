@@ -12,15 +12,15 @@ import java.util.ArrayList;
 import java.util.List;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
-import javax.swing.Timer;
+import java.util.Timer;
 import java.awt.geom.AffineTransform;
 
 
 public class Board extends JPanel implements ActionListener{
 
-    public SpaceShip spaceship; 
-    private Map map;
-    private boolean ingame;
+    SpaceShip spaceship; 
+    Map map;
+    boolean ingame;
     AffineTransform af = new AffineTransform();
     Graphics2D g2;
     BufferedImage bgImage;
@@ -32,34 +32,8 @@ public class Board extends JPanel implements ActionListener{
     public Board() throws IOException{
         //Initialisation
         boardInit();
-        //Boucle du jeu
-        Constants.TIMER = new Timer(20,new ActionListener(){
-            @Override
-            public void actionPerformed(ActionEvent e){
-                inGame();
-                minimap.repaint();
-                //checkcollision avant de move avec les cordonnees de move
-                if(!checkCollision()){
-                    updateShip();
-                }else{
-                    //Quand il y a collision
-                    if(spaceship.canTakeDamage()){
-                        if(spaceship.shield.isActive()){
-                            spaceship.shield.destroy();
-                            spaceship.shield.disable();
-                        }else{
-                            spaceship.setHealth(spaceship.getHealth()-50);
-                        }
-                    }
-                }
-                spaceship.rotateRight(spaceship.rightRotationFlag);
-                spaceship.rotateLeft(spaceship.leftRotationFlag);
-                updateMissiles();
-                updateBonus();
-                repaint();
-            }
-        });
-        Constants.TIMER.start();
+        Constants.TIMER=new Timer();
+        Constants.TIMER.schedule(new GameLoop(this), 0,20);
     }
 
     private void boardInit() throws IOException{
@@ -78,16 +52,15 @@ public class Board extends JPanel implements ActionListener{
 
     
     //Verifie les conditions d'arrêt du jeu
-    private void inGame() {
+    public void inGame() {
         if(spaceship.getFuel() <= 0 ||
             spaceship.getHealth() <= 0){
             ingame = false;
         }
         if (!ingame) {
-            Constants.TIMER.stop();
+            Constants.TIMER.cancel();
         }
     }
-
     @Override
     public void paintComponent(Graphics g0) {
         super.paintComponent(g0);
@@ -124,13 +97,12 @@ public class Board extends JPanel implements ActionListener{
                     }
                 }
                 else{
-                    System.out.println("Missile: " + missile.getX() + " " + missile.getY());
                     g3.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(),null);
                 }
             }
 
             //Camera affiche la position de vaisseau dans le seconde image
-            g2.drawImage(image,(int)(-spaceship.getX())+400,(int)(-spaceship.getY())+300, null);
+            g2.drawImage(image,(int)(-spaceship.getX())+Constants.B_WIDTH/2,(int)(-spaceship.getY())+Constants.B_HEIGHT/2, null);
 
             //Vaisseau
             af.setToIdentity();
@@ -139,8 +111,14 @@ public class Board extends JPanel implements ActionListener{
             g2.drawImage(spaceship.getImage(),af,null);
 
             //Boule
-            if(map.ball.isTaken()) g.drawImage(map.ball.getImage(), Constants.B_WIDTH/2, Constants.B_HEIGHT/2+40, null);
-
+            if(map.ball.isTaken()) {
+                g2.setColor(Color.WHITE);
+                g2.drawOval(10, Constants.B_HEIGHT-35, 33, 33);
+                g2.fillOval(10, Constants.B_HEIGHT-35, 33, 33);
+            }else{
+                g2.setColor(Color.WHITE);
+                g2.drawOval(10, Constants.B_HEIGHT-35, 33, 33);
+            }
             //Textes
             g2.setColor(Color.GREEN);
             g2.drawString("Ball: " + map.ball.isTaken(), 2, 20);
@@ -184,7 +162,7 @@ public class Board extends JPanel implements ActionListener{
         g.drawString("" + spaceship.getFuel(), Constants.B_WIDTH/2-10, Constants.B_HEIGHT/20+12);
     }
     //Dessine les bonus
-    private void drawBonus(){
+    public void drawBonus(){
         for(Bonus b : map.bonusList){
             map.g2.setColor(Color.ORANGE);
             map.g2.drawOval(b.x2+10, b.y2+10, 10, 10);
@@ -193,7 +171,7 @@ public class Board extends JPanel implements ActionListener{
     }
 
     //Efface les bonus pris
-    private void erase(Bonus b){
+    public void erase(Bonus b){
         map.g2.setColor(Color.BLACK);
         map.g2.drawOval(b.x2+10, b.y2+10, 10, 10);
         map.g2.fillOval(b.x2+10, b.y2+10, 10, 10);
@@ -209,65 +187,14 @@ public class Board extends JPanel implements ActionListener{
         g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
         Constants.B_HEIGHT / 2);
     }
-
-    //Fonctions Update
-    private void updateShip() {
-        if (spaceship.isVisible()) {
-            spaceship.move();
-            spaceship.acceleration();
-            spaceship.deceleration();
-            if(spaceship.moveFlag)spaceship.consumeFuel();
-        }
-    }
-
-    private void updateMissiles() {
-        List<Missile> ms = this.missiles;
-        for (Missile m : this.missiles) {
-            if (m.isVisible()) {
-                m.move();
-            } else {
-                ms.remove(m);
-            }
-        }
-    }
     
-    private void updateBonus(){
-        if(System.currentTimeMillis() - map.lastTime > Constants.BONUS_SPAWNRATE){
-            map.addBonus();
-            drawBonus();
-        }
-    }
-
     //Autres fonctions
 
     public void fire() {
-        missiles.add(new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation));
-    }
-
-    public boolean checkCollision(){
-        Rectangle s=new Rectangle((int)(spaceship.getX()+spaceship.SPEED * Math.cos(Math.toRadians(spaceship.rotation))),(int)(spaceship.getY()+spaceship.SPEED*Math.sin(Math.toRadians(spaceship.rotation))),16,16);
-        for (Obstacle obstacle : map.ListeObstacle) {
-            Rectangle o=new Rectangle(obstacle.x[0],obstacle.y[0],obstacle.x[1]-obstacle.x[0],obstacle.y[2]-obstacle.y[1]);
-            //ship apres le movement
-            if(s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof Ball) && !(obstacle instanceof Bonus)){
-                return true;
-            }else if(s.intersects(o)&& obstacle instanceof Ball){
-                map.ball.take();
-            }else if(s.intersects(o)&& obstacle instanceof Goal && map.ball.isTaken()){
-                ingame = false;
-            }
+        MissileDiffusion s=new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation);
+        for(int i=0;i<5;i++){
+            missiles.add(s.getDiffusion()[i]);
         }
-        for (int i = 0; i < map.bonusList.size(); i++){
-            Bonus b = map.bonusList.get(i);
-            Rectangle r=new Rectangle(b.x[0],b.y[0],b.x[1]-b.x[0],b.y[2]-b.y[1]);
-            if(s.intersects(r)){
-                if(spaceship.getFuel()<spaceship.BASE_FUEL)spaceship.setFuel(spaceship.getFuel()+500);
-                spaceship.shield.add();
-                erase(b);
-                map.bonusList.remove(b);
-            }
-        }
-        return false;
     }
 
     public void playMusic() throws LineUnavailableException, IOException {
@@ -300,7 +227,6 @@ public class Board extends JPanel implements ActionListener{
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        // TODO Auto-generated method stub
-    }
 
+    }
 }

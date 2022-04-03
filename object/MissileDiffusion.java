@@ -17,15 +17,10 @@ public class MissileDiffusion extends Missile{
     }
 
     public void move() {
-        // if(rebounce%2==0){
-            for(MissileNormale a:Diffusion){
-                a.x += MISSILE_SPEED * Math.cos(Math.toRadians(a.getdirection()));
-                a.y += MISSILE_SPEED * Math.sin(Math.toRadians(a.getdirection()));
-            }
-        // }else{
-        //     x -= MISSILE_SPEED * Math.cos(Math.toRadians(direction));
-        //     y -= MISSILE_SPEED * Math.sin(Math.toRadians(direction));
-        // }
+        for(MissileNormale a:Diffusion){
+            a.x += MISSILE_SPEED * Math.cos(Math.toRadians(a.getdirection()));
+            a.y += MISSILE_SPEED * Math.sin(Math.toRadians(a.getdirection()));
+        }
     }
 
     public MissileNormale[] getDiffusion(){return this.Diffusion;}

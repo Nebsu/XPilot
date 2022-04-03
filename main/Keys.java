@@ -22,7 +22,7 @@ public class Keys implements KeyListener{
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
             try {
-                Constants.TIMER.stop();
+                Constants.TIMER.cancel();
                 Constants.WINDOW.setVisible(false);
                 Constants.GAME.stopMusic();
                 Constants.WINDOW = new Window(true);
@@ -34,7 +34,7 @@ public class Keys implements KeyListener{
             return;
         }
         if (key == Constants.SHOOT){
-            Constants.TIMER.start();
+            // Constants.TIMER.start();
             board.fire();
             try {
                 pew.playSound();

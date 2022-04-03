@@ -52,15 +52,15 @@ public class SpaceShip extends Sprite {
         this.fuel = fuel;
     }
 
-    public void rotateRight(boolean canRotate){
-        if(canRotate){
+    public void rotateRight(){
+        if(rightRotationFlag){
            rotation += rotationRate;
            if(rotation > 360) rotation = rotationRate;
         }
     }
 
-    public void rotateLeft(boolean canRotate){
-        if(canRotate){
+    public void rotateLeft(){
+        if(leftRotationFlag){
            rotation -= rotationRate;
            if(rotation == rotationRate) rotation = rotationRate;
         }

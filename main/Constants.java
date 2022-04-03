@@ -2,9 +2,9 @@ package main;
 
 import menu.*;
 
-import javax.swing.Timer;
 import java.awt.event.KeyEvent;
 import java.io.IOException;
+import java.util.Timer;
 
 public class Constants {
     //Coordonnées du vaisseau
