@@ -10,7 +10,7 @@ public class Keys implements KeyListener{
 
     public Keys(Board b){
         this.board = b;
-        this.pew = new SFX("ressources/pew.wav");
+        this.pew = new SFX("ressources/music/pew.wav");
     }
 
     @Override
@@ -65,7 +65,12 @@ public class Keys implements KeyListener{
                 board.spaceship.shield.disable();
             }
         }
-
+        if (key == Constants.SWITCH){
+            board.spaceship.missile_switch += 1;
+            if(board.spaceship.missile_switch > 2){
+                board.spaceship.missile_switch = 1;
+            }
+        }
 
     }
 

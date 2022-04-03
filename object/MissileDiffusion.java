@@ -24,5 +24,10 @@ public class MissileDiffusion extends Missile{
     }
 
     public MissileNormale[] getDiffusion(){return this.Diffusion;}
+
+    @Override
+    public int getdirection() {
+        return direction;
+    }
     
 }

@@ -4,10 +4,11 @@ public abstract class Missile extends Sprite {
 
     public Missile(double x, double y) {
         super(x, y);
-        loadImage("ressources/shot_h.png");
+        loadImage("ressources/images/shot.png");
         getImageDimensions();
     }
 
     public abstract void move();
+    public abstract int getdirection();
 
 }

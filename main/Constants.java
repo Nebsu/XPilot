@@ -37,6 +37,6 @@ public class Constants {
     public static int RIGHT = KeyEvent.VK_RIGHT; // rotation droite
     public static int SHOOT = KeyEvent.VK_SPACE; // trier missile
     public static int SHIELD = KeyEvent.VK_C; // bouclier
-    public static int SWITCH = KeyEvent.VK_S; // changer le mode du missile
+    public static int SWITCH = KeyEvent.VK_X; // changer le mode du missile
 
 }

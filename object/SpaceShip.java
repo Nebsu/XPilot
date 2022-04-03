@@ -25,10 +25,14 @@ public class SpaceShip extends Sprite {
     private long ft0, ftimer = 0;
     private final int CONSUME_SPEED = 1000;
     private final int CONSUME_RATE = 100;
+    //Missile
+    public int missile_switch = 1;
+    public final int MAX_MISSILE_SHOT = 50;
+    public int missile_left = MAX_MISSILE_SHOT;
 
     public SpaceShip(double x, double y){
         super(x, y);
-        loadImage("ressources/player_right.png");
+        loadImage("ressources/images/ship2.png");
         getImageDimensions();
     }
 

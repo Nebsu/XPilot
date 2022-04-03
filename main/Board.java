@@ -73,6 +73,8 @@ public class Board extends JPanel implements ActionListener{
             }
             drawHealthBar(g);
             drawFuelBar(g);
+            drawMissileIndicator(g);
+            drawShield(g);
         } else {
             drawGameOver(g);
         }
@@ -86,18 +88,24 @@ public class Board extends JPanel implements ActionListener{
 
         bgImage= new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
         g2 = bgImage.createGraphics();
-
+        AffineTransform af2 = new AffineTransform();
         if (spaceship.isVisible()) {
             for (Missile missile : this.missiles) {
                 //paint Missile dans la seconde image
                 if(missile instanceof MissileDiffusion){
                     MissileDiffusion represent=(MissileDiffusion)missile;
                     for(MissileNormale tmp:represent.getDiffusion()){
-                        g3.drawImage(tmp.getImage(), (int)tmp.getX(), (int)tmp.getY(),null);
+                        af2.setToIdentity();
+                        af2.translate((int)tmp.getX(), (int)tmp.getY());
+                        af2.rotate(Math.toRadians(tmp.getdirection()),tmp.getImage().getWidth(this)/2, tmp.getImage().getHeight(this)/2);
+                        g3.drawImage(tmp.getImage(), af2, null);
                     }
                 }
                 else{
-                    g3.drawImage(missile.getImage(), (int)missile.getX(), (int)missile.getY(),null);
+                    af2.setToIdentity();
+                    af2.translate((int)missile.getX(), (int)missile.getY());
+                    af2.rotate(Math.toRadians(missile.getdirection()),missile.getImage().getWidth(this)/2, missile.getImage().getHeight(this)/2);
+                    g3.drawImage(missile.getImage(), af2,null);
                 }
             }
 
@@ -113,22 +121,42 @@ public class Board extends JPanel implements ActionListener{
             //Boule
             if(map.ball.isTaken()) {
                 g2.setColor(Color.WHITE);
-                g2.drawOval(10, Constants.B_HEIGHT-35, 33, 33);
-                g2.fillOval(10, Constants.B_HEIGHT-35, 33, 33);
+                g2.drawOval(10, Constants.B_HEIGHT-40, 33, 33);
+                g2.fillOval(10, Constants.B_HEIGHT-40, 33, 33);
             }else{
                 g2.setColor(Color.WHITE);
-                g2.drawOval(10, Constants.B_HEIGHT-35, 33, 33);
-            }
-            //Textes
-            g2.setColor(Color.GREEN);
-            g2.drawString("Ball: " + map.ball.isTaken(), 2, 20);
-            g2.drawString("Shield: " + spaceship.shield.getQuantity(), 2, 35);
-            if (spaceship.shield.isActive()){
-                g2.setColor(Color.WHITE);
-                g2.drawOval(Constants.B_WIDTH/2-8, Constants.B_HEIGHT/2-9, 33, 33);
+                g2.drawOval(10, Constants.B_HEIGHT-40, 33, 33);
             }
             //afficher dans g
             g.drawImage(bgImage, 0, 0, null);
+        }
+    }
+
+    private void drawShield(Graphics2D g){
+        //Quantité de bouclier
+        String msg = Integer.toString(spaceship.shield.getQuantity());
+        g.setColor(Color.GREEN);
+        Font ft = new Font("Helvetica", Font.BOLD, 20);
+        FontMetrics fm = getFontMetrics(ft);
+        g.setFont(ft);
+        if(spaceship.shield.getQuantity() >= 10){
+            g.drawString(msg, Constants.B_WIDTH - fm.stringWidth(msg) - 19, 38);
+        }else{
+            g.drawString(msg, Constants.B_WIDTH - fm.stringWidth(msg) - 24, 38);
+        }
+
+        //Indicateur du bouclier :
+        Polygon p = new Polygon();
+        for (int i = 0; i < 6; i++)
+        p.addPoint((int) (Constants.B_WIDTH - 30 - 20 * Math.cos(i * 2 * Math.PI / 6)),(int) (30 + 20 * Math.sin(i * 2 * Math.PI / 6)));        
+        g.drawPolygon(p);  
+
+        //Bouclier autour du vaisseau :
+        Polygon p2 = new Polygon();
+        if (spaceship.shield.isActive()){
+            // g.setColor(Color.WHITE);
+            for (int i = 0; i < 6; i++)p2.addPoint((int) (Constants.B_WIDTH/2+5 + 20 * Math.cos(i * 2 * Math.PI / 6)),(int) (Constants.B_HEIGHT/2+5 + 20 * Math.sin(i * 2 * Math.PI / 6)));        
+            g.drawPolygon(p2);  
         }
     }
 
@@ -161,6 +189,7 @@ public class Board extends JPanel implements ActionListener{
         g.setColor(Color.GRAY);
         g.drawString("" + spaceship.getFuel(), Constants.B_WIDTH/2-10, Constants.B_HEIGHT/20+12);
     }
+
     //Dessine les bonus
     public void drawBonus(){
         for(Bonus b : map.bonusList){
@@ -177,13 +206,23 @@ public class Board extends JPanel implements ActionListener{
         map.g2.fillOval(b.x2+10, b.y2+10, 10, 10);
     }
 
+    public void drawMissileIndicator(Graphics2D g){
+        g.setColor(Color.GREEN);
+        if(spaceship.missile_switch == 1){
+            g.drawString("Missile Type: Simple", 2, 35);
+        }else{
+            g.drawString("Missile Type: Volley", 2, 35);
+        }
+        g.drawString("Missiles left: " + spaceship.missile_left, 2, 50);
+    }
+
     //Ecran de fin
     private void drawGameOver(Graphics g) {
         String msg = "Game Over";
         Font ft = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics fm = getFontMetrics(ft);
-        g.setColor(Color.white);
         g.setFont(ft);
+        g.setColor(Color.white);
         g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
         Constants.B_HEIGHT / 2);
     }
@@ -191,16 +230,24 @@ public class Board extends JPanel implements ActionListener{
     //Autres fonctions
 
     public void fire() {
-        MissileDiffusion s=new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation);
-        for(int i=0;i<5;i++){
-            missiles.add(s.getDiffusion()[i]);
+        if(spaceship.missile_left > 0){
+            if(spaceship.missile_switch == 2 && spaceship.missile_left >= 5){
+                MissileDiffusion s=new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation);
+                for(int i=0;i<5;i++){
+                    missiles.add(s.getDiffusion()[i]);
+                }
+                spaceship.missile_left -= 5;
+            }else if(spaceship.missile_switch == 1){
+                missiles.add(new MissileNormale(spaceship.getX(), spaceship.getY(), spaceship.rotation));
+                spaceship.missile_left -= 1;
+            }
         }
     }
 
     public void playMusic() throws LineUnavailableException, IOException {
 		try {
 			// Music :
-			String filepath = "ressources/gamemusic.wav";
+			String filepath = "ressources/music/gamemusic.wav";
 			this.gameMusic = new Music(filepath);
 			gameMusic.playMusic();
 		} catch (Exception e) {

@@ -3,7 +3,7 @@ package object;
 public class MissileNormale extends Missile{
 
     private final int MISSILE_SPEED = 30;
-    private double direction;
+    private int direction;
 
 
     public MissileNormale(double x, double y, int rotation) {
@@ -16,7 +16,8 @@ public class MissileNormale extends Missile{
         y += MISSILE_SPEED * Math.sin(Math.toRadians(direction));
     }
 
-    public double getdirection(){
+    @Override
+    public int getdirection() {
         return this.direction;
     }
     

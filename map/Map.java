@@ -22,7 +22,7 @@ public class Map {
 
     public Map() throws IOException{
         try{
-            this.img_map=ImageIO.read(new File("ressources/background2.png"));
+            this.img_map=ImageIO.read(new File("ressources/images/background2.png"));
         }catch(IOException e){
             e.printStackTrace();
         }
@@ -50,7 +50,7 @@ public class Map {
 
  	public void createinfor(){
     	try{
-	        File fil = new File("ressources/infor_map2.txt");
+	        File fil = new File("ressources/map/infor_map2.txt");
 	        FileReader inputFil = new FileReader(fil);
 	        BufferedReader in = new BufferedReader(inputFil);
 	        

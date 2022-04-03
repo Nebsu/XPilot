@@ -38,7 +38,7 @@ public class MenuPanel extends JPanel {
 	public void playMusic() throws LineUnavailableException, IOException {
 		try {
 			// Music :
-			String filepath = "ressources/pokemon.wav";
+			String filepath = "ressources/music/pokemon.wav";
 			this.menuMusic = new Music(filepath);
 			menuMusic.playMusic();
 		} catch (Exception e) {

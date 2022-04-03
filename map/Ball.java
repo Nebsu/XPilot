@@ -13,7 +13,7 @@ public class Ball extends Obstacle {
     
     public Ball(int[] x, int[] y) throws IOException {
         super(x, y);
-        this.ball_img = ImageIO.read(new File("ressources/ball.png"));
+        this.ball_img = ImageIO.read(new File("ressources/images/ball.png"));
     }
 
     public void draw(Graphics g){
