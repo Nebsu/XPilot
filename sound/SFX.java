@@ -1,7 +1,6 @@
 package sound;
 
 import java.io.*;
-import javax.swing.JOptionPane;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
@@ -21,12 +20,13 @@ public class SFX {
             if (file.exists()) {
                 this.audio = AudioSystem.getAudioInputStream(file);
                 this.clip = AudioSystem.getClip();
-                clip.open(this.audio);
+                this.clip.open(this.audio); 
             } else throw new IllegalStateException();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Can't find file");
-            JOptionPane.showMessageDialog(null, "Error");
+            System.out.println(e);
+            System.exit(1);
         }
     }
 

@@ -2,11 +2,11 @@ package menu;
 
 import java.awt.event.*;
 
-public class MenuKeys implements KeyListener {
+public final class MenuKeys implements KeyListener {
 
-    private MenuPanel menu;
+    private final Menu menu;
 
-    public MenuKeys(MenuPanel menu) {
+    public MenuKeys(Menu menu) {
         this.menu = menu;
     }
 

@@ -1,7 +1,6 @@
 package sound;
 
 import java.io.*;
-import javax.swing.JOptionPane;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
@@ -10,10 +9,10 @@ import javax.sound.sampled.AudioInputStream;
 
 public class Music {
 
-    private File musicPath; // audio file
-    private AudioInputStream audio; // audio input
-    private Clip clip; // sample clip
-    private static float volume = 1; // volume
+    private File musicPath;
+    private AudioInputStream audio;
+    private Clip clip;
+    private static float volume = 1;
     
     public Music(String filepath) {
         try {
@@ -21,17 +20,19 @@ public class Music {
             if (musicPath.exists()) {
                 this.audio = AudioSystem.getAudioInputStream(musicPath);
                 this.clip = AudioSystem.getClip();
+                this.clip.open(this.audio);
             } else throw new FileNotFoundException();
         } catch (Exception e) {
             e.printStackTrace();
             System.out.println("Can't find file");
-            JOptionPane.showMessageDialog(null, "Error");
+            System.out.println(e);
+            System.exit(1);
         }
     }
 
     public void playMusic() throws LineUnavailableException, IOException {
-        clip.open(this.audio);
         this.setVolume();
+        clip.setMicrosecondPosition(0);
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);
         // Pause / Resume :

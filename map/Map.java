@@ -6,7 +6,6 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
-
 import javax.imageio.*;
 
 public class Map {
@@ -20,15 +19,17 @@ public class Map {
 	public Ball ball;
 	public long lastTime;
 
-    public Map() throws IOException{
+    public Map() {
         try{
             this.img_map=ImageIO.read(new File("ressources/background2.png"));
-        }catch(IOException e){
+			g2=img_map.createGraphics();
+			createinfor();
+			createInforAMap();
+        }catch(Exception e){
             e.printStackTrace();
+			System.out.println(e);
+			System.exit(1);
         }
-        g2=img_map.createGraphics();
-        createinfor();
-        createInforAMap();
     }
 
 	public void addBonus(){
