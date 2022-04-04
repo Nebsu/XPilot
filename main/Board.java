@@ -21,15 +21,15 @@ import java.awt.geom.AffineTransform;
 
 public class Board extends JPanel implements ActionListener{
 
-    SpaceShip spaceship; 
+    private SpaceShip spaceship; 
     Map map;
     boolean ingame;
     AffineTransform af = new AffineTransform();
     Graphics2D g2;
     BufferedImage bgImage;
-    private Keys k;
-    public Minimap minimap;
-    public List<Missile> missiles;
+    private GameKeys k;
+    Radar minimap;
+    private List<Missile> missiles;
     private Music gameMusic;
     private BufferedImage singleShot;
     private BufferedImage multiShot;
@@ -41,6 +41,10 @@ public class Board extends JPanel implements ActionListener{
         Constants.TIMER.schedule(new GameLoop(this), 0,20);
     }
 
+    public final SpaceShip getSpaceShip() {return this.spaceship;}
+    public final Radar getRadar() {return this.minimap;}
+    public final List<Missile> getMissiles() {return this.missiles;}
+
     private void boardInit() throws IOException{
         addKeyListener(new TAdapter());
         setFocusable(true);
@@ -50,8 +54,8 @@ public class Board extends JPanel implements ActionListener{
         this.spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         this.map = new Map();
         this.missiles = new ArrayList<>();
-        this.k = new Keys(this);
-        this.minimap = new Minimap(spaceship, map);
+        this.k = new GameKeys(this);
+        this.minimap = new Radar(spaceship, map);
         map.addBonus();
         try {
             BufferedImage singleShot = ImageIO.read(new File("ressources/images/overlay_single_shot.png"));
@@ -268,7 +272,7 @@ public class Board extends JPanel implements ActionListener{
         }
     }
 
-    public void playMusic() throws LineUnavailableException, IOException {
+    public void playGameMusic() throws LineUnavailableException, IOException {
 		try {
 			// Music :
 			String filepath = "ressources/music/gamemusic.wav";
@@ -279,7 +283,7 @@ public class Board extends JPanel implements ActionListener{
 		}
 	}
 
-    public void stopMusic() {
+    public void stopGameMusic() {
         this.gameMusic.stopMusic();
     }
 

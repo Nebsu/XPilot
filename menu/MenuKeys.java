@@ -1,12 +1,15 @@
 package menu;
 
 import java.awt.event.*;
+import java.io.IOException;
+
+import javax.sound.sampled.LineUnavailableException;
 
 public class MenuKeys implements KeyListener {
 
-    private MenuPanel menu;
+    private Menu menu;
 
-    public MenuKeys(MenuPanel menu) {
+    public MenuKeys(Menu menu) {
         this.menu = menu;
     }
 
@@ -19,7 +22,11 @@ public class MenuKeys implements KeyListener {
     public void keyPressed(KeyEvent e) {
         int k = e.getKeyCode();
         if (k==KeyEvent.VK_ENTER) {
-			menu.select();
+			try {
+                menu.select();
+            } catch (IOException | LineUnavailableException e1) {
+                e1.printStackTrace();
+            }
             return;
 		}
 		if (k==KeyEvent.VK_UP) {

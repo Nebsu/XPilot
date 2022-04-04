@@ -25,6 +25,8 @@ public class Map {
             this.img_map=ImageIO.read(new File("ressources/images/background2.png"));
         }catch(IOException e){
             e.printStackTrace();
+			System.out.println(e);
+			System.exit(1);
         }
         g2=img_map.createGraphics();
         createinfor();
