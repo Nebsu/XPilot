@@ -36,7 +36,7 @@ public final class Radar extends JPanel {
     }
 
     public void drawShip(Graphics g) throws IOException{
-        BufferedImage bi = ImageIO.read(new File("ressources/minimap.png"));
+        BufferedImage bi = ImageIO.read(new File("ressources/images/minimap.png"));
         g.drawImage(bi,(int)ship.getX()/12,(int)ship.getY()/12,null);
     }
 

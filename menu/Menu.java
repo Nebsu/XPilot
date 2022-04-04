@@ -38,7 +38,7 @@ public final class Menu extends JPanel {
 		this.titleFont = new Font("Century Gothic", Font.PLAIN, 80);
 		this.font = new Font("Arial", Font.PLAIN, 50);
 		// Music :
-		String filepath = "ressources/music/menuMusic2.wav";
+		String filepath = "ressources/audio/menuMusic.wav";
 		this.menuMusic = new Music(filepath);
 	}
 

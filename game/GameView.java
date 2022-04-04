@@ -287,7 +287,7 @@ public final class GameView extends JPanel implements ActionListener {
     public final void playGameMusic() throws LineUnavailableException, IOException {
 		try {
 			// Music :
-			String filepath = "ressources/music/gamemusic.wav";
+			String filepath = "ressources/audio/gamemusic.wav";
 			this.gameMusic = new Music(filepath);
 			gameMusic.playMusic();
 		} catch (Exception e) {

@@ -39,7 +39,7 @@ public final class GameKeys implements KeyListener {
         if (key == Constants.CUSTOM_KEYS.getShoot()){
             game.fire();
             try {
-                SFX pew = new SFX("ressources/pew.wav");
+                SFX pew = new SFX("ressources/audio/pew.wav");
                 pew.playSound();
             } catch (Exception e2) {
                 e2.printStackTrace();
