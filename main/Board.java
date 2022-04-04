@@ -7,9 +7,12 @@ import object.*;
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import java.util.Timer;
@@ -28,6 +31,8 @@ public class Board extends JPanel implements ActionListener{
     public Minimap minimap;
     public List<Missile> missiles;
     private Music gameMusic;
+    private BufferedImage singleShot;
+    private BufferedImage multiShot;
 
     public Board() throws IOException{
         //Initialisation
@@ -48,6 +53,14 @@ public class Board extends JPanel implements ActionListener{
         this.k = new Keys(this);
         this.minimap = new Minimap(spaceship, map);
         map.addBonus();
+        try {
+            BufferedImage singleShot = ImageIO.read(new File("ressources/images/overlay_single_shot.png"));
+            this.singleShot = singleShot;
+            BufferedImage multiShot = ImageIO.read(new File("ressources/images/overlay_volley_shot.png"));
+            this.multiShot = multiShot;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     
@@ -155,7 +168,7 @@ public class Board extends JPanel implements ActionListener{
         Polygon p2 = new Polygon();
         if (spaceship.shield.isActive()){
             // g.setColor(Color.WHITE);
-            for (int i = 0; i < 6; i++)p2.addPoint((int) (Constants.B_WIDTH/2+5 + 20 * Math.cos(i * 2 * Math.PI / 6)),(int) (Constants.B_HEIGHT/2+5 + 20 * Math.sin(i * 2 * Math.PI / 6)));        
+            for (int i = 0; i < 6; i++)p2.addPoint((int) (Constants.B_WIDTH/2+6 + 20 * Math.cos(i * 2 * Math.PI / 6)),(int) (Constants.B_HEIGHT/2+6 + 20 * Math.sin(i * 2 * Math.PI / 6)));        
             g.drawPolygon(p2);  
         }
     }
@@ -208,12 +221,23 @@ public class Board extends JPanel implements ActionListener{
 
     public void drawMissileIndicator(Graphics2D g){
         g.setColor(Color.GREEN);
+
         if(spaceship.missile_switch == 1){
-            g.drawString("Missile Type: Simple", 2, 35);
+            g.drawImage(singleShot, 50, 15, null);
         }else{
-            g.drawString("Missile Type: Volley", 2, 35);
+            g.drawImage(multiShot, 50, 15, null);
         }
-        g.drawString("Missiles left: " + spaceship.missile_left, 2, 50);
+        String msg = Integer.toString(spaceship.missile_left);
+        g.setColor(Color.GREEN);
+        Font ft = new Font("Helvetica", Font.BOLD, 20);
+        FontMetrics fm = getFontMetrics(ft);
+        g.setFont(ft);
+        if(spaceship.missile_left >= 10){
+            g.drawString(msg, fm.stringWidth(msg) - 5 , 37);
+        }else{
+            g.drawString(msg, fm.stringWidth(msg) + 12 , 37);
+        }
+        g.drawRect(10, 10, 35, 35);
     }
 
     //Ecran de fin

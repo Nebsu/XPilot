@@ -27,7 +27,7 @@ public class SpaceShip extends Sprite {
     private final int CONSUME_RATE = 100;
     //Missile
     public int missile_switch = 1;
-    public final int MAX_MISSILE_SHOT = 50;
+    public final int MAX_MISSILE_SHOT = 99;
     public int missile_left = MAX_MISSILE_SHOT;
 
     public SpaceShip(double x, double y){
