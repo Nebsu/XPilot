@@ -1,7 +1,5 @@
 package main;
 
-import java.util.Timer;
-
 public final class Constants {
 
     // Dimensions de la fenêtre :
@@ -15,7 +13,7 @@ public final class Constants {
     // Coordonnées de la balle :
     public static final int BALL_X = 100;
     public static final int BALL_Y = 200;
-    public static Timer TIMER;
+
     // Temps d'apparition des bonus :
     public static final int BONUS_SPAWNRATE = 5000;
 

@@ -7,25 +7,29 @@ import java.awt.event.KeyListener;
 
 public final class GameKeys implements KeyListener {
 
-    private final Board game;
+    private final GameView game;
     
-    public GameKeys(Board g){
+    public GameKeys(GameView g) {
         this.game = g;
     }
 
     @Override
-    public void keyTyped(KeyEvent e) {}
+    public void keyTyped(KeyEvent e) {
+
+    }
 
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
             try {
-                Constants.TIMER.cancel();
+                Window.getMainGame().getTimer().cancel();
                 this.game.stopGameMusic();
                 Window.WINDOW.launchMenu();
             } catch (Exception e1) {
                 e1.printStackTrace();
+                System.out.println(e1);
+               System.exit(1);
             }
             return;
         }
@@ -36,6 +40,8 @@ public final class GameKeys implements KeyListener {
                 pew.playSound();
             } catch (Exception e2) {
                 e2.printStackTrace();
+                System.out.println(e2);
+                System.exit(1);
             }
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
@@ -66,8 +72,6 @@ public final class GameKeys implements KeyListener {
                 game.getSpaceShip().missile_switch = 1;
             }
         }
-
-
     }
 
     @Override
