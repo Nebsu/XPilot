@@ -7,7 +7,6 @@ import sound.Music;
 import java.awt.*;
 import java.awt.event.*;
 import java.io.IOException;
-
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 

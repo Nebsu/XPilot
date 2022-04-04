@@ -1,13 +1,12 @@
 package main;
 
 import menu.*;
+import game.GameView;
 
 import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-
-import game.GameView;
 
 public final class Window extends JFrame {
 

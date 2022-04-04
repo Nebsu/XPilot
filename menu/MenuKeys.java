@@ -2,7 +2,6 @@ package menu;
 
 import java.awt.event.*;
 import java.io.IOException;
-
 import javax.sound.sampled.LineUnavailableException;
 
 public class MenuKeys implements KeyListener {

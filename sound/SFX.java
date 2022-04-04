@@ -9,7 +9,7 @@ import javax.sound.sampled.AudioInputStream;
 
 public class SFX {
  
-    private File file; // fichier
+    private File file;
     private AudioInputStream audio;
     private Clip clip;
     private static float volume = 1;
