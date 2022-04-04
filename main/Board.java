@@ -223,9 +223,9 @@ public class Board extends JPanel implements ActionListener{
         g.setColor(Color.GREEN);
 
         if(spaceship.missile_switch == 1){
-            g.drawImage(singleShot, 50, 15, null);
+            g.drawImage(singleShot, 10, 15, null);
         }else{
-            g.drawImage(multiShot, 50, 15, null);
+            g.drawImage(multiShot, 10, 15, null);
         }
         String msg = Integer.toString(spaceship.missile_left);
         g.setColor(Color.GREEN);
@@ -233,11 +233,11 @@ public class Board extends JPanel implements ActionListener{
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
         if(spaceship.missile_left >= 10){
-            g.drawString(msg, fm.stringWidth(msg) - 5 , 37);
+            g.drawString(msg, fm.stringWidth(msg) + 20 , 37);
         }else{
-            g.drawString(msg, fm.stringWidth(msg) + 12 , 37);
+            g.drawString(msg, fm.stringWidth(msg) + 35 , 37);
         }
-        g.drawRect(10, 10, 35, 35);
+        // g.drawRect(10, 10, 35, 35);
     }
 
     //Ecran de fin
