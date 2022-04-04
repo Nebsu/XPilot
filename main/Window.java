@@ -3,6 +3,7 @@ package main;
 import menu.*;
 import game.GameView;
 
+import java.awt.EventQueue;
 import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
@@ -12,53 +13,45 @@ public final class Window extends JFrame {
 
     public static final Menu MENU = new Menu();
     public static final Window WINDOW = new Window();
-    private static GameView MAINGAME;
+    private static GameView MAINGAME = null;
 
     public static final GameView getMainGame() {return MAINGAME;}
 
     public Window() {
+        // Frame settings :
+        this.setTitle("Xpilot");
+        this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        this.setResizable(false);
+        // Menu is launched first :
         this.launchMenu();
     }
 
     public final void launchMenu() {
+        if (MAINGAME!=null) MAINGAME.stopGameMusic();
         this.dispose();
-        this.setContentPane(MENU);
-        // add(MENU);
-        setResizable(false);
-        pack();
-        setTitle("Xpilot");
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MENU.playMenuMusic();
+        this.setContentPane(MENU.getMenuPanel());
+        this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
-    }
-
-    public final void settingsSection() {
-        removeAll();
-        revalidate();
-        repaint();
-        this.setContentPane(new JPanel());
-        add(new SettingsPanel());
+        MENU.playMenuMusic();
     }
 
     // Démarrage du jeu principal lorsque "Start" est sélectionné dans le menu :
     public final void launchGame() throws IOException, LineUnavailableException {
+        MENU.stopMenuMusic();
         this.dispose();
-        this.setContentPane(new JPanel());
         MAINGAME = new GameView();
-        add(MAINGAME.getRadar());
-        add(MAINGAME);
-        setResizable(false);
-        pack();
-        setTitle("Xpilot");
-        setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MAINGAME.playGameMusic();
+        this.setContentPane(new JPanel());
+        this.add(MAINGAME.getRadar());
+        this.add(MAINGAME);
+        this.pack();
+        this.setLocationRelativeTo(null);
         this.setVisible(true);
+        MAINGAME.playGameMusic();
     }
 
     public static void main(String[] args) {
-        
+        EventQueue.invokeLater(() -> {});
     }
 
 }

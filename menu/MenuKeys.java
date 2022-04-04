@@ -6,9 +6,9 @@ import javax.sound.sampled.LineUnavailableException;
 
 public class MenuKeys implements KeyListener {
 
-    private Menu menu;
+    private MenuPanel menu;
 
-    public MenuKeys(Menu menu) {
+    public MenuKeys(MenuPanel menu) {
         this.menu = menu;
     }
 
