@@ -1,9 +1,13 @@
-package main;
+package game;
 
 import map.*;
 import object.*;
 
 import java.util.TimerTask;
+
+import main.Constants;
+import main.Window;
+
 import java.awt.*;
 
 /* Class timer pour refresh le board, 

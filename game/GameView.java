@@ -1,4 +1,4 @@
-package main;
+package game;
 
 import map.*;
 import sound.Music;
@@ -14,6 +14,10 @@ import java.util.List;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
+
+import main.Constants;
+import main.Window;
+
 import java.util.Timer;
 import java.awt.geom.AffineTransform;
 

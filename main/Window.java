@@ -7,6 +7,8 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
+import game.GameView;
+
 public final class Window extends JFrame {
 
     public static final Menu MENU = new Menu();
