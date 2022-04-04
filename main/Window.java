@@ -1,6 +1,6 @@
 package main;
 
-import menu.Menu;
+import menu.*;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -26,6 +26,14 @@ public final class Window extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         MENU.playMenuMusic();
         this.setVisible(true);
+    }
+
+    public final void settingsSection() {
+        removeAll();
+        revalidate();
+        repaint();
+        this.setContentPane(new JPanel());
+        add(new SettingsPanel());
     }
 
     // Démarrage du jeu principal lorsque "Start" est sélectionné dans le menu :

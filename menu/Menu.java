@@ -52,7 +52,7 @@ public final class Menu extends JPanel {
 		}
 		if (currentChoice == 1) {
 			// settings :
-
+			Window.WINDOW.settingsSection();
 		}
 		if (currentChoice == 2) {
 			// help

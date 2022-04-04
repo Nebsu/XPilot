@@ -4,7 +4,6 @@ import java.awt.event.KeyEvent;
 
 public final class CustomKeys {
 
-    // KEYS :
     private int up = KeyEvent.VK_UP; // avancer
     private int left = KeyEvent.VK_LEFT; // rotation gauche
     private int right = KeyEvent.VK_RIGHT; // rotation droite
