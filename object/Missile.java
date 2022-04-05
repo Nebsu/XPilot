@@ -1,3 +1,6 @@
+/**
+ * A missile is a Sprite that moves in a direction
+ */
 package object;
 
 public abstract class Missile extends Sprite {

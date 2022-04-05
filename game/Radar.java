@@ -1,3 +1,6 @@
+/**
+ * The Radar class is a JPanel that displays the minimap of the game
+ */
 package game;
 
 import map.Map;
@@ -22,6 +25,11 @@ public final class Radar extends JPanel {
         setPreferredSize(new Dimension(200,200));
     }
 
+ /**
+  * Draw the minimap and the ship
+  * 
+  * @param g The Graphics object that is used to draw the minimap.
+  */
     @Override
     public void paintComponent(Graphics g){
         super.paintComponent(g);
@@ -35,11 +43,21 @@ public final class Radar extends JPanel {
         }
     }
 
+/**
+ * Draws the ship on the minimap
+ * 
+ * @param g The Graphics object to draw on.
+ */
     public void drawShip(Graphics g) throws IOException{
         BufferedImage bi = ImageIO.read(new File("ressources/images/minimap.png"));
         g.drawImage(bi,(int)ship.getX()/12,(int)ship.getY()/12,null);
     }
 
+/**
+ * Draw the map on the minimap
+ * 
+ * @param g The Graphics object that you want to draw on.
+ */
 	public void drawMinimap(Graphics g){
         for(int i=0;i<minimap.infor_map.length;i++){
             for(int j=0;j<minimap.infor_map.length;j++){

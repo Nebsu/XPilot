@@ -1,3 +1,6 @@
+/**
+ * The menu class is the class that contains the menu of the game
+ */
 package menu;
 
 import main.Constants;
@@ -46,7 +49,9 @@ public final class Menu extends JPanel {
     //                                                 FONCTIONS DU MODELE                                                     //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	// Sélection :
+/**
+ * Selects the choice that the user has chosen
+ */
 	public final void select() throws IOException, LineUnavailableException {
 		if (currentChoice == 0) {
 			// start
@@ -92,6 +97,11 @@ public final class Menu extends JPanel {
 		draw(g2);
 	}
 	
+/**
+ * Draw the title and the menu options
+ * 
+ * @param g The Graphics2D object that we are drawing to.
+ */
 	public final void draw(Graphics2D g) {
 		// draw title
 		g.setColor(titleColor);
@@ -109,6 +119,9 @@ public final class Menu extends JPanel {
 		}
 	}
 
+/**
+ * Plays the menu music.
+ */
 	public final void playMenuMusic() {
 		try {
 			this.menuMusic.playMusic();

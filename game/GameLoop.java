@@ -1,3 +1,6 @@
+/**
+ * The GameLoop class is the main loop of the game. It is responsible for the game logic
+ */
 package game;
 
 import map.*;
@@ -10,10 +13,6 @@ import main.Window;
 
 import java.awt.*;
 
-/* Class timer pour refresh le board, 
- * on utilise la class timertask pour exécuter les événements
- */ 
-
 public final class GameLoop extends TimerTask {
 
     private GameView b;
@@ -22,7 +21,9 @@ public final class GameLoop extends TimerTask {
         this.b=b;
     }
     
-// Méthode principale run pour exécuter :
+ /**
+  * Game Loop
+  */
     @Override
     public void run() {
         inGame();
@@ -44,7 +45,10 @@ public final class GameLoop extends TimerTask {
         updateBonus();
         b.repaint();    
     }
-    // Pour arrêter le timer :
+
+/**
+ * If the player's health or fuel is less than or equal to zero, the game is over
+ */
     public final void inGame() {
         if(b.getSpaceShip().getFuel() <= 0 ||
             b.getSpaceShip().getHealth() <= 0){
@@ -54,15 +58,20 @@ public final class GameLoop extends TimerTask {
             Window.getMainGame().getTimer().cancel();
         }
     }
-    // Détecter le collision pour le vaisseau
+
+/**
+ * Check if the ship collides with an obstacle
+ * 
+ * @return Nothing.
+ */
     public final boolean checkCollision(){
         Rectangle s=new Rectangle((int)(b.getSpaceShip().getX()+b.getSpaceShip().SPEED * Math.cos(Math.toRadians(b.getSpaceShip().rotation))),(int)(b.getSpaceShip().getY()+b.getSpaceShip().SPEED*Math.sin(Math.toRadians(b.getSpaceShip().rotation))),16,16);
         for (Obstacle obstacle : b.getMap().ListeObstacle) {
             Rectangle o=new Rectangle(obstacle.x[0],obstacle.y[0],obstacle.x[1]-obstacle.x[0],obstacle.y[2]-obstacle.y[1]);
             // Ship après le movement :
-            if(s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof Ball) && !(obstacle instanceof Bonus)){
+            if(s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof BallHolder) && !(obstacle instanceof Bonus)){
                 return true;
-            }else if(s.intersects(o)&& obstacle instanceof Ball){
+            }else if(s.intersects(o)&& obstacle instanceof BallHolder){
                 b.getMap().ball.take();
             }else if(s.intersects(o)&& obstacle instanceof Goal && b.getMap().ball.isTaken()){
                 b.setInGame(false);
@@ -81,7 +90,10 @@ public final class GameLoop extends TimerTask {
         }
         return false;
     }
-    //mise a jour du vaisseau
+
+/**
+ * Update the ship's position and velocity
+ */
     public final void updateShip() {
         if (b.getSpaceShip().isVisible()) {
             b.getSpaceShip().move();
@@ -90,7 +102,10 @@ public final class GameLoop extends TimerTask {
             if(b.getSpaceShip().moveFlag)b.getSpaceShip().consumeFuel();
         }
     }
-    //mise a jour du missile et detection du collision
+
+/**
+ * Update the position of all the missiles in the game
+ */
     public final void updateMissiles() {
         for (Missile m : b.getMissiles()) {
             if (m.isVisible()) {
@@ -109,7 +124,7 @@ public final class GameLoop extends TimerTask {
             }
         }
     }
-    //mise a jour du bonus
+
     public final void updateBonus(){
         if(System.currentTimeMillis() - b.getMap().lastTime > Constants.BONUS_SPAWNRATE){
             b.getMap().addBonus();

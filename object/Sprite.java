@@ -1,3 +1,6 @@
+/**
+ * A Sprite is a simple image that can be displayed on the screen
+ */
 package object;
 
 import java.awt.Image;

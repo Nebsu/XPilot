@@ -1,3 +1,6 @@
+/**
+ * The SpaceShip class is a Sprite that can move, rotate, take damage, and consume fuel
+ */
 
 package object;
 
@@ -21,10 +24,10 @@ public class SpaceShip extends Sprite {
     public final long COOLDOWN = 1000;
     //Fuel
     public final int BASE_FUEL = 5000;
-    private int fuel = BASE_FUEL;
-    private long ft0, ftimer = 0;
     private final int CONSUME_SPEED = 1000;
     private final int CONSUME_RATE = 100;
+    private int fuel = BASE_FUEL;
+    private long ft0, ftimer = 0;
     //Missile
     public int missile_switch = 1;
     public final int MAX_MISSILE_SHOT = 99;
@@ -56,6 +59,9 @@ public class SpaceShip extends Sprite {
         this.fuel = fuel;
     }
 
+/**
+ * Rotate the camera to the right.
+ */
     public void rotateRight(){
         if(rightRotationFlag){
            rotation += rotationRate;
@@ -63,6 +69,9 @@ public class SpaceShip extends Sprite {
         }
     }
 
+/**
+ * Rotate the camera left.
+ */
     public void rotateLeft(){
         if(leftRotationFlag){
            rotation -= rotationRate;
@@ -94,6 +103,9 @@ public class SpaceShip extends Sprite {
         }
     }
 
+/**
+ * Move the player in the direction it is facing
+ */
     public void move() {
         if(moveFlag || canDecelerate){
             x += SPEED * Math.cos(Math.toRadians(rotation));
@@ -107,6 +119,11 @@ public class SpaceShip extends Sprite {
         }
     }
 
+/**
+ * It checks if the cooldown period has passed.
+ * 
+ * @return The boolean value of whether or not the player can take damage.
+ */
     public boolean canTakeDamage() {
         boolean res;
         long delta = System.currentTimeMillis() - t0;
@@ -121,6 +138,9 @@ public class SpaceShip extends Sprite {
         return res;
     }
 
+/**
+ * Consume fuel at a rate of CONSUME_RATE every CONSUME_SPEED milliseconds
+ */
     public void consumeFuel(){
         long delta = System.currentTimeMillis() - ft0;
         ftimer += delta;

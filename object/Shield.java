@@ -1,3 +1,6 @@
+/**
+ * Shields are used to protect the ship from enemy fire
+ */
 package object;
 
 public class Shield {

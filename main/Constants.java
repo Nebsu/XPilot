@@ -1,3 +1,6 @@
+/**
+ * The Constants class contains all the constants used in the game
+ */
 package main;
 
 public final class Constants {

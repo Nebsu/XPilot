@@ -1,3 +1,6 @@
+/**
+ * A missile that moves in a straight line
+ */
 package object;
 
 public class MissileNormale extends Missile{

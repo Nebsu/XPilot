@@ -1,3 +1,6 @@
+/**
+ * The missile diffusion class is a missile that has 5 missiles that are fired in a circular pattern
+ */
 package object;
 
 public class MissileDiffusion extends Missile{

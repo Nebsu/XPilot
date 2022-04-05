@@ -1,3 +1,6 @@
+/**
+ * The SettingsPanel class is a JPanel that contains a JLabel and a JButton
+ */
 package menu;
 
 import main.Constants;
@@ -53,16 +56,6 @@ public class SettingsPanel extends JPanel {
 		this.add(retour);
 	}
 
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                 FONCTIONS DU MODELE                                                     //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                   FONCTIONS DE LA VUE                                                   //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
 	@Override
 	protected final void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -70,8 +63,12 @@ public class SettingsPanel extends JPanel {
 		draw(g2);
 	}
 	
+/**
+ * Draw the title of the game
+ * 
+ * @param g The Graphics2D object that is used to draw the text.
+ */
 	public final void draw(Graphics2D g) {
-		// draw title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
 		g.drawString("Xpilot", 300, 100);

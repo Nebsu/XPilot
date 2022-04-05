@@ -1,3 +1,6 @@
+/**
+ * The MenuKeys class is a key listener that handles the key events for the menu
+ */
 package menu;
 
 import java.awt.event.*;
@@ -18,6 +21,11 @@ public class MenuKeys implements KeyListener {
 
     }
 
+/**
+ * When the user presses the Enter key, the menu's select() method is called
+ * 
+ * @param e The KeyEvent object.
+ */
     @Override
     public void keyPressed(KeyEvent e) {
         int k = e.getKeyCode();

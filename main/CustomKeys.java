@@ -1,3 +1,6 @@
+/**
+ * The CustomKeys class is a class that contains the keys used to control the game
+ */
 package main;
 
 import java.awt.event.KeyEvent;

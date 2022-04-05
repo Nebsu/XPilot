@@ -1,3 +1,6 @@
+/**
+ * This class is used to play sound effects
+ */
 package sound;
 
 import java.io.*;
