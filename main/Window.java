@@ -29,11 +29,18 @@ public final class Window extends JFrame {
     public final void launchMenu() {
         if (MAINGAME!=null) MAINGAME.stopGameMusic();
         this.dispose();
-        this.setContentPane(MENU.getMenuPanel());
+        this.setContentPane(MENU);
         this.pack();
         this.setLocationRelativeTo(null);
         this.setVisible(true);
         MENU.playMenuMusic();
+    }
+
+    public final void settingsPanel() {
+        this.setContentPane(MENU.getSettingsPanel());
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
     }
 
     // Démarrage du jeu principal lorsque "Start" est sélectionné dans le menu :
