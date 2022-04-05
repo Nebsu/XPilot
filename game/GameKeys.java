@@ -38,13 +38,16 @@ public final class GameKeys implements KeyListener {
         }
         if (key == Constants.CUSTOM_KEYS.getShoot()){
             game.fire();
-            try {
-                SFX pew = new SFX("ressources/audio/pew.wav");
-                pew.playSound();
-            } catch (Exception e2) {
-                e2.printStackTrace();
-                System.out.println(e2);
-                System.exit(1);
+            if(game.getSpaceShip().missile_left > 0 && game.getSpaceShip().missile_switch == 1 || 
+               game.getSpaceShip().missile_left >= 5 && game.getSpaceShip().missile_switch == 2){
+                try {
+                    SFX pew = new SFX("ressources/audio/pew.wav");
+                    pew.playSound();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2);
+                    System.exit(1);
+                }
             }
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
