@@ -16,7 +16,6 @@ import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 
 import main.Constants;
-import main.Window;
 
 import java.util.Timer;
 import java.awt.geom.AffineTransform;
@@ -41,6 +40,8 @@ public final class GameView extends JPanel implements ActionListener {
     private boolean ingame;
     private GameKeys k;
     private Timer timer;
+
+    public Enemy e = new Enemy(700,700);
 
     public final SpaceShip getSpaceShip() {return this.spaceship;}
     public final List<Missile> getMissiles() {return this.missiles;}
@@ -109,6 +110,7 @@ public final class GameView extends JPanel implements ActionListener {
         g2 = bgImage.createGraphics();
         AffineTransform af2 = new AffineTransform();
         if (spaceship.isVisible()) {
+            missiles.add(new MissileNormale(e.x, e.y, (int)Math.toDegrees(e.getRad(spaceship.getX(), spaceship.getY()))));
             for (Missile missile : this.missiles) {
                 //paint Missile dans la seconde image
                 if(missile instanceof MissileDiffusion){
@@ -127,7 +129,14 @@ public final class GameView extends JPanel implements ActionListener {
                     g3.drawImage(missile.getImage(), af2,null);
                 }
             }
-
+            AffineTransform af3 = new AffineTransform();
+            af3.setToIdentity();
+            int cx = e.image.getWidth()/2;
+            int cy = e.image.getHeight()/2;
+            af3.translate(cx+e.x, cy+e.y);
+            af3.rotate(e.getRad(spaceship.getX(), spaceship.getY()));
+            af3.translate(-cx,-cy);
+            g3.drawImage(e.image,af3,null);
             //Camera affiche la position de vaisseau dans le seconde image
             g2.drawImage(image,(int)(-spaceship.getX())+Constants.B_WIDTH/2,(int)(-spaceship.getY())+Constants.B_HEIGHT/2, null);
 
@@ -227,7 +236,8 @@ public final class GameView extends JPanel implements ActionListener {
  */
     public final void drawBonus(){
         for(Bonus b : map.bonusList){
-            map.g2.setColor(Color.ORANGE);
+            Color c = new Color(255,165,0,127);
+            map.g2.setColor(c);
             map.g2.drawOval(b.x2+10, b.y2+10, 10, 10);
             map.g2.fillOval(b.x2+10, b.y2+10, 10, 10);
         }
