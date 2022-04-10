@@ -39,6 +39,7 @@ public final class GameLoop extends TimerTask {
                 }
             }
         }
+        updateEnemies();
         b.getSpaceShip().rotateRight();
         b.getSpaceShip().rotateLeft();
         updateMissiles();
@@ -121,6 +122,14 @@ public final class GameLoop extends TimerTask {
                 if(r.intersects(o)){
                     b.getMissiles().remove(m);
                 }
+            }
+        }
+    }
+
+    public final void updateEnemies(){
+        for(Enemy e : b.getMap().enemies){
+            if(Math.sqrt(Math.pow(b.getSpaceShip().getX()-e.x, 2)+Math.pow(b.getSpaceShip().getY()-e.y,2))< 200 && e.canShoot()){
+                b.getMissiles().add(new MissileNormale(e.x, e.y, (int)Math.toDegrees(e.getRad(b.getSpaceShip().getX(), b.getSpaceShip().getY()))));
             }
         }
     }

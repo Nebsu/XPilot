@@ -22,6 +22,7 @@ public class Map {
     public Graphics2D g2;
 	public BallHolder ball;
 	public long lastTime;
+	public LinkedList<Enemy> enemies = new LinkedList<>();
 
     public Map() throws IOException{
         try{
@@ -109,6 +110,9 @@ public class Map {
 					this.ball = ball;
     		        ListeObstacle.add(ball);
 					ball.draw(g2);
+				}else if(infor_map[i][j]==4){
+					Enemy e = new Enemy(i*48, j*48);
+					enemies.add(e);
 				}
     		}
     	}
