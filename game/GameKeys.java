@@ -3,6 +3,7 @@
  */
 package game;
 
+import main.CustomKeys;
 import sound.SFX;
 
 import java.awt.event.KeyEvent;
@@ -66,7 +67,7 @@ public final class GameKeys implements KeyListener {
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
             if(game.getSpaceShip().timerStartFlag){game.getSpaceShip().timerStartFlag = false;}
-            if(game.getSpaceShip().moveFlag == false)game.getSpaceShip().moveTime = System.currentTimeMillis();
+            if(!game.getSpaceShip().moveFlag)game.getSpaceShip().moveTime = System.currentTimeMillis();
             game.getSpaceShip().canDecelerate = false;
             game.getSpaceShip().moveFlag = true;
             game.getSpaceShip().canAccelerate = true;
@@ -91,6 +92,10 @@ public final class GameKeys implements KeyListener {
             if(game.getSpaceShip().missile_switch > 2){
                 game.getSpaceShip().missile_switch = 1;
             }
+        }
+        if (key == Constants.CUSTOM_KEYS.getFullScreen()){
+            GameLoop.actFullScreen = true;
+            GameLoop.fullScreenMode = !GameLoop.fullScreenMode;
         }
     }
 

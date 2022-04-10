@@ -3,9 +3,11 @@
  */
 package game;
 
+import main.CustomKeys;
 import map.*;
 import object.*;
 
+import java.awt.event.KeyEvent;
 import java.util.TimerTask;
 
 import main.Constants;
@@ -14,8 +16,10 @@ import main.Window;
 import java.awt.*;
 
 public final class GameLoop extends TimerTask {
+    public static boolean fullScreenMode = false;
+    public static boolean actFullScreen = false;
 
-    private GameView b;
+    private final GameView b;
 
     public GameLoop(GameView b){
         this.b=b;
@@ -27,7 +31,7 @@ public final class GameLoop extends TimerTask {
     @Override
     public void run() {
         inGame();
-        b.getRadar().repaint();
+        //b.getRadar().repaint();
         if(!checkCollision())updateShip();
         else{
             if(b.getSpaceShip().canTakeDamage()){
@@ -43,7 +47,18 @@ public final class GameLoop extends TimerTask {
         b.getSpaceShip().rotateLeft();
         updateMissiles();
         updateBonus();
-        b.repaint();    
+        if (fullScreenMode && actFullScreen) {
+            System.out.println("ça loop");
+            Window.WINDOW.setDimensionsToFullScreen();
+            Window.WINDOW.setFullScreen(b);
+        }
+        if (!fullScreenMode && actFullScreen) {
+            System.out.println("c'est rentré");
+            Window.WINDOW.setDimensionsToSmallScreen();
+            Window.WINDOW.setSmallScreen(b);
+        }
+        actFullScreen = false;
+        b.repaint();
     }
 
 /**

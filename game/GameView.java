@@ -56,7 +56,7 @@ public final class GameView extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.BLACK);
         this.ingame = true;
-        setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+        setPreferredSize(new Dimension(Constants.B_WIDTH , Constants.B_HEIGHT));
         this.spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         this.map = new Map();
         this.missiles = new ArrayList<>();
@@ -105,7 +105,7 @@ public final class GameView extends JPanel implements ActionListener {
         Graphics2D g3=image.createGraphics();
         g3.drawImage(map.img_map, 0, 0, null);
 
-        bgImage= new BufferedImage(800,600,BufferedImage.TYPE_INT_BGR);
+        bgImage= new BufferedImage(Constants.B_WIDTH, Constants.B_HEIGHT,BufferedImage.TYPE_INT_BGR);
         g2 = bgImage.createGraphics();
         AffineTransform af2 = new AffineTransform();
         if (spaceship.isVisible()) {

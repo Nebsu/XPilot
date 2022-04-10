@@ -20,7 +20,7 @@ public final class Radar extends JPanel {
     public Radar(SpaceShip s, Map m) {
         this.ship = s;
         this.minimap = m;
-        this.setBackground(Color.BLACK);
+        this.setBackground(Color.WHITE);
         setFocusable(true);
         setPreferredSize(new Dimension(200,200));
     }
