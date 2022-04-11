@@ -26,6 +26,7 @@ public final class GameLoop extends TimerTask {
   */
     @Override
     public void run() {
+        System.out.println(b.getSpaceShip().rotation);
         inGame();
         b.getRadar().repaint();
         if(!checkCollision())updateShip();
@@ -119,8 +120,23 @@ public final class GameLoop extends TimerTask {
             Rectangle r=m.getBounds();
             for(Obstacle ob:b.getMap().ListeObstacle){
                 Rectangle o=new Rectangle(ob.x[0],ob.y[0],ob.x[1]-ob.x[0],ob.y[2]-ob.y[1]);
-                if(r.intersects(o)){
+                if(r.intersects(o) && (m instanceof MissileNormale || m instanceof MissileDiffusion)){
                     b.getMissiles().remove(m);
+                }else if(r.intersects(o) && (m instanceof Rocket)){
+                    int angle;
+                    if(((Rocket)m).rebounce == 3){
+                        b.getMissiles().remove(m);
+                    }
+                    ((Rocket)m).rebounce += 1;
+                    if(((Rocket)m).getdirection() < 0){
+                        angle = ((Rocket)m).getdirection() + 360;
+                    }else{
+                        angle = ((Rocket)m).getdirection();
+                    }
+                    //Si le missile touche un mur sur la gauche ou la droite
+                    ((Rocket)m).setDirection(180-angle);
+                    //Si le missile touche un mur sur haut ou le bas
+                    ((Rocket)m).setDirection(360-angle);
                 }
             }
         }

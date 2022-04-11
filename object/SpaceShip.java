@@ -75,7 +75,7 @@ public class SpaceShip extends Sprite {
     public void rotateLeft(){
         if(leftRotationFlag){
            rotation -= rotationRate;
-           if(rotation == rotationRate) rotation = rotationRate;
+           if(rotation < -360) rotation = rotationRate;
         }
     }
 
