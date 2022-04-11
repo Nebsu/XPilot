@@ -32,7 +32,6 @@ public final class GameView extends JPanel implements ActionListener {
     private AffineTransform af = new AffineTransform();
     private Graphics2D g2;
     private BufferedImage bgImage;
-    private Radar minimap;
     private BufferedImage singleShot;
     private BufferedImage multiShot;
     private Music gameMusic;
@@ -45,7 +44,6 @@ public final class GameView extends JPanel implements ActionListener {
     public final SpaceShip getSpaceShip() {return this.spaceship;}
     public final List<Missile> getMissiles() {return this.missiles;}
     public final Map getMap() {return this.map;}
-    public final Radar getRadar() {return this.minimap;}
     public final Timer getTimer() {return this.timer;}
     public final boolean isInGame() {return this.ingame;}
     public final void setInGame(boolean inGame) {this.ingame = inGame;}
@@ -56,12 +54,12 @@ public final class GameView extends JPanel implements ActionListener {
         setFocusable(true);
         setBackground(Color.BLACK);
         this.ingame = true;
-        setPreferredSize(new Dimension(Constants.B_WIDTH , Constants.B_HEIGHT));
+        setPreferredSize(new Dimension(Constants.B_WIDTH  , Constants.B_HEIGHT));
         this.spaceship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         this.map = new Map();
         this.missiles = new ArrayList<>();
         this.k = new GameKeys(this);
-        this.minimap = new Radar(spaceship, map);
+
         map.addBonus();
         try {
             BufferedImage singleShot = ImageIO.read(new File("ressources/images/overlay_single_shot.png"));
@@ -78,6 +76,7 @@ public final class GameView extends JPanel implements ActionListener {
     @Override
     public void paintComponent(Graphics g0) {
         super.paintComponent(g0);
+        requestFocus(true);
         Graphics2D g = (Graphics2D) g0;
         if (ingame) {
             try {
@@ -89,6 +88,11 @@ public final class GameView extends JPanel implements ActionListener {
             drawFuelBar(g);
             drawMissileIndicator(g);
             drawShield(g);
+            try {
+                drawMinimap(g);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         } else {
             drawGameOver(g);
         }
@@ -266,6 +270,27 @@ public final class GameView extends JPanel implements ActionListener {
             g.drawString(msg, fm.stringWidth(msg) + 20 , 37);
         }else{
             g.drawString(msg, fm.stringWidth(msg) + 35 , 37);
+        }
+    }
+    public void drawMinimap(Graphics g) throws IOException {
+        BufferedImage bi = ImageIO.read(new File("ressources/images/minimap.png"));
+        g.translate(Constants.B_WIDTH - 150, Constants.B_HEIGHT - 150);
+
+        for(int i=0;i<map.infor_map.length;i++){
+            for(int j=0;j<map.infor_map.length;j++){
+                if (map.infor_map[i][j] == 0){
+                    g.setColor(Color.BLACK);
+                    g.fillRect(i*3,j*3,3,3);
+                }
+                if(map.infor_map[i][j]==1){
+                    g.setColor(Color.YELLOW);
+                    g.fillRect(i*3,j*3,3,3);
+                }else if(map.infor_map[i][j]==2){
+                    g.setColor(Color.RED);
+                    g.fillRect(i*3,j*3,3,3);
+                }
+                g.drawImage(bi,(int)spaceship.getX()/16,(int)spaceship.getY()/16,null);
+            }
         }
     }
 

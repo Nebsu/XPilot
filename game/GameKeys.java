@@ -3,14 +3,12 @@
  */
 package game;
 
-import main.CustomKeys;
+import main.Constants;
+import main.Window;
 import sound.SFX;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-
-import main.Constants;
-import main.Window;
 
 public final class GameKeys implements KeyListener {
 
@@ -71,6 +69,7 @@ public final class GameKeys implements KeyListener {
             game.getSpaceShip().canDecelerate = false;
             game.getSpaceShip().moveFlag = true;
             game.getSpaceShip().canAccelerate = true;
+
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
             if(game.getSpaceShip().timerStartFlag){game.getSpaceShip().timerStartFlag = false;}

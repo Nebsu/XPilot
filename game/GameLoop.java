@@ -48,16 +48,15 @@ public final class GameLoop extends TimerTask {
         updateMissiles();
         updateBonus();
         if (fullScreenMode && actFullScreen) {
-            System.out.println("ça loop");
             Window.WINDOW.setDimensionsToFullScreen();
-            Window.WINDOW.setFullScreen(b);
+            Window.WINDOW.setFullScreen();
         }
         if (!fullScreenMode && actFullScreen) {
-            System.out.println("c'est rentré");
             Window.WINDOW.setDimensionsToSmallScreen();
-            Window.WINDOW.setSmallScreen(b);
+            Window.WINDOW.setSmallScreen();
         }
         actFullScreen = false;
+
         b.repaint();
     }
 

@@ -8,7 +8,6 @@ import game.GameView;
 import menu.Menu;
 import menu.SettingsPanel;
 
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
 import java.awt.*;
 import java.io.IOException;
@@ -18,7 +17,7 @@ public final class Window extends JFrame {
     public final static GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     public final static GraphicsDevice device = env.getScreenDevices()[0];
     public static final Rectangle RECTANGLE = device.getDefaultConfiguration().getBounds();
-    public static final int MAX_WIDTH = RECTANGLE.width - 200;
+    public static final int MAX_WIDTH = RECTANGLE.width;
     public static final int MAX_HEIGHT = RECTANGLE.height;
 
     public static final Menu MENU = new Menu();
@@ -61,17 +60,17 @@ public final class Window extends JFrame {
 /**
  * This function launches the game
  */
-    public final void launchGame() throws IOException, LineUnavailableException {
+    public final void launchGame() throws IOException {
         this.dispose();
-        MAINGAME = new GameView();
+        getContentPane().removeAll();
         setContentPane(new JPanel());
-        getContentPane().add(MAINGAME.getRadar());
-        getContentPane().add(MAINGAME);
+        MAINGAME = new GameView();
+        setLayout(new BorderLayout());
+        getContentPane().add(BorderLayout.CENTER,MAINGAME);
+        setLocationRelativeTo(null);
         pack();
         setTitle("Xpilot");
-        setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        MAINGAME.playGameMusic();
         this.setVisible(true);
     }
     public void setDimensionsToFullScreen() {
@@ -84,32 +83,28 @@ public final class Window extends JFrame {
         Constants.B_WIDTH = 800;
     }
 
-    public void setSmallScreen(GameView comp) {
+    public void setSmallScreen() {
         dispose();
         getContentPane().removeAll();
-        getContentPane().add(comp.getRadar());
-        getContentPane().add(comp);
-        this.setUndecorated(false);
-        this.pack();
-        this.setVisible(true);
+        setLayout(new BorderLayout());
+        getContentPane().add(BorderLayout.CENTER,MAINGAME);
+        MAINGAME.setPreferredSize(new Dimension(Constants.B_WIDTH , Constants.B_HEIGHT));
+        setLocationRelativeTo(null);
+        pack();
+        setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         repaint();
-
-
     }
 
-    public void setFullScreen(GameView comp) {
+    public void setFullScreen() {
         dispose();
         getContentPane().removeAll();
-        getContentPane().setLayout(new BorderLayout());
-        getContentPane().add(BorderLayout.EAST, comp.getRadar());
-        getContentPane().add(BorderLayout.CENTER,comp);
-        getContentPane().getComponent(1).setPreferredSize(new Dimension (Constants.B_WIDTH, Constants.B_HEIGHT));
-        this.setUndecorated(true);
+        setLayout(new BorderLayout());
+        getContentPane().add(BorderLayout.CENTER,MAINGAME);
+        device.setFullScreenWindow(WINDOW);
         pack();
-        this.setVisible(true);
+        setVisible(true);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
-        setSize(Constants.B_WIDTH , Constants.B_HEIGHT );
         repaint();
     }
 
