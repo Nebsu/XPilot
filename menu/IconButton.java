@@ -1,7 +1,5 @@
 package menu;
 
-import javax.swing.JButton;
-import javax.swing.JComponent;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import java.awt.Image;
@@ -9,21 +7,19 @@ import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 
-
-public final class IconButton extends JComponent {
+public final class IconButton extends MyButton {
 
     private final Image iconImage;
     private final Icon icon;
-    public final JButton button;
-
+    
     public final Icon getIcon() {return icon;}
 
     public IconButton(String filepath) {
+        super();
         this.iconImage = setImageFile(filepath);
         this.icon = new ImageIcon(this.iconImage);
-        this.button = new JButton(this.icon);
     }
-    
+
     private final Image setImageFile(String imagePath) {
         try {
             return ImageIO.read(new File(imagePath));
@@ -34,5 +30,5 @@ public final class IconButton extends JComponent {
         }
         return null;
     }
-
+    
 }

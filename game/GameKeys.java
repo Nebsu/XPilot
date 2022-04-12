@@ -26,7 +26,7 @@ public final class GameKeys implements KeyListener {
             try {
                 Window.getMainGame().getTimer().cancel();
                 this.game.stopGameMusic();
-                Window.WINDOW.launchMenu();
+                Window.WINDOW.launchMenu(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
                 System.out.println(e1);

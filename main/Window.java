@@ -23,17 +23,19 @@ public final class Window extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setResizable(false);
         // Menu is launched first :
-        this.launchMenu();
+        this.launchMenu(true);
     }
 
-    public final void launchMenu() {
+    public final void launchMenu(boolean launch) {
         if (MAINGAME!=null) MAINGAME.stopGameMusic();
-        this.dispose();
+        if (launch) this.dispose();
         this.setContentPane(MENU);
         this.pack();
         this.setLocationRelativeTo(null);
-        this.setVisible(true);
-        MENU.playMenuMusic();
+        if (launch) {
+            this.setVisible(true);
+            MENU.playMenuMusic();
+        }
     }
 
     public final void settingsPanel() {
