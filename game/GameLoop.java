@@ -26,7 +26,6 @@ public final class GameLoop extends TimerTask {
   */
     @Override
     public void run() {
-        System.out.println(b.getSpaceShip().rotation);
         inGame();
         b.getRadar().repaint();
         if(!checkCollision())updateShip();
@@ -84,7 +83,13 @@ public final class GameLoop extends TimerTask {
             Bonus bo = b.getMap().bonusList.get(i);
             Rectangle r=new Rectangle(bo.x[0],bo.y[0],bo.x[1]-bo.x[0],bo.y[2]-bo.y[1]);
             if(s.intersects(r)){
-                if(b.getSpaceShip().getFuel()<b.getSpaceShip().BASE_FUEL)b.getSpaceShip().setFuel(b.getSpaceShip().getFuel()+500);
+                if(b.getSpaceShip().getFuel()<Constants.BASE_FUEL){
+                    if(b.getSpaceShip().getFuel()>Constants.BASE_FUEL - 500){
+                        b.getSpaceShip().setFuel(b.getSpaceShip().getFuel()+Constants.BASE_FUEL-b.getSpaceShip().getFuel());
+                    }else{
+                        b.getSpaceShip().setFuel(b.getSpaceShip().getFuel()+500);
+                    }
+                }
                 b.getSpaceShip().shield.add();
                 b.erase(bo);
                 b.getMap().bonusList.remove(bo);
@@ -94,7 +99,7 @@ public final class GameLoop extends TimerTask {
     }
 
 /**
- * Update the ship's position and velocity
+ * Update the ship's position
  */
     public final void updateShip() {
         if (b.getSpaceShip().isVisible()) {
@@ -118,6 +123,18 @@ public final class GameLoop extends TimerTask {
         for(int i=0;i<b.getMissiles().size();i++) {
             Missile m= b.getMissiles().get(i);
             Rectangle r=m.getBounds();
+            Rectangle s = b.getSpaceShip().getBounds();
+            if(r.intersects(s)){
+                if(b.getMissiles().get(i).shooter == 2){
+                    b.getMissiles().remove(m);
+                    if(b.getSpaceShip().shield.isActive()){
+                        b.getSpaceShip().shield.destroy();
+                        b.getSpaceShip().shield.disable();
+                    }else{
+                        b.getSpaceShip().setHealth(b.getSpaceShip().getHealth()-100);
+                    }
+                }
+            }
             for(Obstacle ob:b.getMap().ListeObstacle){
                 Rectangle o=new Rectangle(ob.x[0],ob.y[0],ob.x[1]-ob.x[0],ob.y[2]-ob.y[1]);
                 if(r.intersects(o) && (m instanceof MissileNormale || m instanceof MissileDiffusion)){
@@ -133,10 +150,19 @@ public final class GameLoop extends TimerTask {
                     }else{
                         angle = ((Rocket)m).getdirection();
                     }
-                    //Si le missile touche un mur sur la gauche ou la droite
-                    ((Rocket)m).setDirection(180-angle);
-                    //Si le missile touche un mur sur haut ou le bas
-                    ((Rocket)m).setDirection(360-angle);
+                    if(angle > 270){
+                        // ((Rocket)m).setDirection(180-angle);
+                        ((Rocket)m).setDirection(360-angle);
+                    }else if(angle < 90){
+                        // ((Rocket)m).setDirection(360-angle);
+                        ((Rocket)m).setDirection(180-angle);
+                    }else if(angle > 90 && angle < 180){
+                        // ((Rocket)m).setDirection(360-angle);
+                        ((Rocket)m).setDirection(180-angle);
+                    }else if(angle > 180 && angle < 270){
+                        // ((Rocket)m).setDirection(180-angle);
+                        ((Rocket)m).setDirection(360-angle);
+                    }
                 }
             }
         }
@@ -144,8 +170,8 @@ public final class GameLoop extends TimerTask {
 
     public final void updateEnemies(){
         for(Enemy e : b.getMap().enemies){
-            if(Math.sqrt(Math.pow(b.getSpaceShip().getX()-e.x, 2)+Math.pow(b.getSpaceShip().getY()-e.y,2))< 200 && e.canShoot()){
-                b.getMissiles().add(new MissileNormale(e.x, e.y, (int)Math.toDegrees(e.getRad(b.getSpaceShip().getX(), b.getSpaceShip().getY()))));
+            if(Math.sqrt(Math.pow(b.getSpaceShip().getX()-e.x, 2)+Math.pow(b.getSpaceShip().getY()-e.y,2))< Constants.RANGE && e.canShoot()){
+                b.getMissiles().add(new MissileNormale(e.x, e.y, (int)Math.toDegrees(e.getRad(b.getSpaceShip().getX(), b.getSpaceShip().getY())),2));
             }
         }
     }

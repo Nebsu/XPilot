@@ -5,12 +5,13 @@ package object;
 
 public class MissileNormale extends Missile{
 
-    private final int MISSILE_SPEED = 30;
+    private final int MISSILE_SPEED = 20;
     private int direction;
+    public int shooter;
 
 
-    public MissileNormale(double x, double y, int rotation) {
-        super(x, y);
+    public MissileNormale(double x, double y, int rotation, int shooter) {
+        super(x, y, shooter);
         direction = rotation;
     }
 

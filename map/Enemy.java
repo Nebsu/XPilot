@@ -7,12 +7,13 @@ import java.awt.image.*;
 
 import javax.imageio.ImageIO;
 
+import main.Constants;
+
 public class Enemy{
     public BufferedImage image;
     public double x;
     public double y;
     private long t0, timer = 0;
-    public final int COOLDOWN = 1000;
 
     public Enemy(double x, double y) throws IOException {
         this.x = x;
@@ -32,7 +33,7 @@ public class Enemy{
         boolean res;
         long delta = System.currentTimeMillis() - t0;
         timer += delta;
-        if (timer > COOLDOWN) {
+        if (timer > Constants.SHOOT_RATE) {
             timer = 0;
             res = true;
         } else {

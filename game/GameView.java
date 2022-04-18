@@ -225,7 +225,7 @@ public final class GameView extends JPanel implements ActionListener {
         g.fillRect(Constants.B_WIDTH/4, Constants.B_HEIGHT/20, Constants.B_WIDTH/2, 15);
         //Barre de fuel
         g.setColor(Color.GREEN);
-        float width = (Constants.B_WIDTH/2-4) * ((float)spaceship.getFuel() / (float)spaceship.BASE_FUEL);
+        float width = (Constants.B_WIDTH/2-4) * ((float)spaceship.getFuel() / (float)Constants.BASE_FUEL);
         g.fillRect(Constants.B_WIDTH/4+2, Constants.B_HEIGHT/20+2, (int)Math.round(width), 15-4);
         //Nombre
         g.setColor(Color.GRAY);
@@ -237,8 +237,7 @@ public final class GameView extends JPanel implements ActionListener {
  */
     public final void drawBonus(){
         for(Bonus b : map.bonusList){
-            Color c = new Color(255,165,0,127);
-            map.g2.setColor(c);
+            map.g2.setColor(Color.GREEN);
             map.g2.drawOval(b.x2+10, b.y2+10, 10, 10);
             map.g2.fillOval(b.x2+10, b.y2+10, 10, 10);
         }
@@ -247,7 +246,7 @@ public final class GameView extends JPanel implements ActionListener {
 /**
  * Erase the bonus from the map
  * 
- * @param b the bonus object
+ * @param b the bonus objects
  */
     public final void erase(Bonus b){
         map.g2.setColor(Color.BLACK);
@@ -300,13 +299,13 @@ public final class GameView extends JPanel implements ActionListener {
     public final void fire() {
         if(spaceship.missile_left > 0){
             if(spaceship.missile_switch == 2 && spaceship.missile_left >= 5){
-                MissileDiffusion s=new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation);
+                MissileDiffusion s=new MissileDiffusion(spaceship.getX(), spaceship.getY(), spaceship.rotation, 1);
                 for(int i=0;i<5;i++){
                     missiles.add(s.getDiffusion()[i]);
                 }
                 spaceship.missile_left -= 5;
             }else if(spaceship.missile_switch == 1){
-                missiles.add(new MissileNormale(spaceship.getX(), spaceship.getY(), spaceship.rotation));
+                missiles.add(new Rocket(spaceship.getX(), spaceship.getY(), spaceship.rotation, 1));
                 spaceship.missile_left -= 1;
             }
         }

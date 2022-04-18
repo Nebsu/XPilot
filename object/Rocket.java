@@ -4,10 +4,11 @@ public class Rocket extends Missile{
     private final int MISSILE_SPEED = 30;
     private int direction;
     public int rebounce = 0;
+    public int shooter;
 
 
-    public Rocket(double x, double y, int rotation) {
-        super(x, y);
+    public Rocket(double x, double y, int rotation, int shooter) {
+        super(x, y, shooter);
         direction = rotation;
     }
 
