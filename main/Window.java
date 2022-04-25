@@ -5,7 +5,7 @@
 package main;
 
 import menu.Menu;
-import game.GameLoop;
+import game.GameView;
 
 import java.awt.*;
 import java.io.IOException;
@@ -37,9 +37,8 @@ public final class Window extends JFrame {
  */
     public final void launchMenu(boolean launch) {
         Constants.isMenu = true;
-        if (launch) this.dispose();
         this.setResizable(false);
-        this.getContentPane().removeAll();
+        if (launch) this.dispose();
         this.setContentPane(menu);
         this.pack();
         this.setLocationRelativeTo(null);
@@ -77,14 +76,13 @@ public final class Window extends JFrame {
         menu.stopMenuMusic();
         setResizable(true);
         dispose();
-        getContentPane().removeAll();
         setContentPane(new JPanel());
         getContentPane().add(BorderLayout.CENTER,comp);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         repaint();
-        GameLoop.view.playGameMusic();
+        ((GameView) comp).playGameMusic();
     }
 
     public void setDimensionsToFullScreen() {
@@ -106,7 +104,6 @@ public final class Window extends JFrame {
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         repaint();
     }
 
@@ -117,7 +114,6 @@ public final class Window extends JFrame {
         device.setFullScreenWindow(this);
         pack();
         setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         repaint();
     }
 

@@ -12,21 +12,18 @@ public abstract class MyButton extends JButton {
     private boolean over;
     private Color color;
     private Color colorOver;
-    private Color colorClick;
     private Color borderColor;
     private int radius;
 
     public final boolean isOver() {return over;}
     public final Color getColor() {return color;}
     public final Color getColorOver() {return colorOver;}
-    public final Color getColorClick() {return colorClick;}
     public final Color getBorderColor() {return borderColor;}
     public final int getRadius() {return radius;}
 
     public final void setOver(boolean over) {this.over = over;}
     public final void setColor(Color color) {this.color = color;}
     public final void setColorOver(Color c) {this.colorOver = c;}
-    public final void setColorClick(Color c) {this.colorClick = c;}
     public final void setBorderColor(Color color) {this.borderColor = color;}
     public final void setRadius(int radius) {this.radius = radius;}
 
@@ -36,7 +33,6 @@ public abstract class MyButton extends JButton {
         // Init color :
         this.color = Color.WHITE;
         this.colorOver = new Color(240, 55, 55);
-        this.colorClick = new Color(255, 252, 74);
         this.borderColor = new Color(255, 0, 0);
         this.setContentAreaFilled(false);
         // Add event mouse :
@@ -58,7 +54,6 @@ public abstract class MyButton extends JButton {
             @Override
             public void mousePressed(MouseEvent e) {
                 super.mousePressed(e);
-                setBackground(colorClick);
             }
 
             @Override

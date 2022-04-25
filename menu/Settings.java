@@ -1,7 +1,6 @@
 package menu;
 
 import main.Constants;
-import main.Window;
 import sound.Music;
 import sound.SFX;
 import game.GameLoop;

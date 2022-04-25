@@ -36,6 +36,7 @@ public final class GameKeys implements KeyListener {
  */
     @Override
     public void keyPressed(KeyEvent e) {
+        if (Constants.isMenu) return;
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
             try {
@@ -88,6 +89,7 @@ public final class GameKeys implements KeyListener {
 
     @Override
     public void keyReleased(KeyEvent e) {
+        if (Constants.isMenu) return;
         int key = e.getKeyCode();
         if (key == Constants.CUSTOM_KEYS.getRight()) {
             game.getShip().rightRotationFlag = false;

@@ -19,6 +19,7 @@ public final class GameLoop implements Game, Runnable {
     // Fullscreen / UI :
     public static boolean fullScreenMode = false;
     public static boolean actFullScreen = false;
+
     public static GameView view;
     public static Window win;
     // Game Objects :

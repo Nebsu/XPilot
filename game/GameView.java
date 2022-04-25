@@ -1,24 +1,19 @@
 package game;
 
 import map.*;
-import menu.Menu;
-import menu.Settings;
 import sound.Music;
 import sound.SFX;
 import object.*;
 import main.Constants;
-import main.Window;
 
 import java.awt.*;
 import java.awt.event.*;
 import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
-import java.util.List;
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
-import java.util.Timer;
 import java.awt.geom.AffineTransform;
 
 public final class GameView extends JPanel implements ActionListener {
@@ -35,7 +30,6 @@ public final class GameView extends JPanel implements ActionListener {
     public boolean settings = false;
     // Varaibles modèle :
     private boolean ingame;
-    private GameKeys k;
 
     public final boolean isInGame() {
         return this.ingame;
@@ -368,21 +362,6 @@ public final class GameView extends JPanel implements ActionListener {
     public final void stopGameMusic() {
         this.gameMusic.stopMusic();
     }
-
-    // //Inputs
-    // private final class TAdapter extends KeyAdapter {
-
-    //     @Override
-    //     public void keyReleased(KeyEvent e) {
-    //         k.keyReleased(e);
-    //     }
-
-    //     @Override
-    //     public void keyPressed(KeyEvent e) {
-    //         k.keyPressed(e);
-    //     }
-
-    // }
 
     @Override
     public void actionPerformed(ActionEvent e) {

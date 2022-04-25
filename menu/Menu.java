@@ -1,10 +1,7 @@
 package menu;
 
-import game.Game;
 import game.GameLoop;
-import game.GameView;
 import main.Constants;
-import main.Window;
 import sound.Music;
 
 import javax.sound.sampled.LineUnavailableException;

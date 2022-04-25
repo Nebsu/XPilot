@@ -1,7 +1,6 @@
 package menu;
 
 import main.Constants;
-import main.Window;
 import game.GameLoop;
 
 import java.awt.event.*;
