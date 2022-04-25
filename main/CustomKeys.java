@@ -22,6 +22,7 @@ public final class CustomKeys {
     public final int getShoot() {return shoot;}
     public final int getShield() {return shield;}
     public final int getSwitch() {return mode;}
+    public final int getFullScreen() {return fullScreen;}
 
     public final void WASD_MODE(boolean status) {
         Constants.WASD_MODE = status;

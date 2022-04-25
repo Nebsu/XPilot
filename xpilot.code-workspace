@@ -4,9 +4,5 @@
 			"path": "."
 		}
 	],
-	"settings": {
-		"java.project.sourcePaths": [
-			"."
-		]
-	}
+	"settings": {}
 }

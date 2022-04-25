@@ -2,6 +2,7 @@ package menu;
 
 import main.Constants;
 import main.Window;
+import game.GameLoop;
 
 import java.awt.event.*;
 import javax.swing.JPanel;
@@ -37,7 +38,7 @@ public class HelpPanel extends JPanel {
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Window.WINDOW.launchMenu(false);
+				GameLoop.win.launchMenu(false);
 			}
 		});
 		// Repaint :

@@ -40,6 +40,7 @@ public final class GameKeys implements KeyListener {
         if (key==KeyEvent.VK_ESCAPE) {
             try {
                 this.view.stopGameMusic();
+                GameLoop.win.launchMenu(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
                 System.out.println(e1);
@@ -48,7 +49,7 @@ public final class GameKeys implements KeyListener {
             return;
         }
         if (key == Constants.CUSTOM_KEYS.getShoot()){
-            game.fire();
+            view.fire();
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
             if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}

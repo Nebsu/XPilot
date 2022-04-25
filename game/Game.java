@@ -10,7 +10,7 @@ public interface Game {
 
     SpaceShip getShip();
     Map getMap();
-    ArrayList<Missile> getMissile();
+    ArrayList<Missile> getMissiles();
     GameKeys getKeys();
     void update();
     public boolean hasGameStarted();

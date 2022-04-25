@@ -4,6 +4,7 @@ import main.Constants;
 import main.Window;
 import sound.Music;
 import sound.SFX;
+import game.GameLoop;
 
 import java.awt.event.*;
 import javax.swing.JPanel;
@@ -44,7 +45,7 @@ public class Settings extends JPanel {
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Window.WINDOW.launchMenu(false);
+				GameLoop.win.launchMenu(false);
 			}
 		});
 		// Music Sliders :
@@ -129,9 +130,9 @@ public class Settings extends JPanel {
 		else volume = -20.0f + (float) value / 10 * 2.0f; // valeur slider
 		if (isMusic) {
 			Music.setMusicVolume(volume);
-			Window.MENU.getMenuMusic().changeGain(volume);
-			if (Window.getMainGame()!=null) 
-				Window.getMainGame().getGameMusic().changeGain(volume);
+			GameLoop.win.menu.getMenuMusic().changeGain(volume);
+			if (GameLoop.view!=null) 
+				GameLoop.view.getGameMusic().changeGain(volume);
 		} else {
 			SFX.setMusicVolume(volume);
 		}

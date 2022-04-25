@@ -31,8 +31,6 @@ public final class GameView extends JPanel implements ActionListener {
     private BufferedImage singleShot;
     private BufferedImage multiShot;
     private Music gameMusic;
-
-    Menu menu;
     public boolean back = false;
     public boolean settings = false;
     // Varaibles modèle :
@@ -47,9 +45,10 @@ public final class GameView extends JPanel implements ActionListener {
         this.ingame = inGame;
     }
 
+    public final Music getGameMusic() {return this.gameMusic;} 
+
     public GameView(Game game) throws IOException {
         this.game = game;
-        this.menu = new Menu(game, this);
         //Initialisation
         setBackground(Color.BLACK);
         this.ingame = true;
@@ -107,7 +106,7 @@ public final class GameView extends JPanel implements ActionListener {
         g2 = bgImage.createGraphics();
         AffineTransform af2 = new AffineTransform();
         if (game.getShip().isVisible()) {
-            for (Missile missile : game.getMissile()) {
+            for (Missile missile : game.getMissiles()) {
                 //paint Missile dans la seconde image
                 if (missile instanceof MissileDiffusion) {
                     MissileDiffusion represent = (MissileDiffusion) missile;
@@ -125,7 +124,7 @@ public final class GameView extends JPanel implements ActionListener {
                 }
             }
             //Dessine les ennemis
-            for(Enemy e : map.enemies){
+            for(Enemy e : game.getMap().enemies){
                 AffineTransform af3 = new AffineTransform();
                 af3.setToIdentity();
                 int cx = e.image.getWidth()/2;
@@ -224,7 +223,7 @@ public final class GameView extends JPanel implements ActionListener {
         g.fillRect(Constants.B_WIDTH / 4, Constants.B_HEIGHT / 20, Constants.B_WIDTH / 2, 15);
         //Barre de fuel
         g.setColor(Color.GREEN);
-        float width = (Constants.B_WIDTH / 2 - 4) * ((float) game.getShip().getFuel() / (float) game.getShip().BASE_FUEL);
+        float width = (Constants.B_WIDTH / 2 - 4) * ((float) game.getShip().getFuel() / (float) Constants.BASE_FUEL);
         g.fillRect(Constants.B_WIDTH / 4 + 2, Constants.B_HEIGHT / 20 + 2, (int) Math.round(width), 15 - 4);
         //Nombre
         g.setColor(Color.GRAY);
@@ -322,7 +321,7 @@ public final class GameView extends JPanel implements ActionListener {
             if(game.getShip().missile_switch == 2 && game.getShip().missile_left >= 5){
                 MissileDiffusion s=new MissileDiffusion(game.getShip().getX(), game.getShip().getY(), game.getShip().rotation, 1);
                 for(int i=0;i<5;i++){
-                    game.getMissile().add(s.getDiffusion()[i]);
+                    game.getMissiles().add(s.getDiffusion()[i]);
                 }
                 game.getShip().missile_left -= 5;
                 try {
@@ -334,7 +333,7 @@ public final class GameView extends JPanel implements ActionListener {
                     System.exit(1);
                 }
             }else if(game.getShip().missile_switch == 1){
-                game.getMissile().add(new Rocket(game.getShip().getX(), game.getShip().getY(), game.getShip().rotation, 1));
+                game.getMissiles().add(new Rocket(game.getShip().getX(), game.getShip().getY(), game.getShip().rotation, 1));
                 game.getShip().missile_left -= 1;
                 try {
                     SFX pew = new SFX("ressources/audio/pew.wav");
@@ -370,24 +369,24 @@ public final class GameView extends JPanel implements ActionListener {
         this.gameMusic.stopMusic();
     }
 
-    //Inputs
-    private final class TAdapter extends KeyAdapter {
+    // //Inputs
+    // private final class TAdapter extends KeyAdapter {
 
-        @Override
-        public void keyReleased(KeyEvent e) {
-            k.keyReleased(e);
-        }
+    //     @Override
+    //     public void keyReleased(KeyEvent e) {
+    //         k.keyReleased(e);
+    //     }
 
-        @Override
-        public void keyPressed(KeyEvent e) {
-            k.keyPressed(e);
-        }
+    //     @Override
+    //     public void keyPressed(KeyEvent e) {
+    //         k.keyPressed(e);
+    //     }
 
-    }
+    // }
 
     @Override
     public void actionPerformed(ActionEvent e) {
 
     }
-    
+
 }

@@ -16,7 +16,6 @@ import java.io.IOException;
 public final class Menu extends JPanel {
 
 	// Vue :
-	final String[] options = {"Start","Settings","Help","Quit"}; 
 	private final Color titleColor;
 	private final Font titleFont;
 	private final Music menuMusic;
@@ -26,17 +25,21 @@ public final class Menu extends JPanel {
 	private final JButton quit;
 
 	// Sections :
-	private final Settings settingsPanel;
-	private final HelpPanel helpPanel;
+	private final Settings settingsPanel = new Settings();
+	private final HelpPanel helpPanel = new HelpPanel();
 
 	// Getters :
 	public final Settings getSettingsPanel() {return settingsPanel;}
 	public final HelpPanel getHelpPanel() {return helpPanel;}
+	public final Music getMenuMusic() {return menuMusic;}
 
 	public Menu() {
 		// Initialisation du panel :
 		super();
 		setFocusable(true);
+		setBackground(Color.BLACK);
+		setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+		requestFocus();
 		this.titleColor = new Color(128, 0, 0);
 		this.titleFont = new Font("Century Gothic", Font.PLAIN, 150);
 		// Music :
@@ -56,13 +59,13 @@ public final class Menu extends JPanel {
 		this.add(settings);
 		this.add(help);
 		this.add(quit);
-		// this.invalidate();
+		this.invalidate();
 		this.repaint();
 		this.start.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				try {
-					Window.WINDOW.launchGame();
+					GameLoop.win.launchGame();
 				} catch (IOException | LineUnavailableException e1) {
 					e1.printStackTrace();
 					System.out.println(e1);
@@ -73,13 +76,13 @@ public final class Menu extends JPanel {
 		this.settings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Window.WINDOW.settingsPanel();
+				GameLoop.win.settingsPanel();
 			}
 		});
 		this.help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Window.WINDOW.helpPanel();
+				GameLoop.win.helpPanel();
 			}
 		});
 		this.quit.addActionListener(new ActionListener() {

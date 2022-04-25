@@ -1,31 +1,33 @@
 /**
  * The GameLoop class is the main loop of the game. It is responsible for the game logic
  */
+
 package game;
 
 import map.*;
 import object.*;
-
-import java.io.IOException;
-import java.util.ArrayList;
-
 import main.Constants;
 import main.Window;
 import menu.Menu;
 
+import java.io.IOException;
+import java.util.ArrayList;
 import java.awt.*;
 
 public final class GameLoop implements Game, Runnable {
+
+    // Fullscreen / UI :
     public static boolean fullScreenMode = false;
     public static boolean actFullScreen = false;
+    public static GameView view;
+    public static Window win;
+    // Game Objects :
     SpaceShip ship;
     Map map;
     ArrayList<Missile> missile;
-    private static GameView view;
+    // Gameloop :
     public static Game game;
-    public static Window win;
     boolean gameStarted = false;
-
     private final double updateRate = 1.0d / 60.0d;
     private int fps, ups;
     private boolean running;
@@ -39,9 +41,8 @@ public final class GameLoop implements Game, Runnable {
         missile = new ArrayList<>();
         view = new GameView(game);
         GameKeys key = new GameKeys(game, view);
-        win = new Window(view);
+        win = new Window(view, new Menu());
         win.addKeyListener(key);
-
     }
 
     /**
@@ -54,18 +55,13 @@ public final class GameLoop implements Game, Runnable {
         double accumulator = 0;
         long currentTime, lastUpdate = System.currentTimeMillis();
         nextStatTime = System.currentTimeMillis() + 1000;
-
-
         while (running) {
-
             win.requestFocus();
-
             currentTime = System.currentTimeMillis();
             double lastRenderTimeSeconds = (currentTime - lastUpdate) / 1000d;
             accumulator += lastRenderTimeSeconds;
             lastUpdate = currentTime;
-
-            if (fullScreenMode && actFullScreen) {
+            if (fullScreenMode && actFullScreen && !Constants.isMenu) {
                 win.setDimensionsToFullScreen();
                 try {
                     view = new GameView(game);
@@ -74,7 +70,7 @@ public final class GameLoop implements Game, Runnable {
                 }
                 win.setFullScreen(view);
             }
-            if (!fullScreenMode && actFullScreen) {
+            if (!fullScreenMode && actFullScreen && !Constants.isMenu) {
                 win.setDimensionsToSmallScreen();
                 try {
                     view = new GameView(game);
@@ -84,7 +80,6 @@ public final class GameLoop implements Game, Runnable {
                 win.setSmallScreen(view);
             }
             actFullScreen = false;
-
             if (accumulator >= updateRate) {
                 while (accumulator > updateRate) {
                     game.update();
@@ -140,20 +135,20 @@ public final class GameLoop implements Game, Runnable {
             }
         }
 
-        for (int i = 0; i < b.getMap().bonusList.size(); i++){
-            Bonus bo = b.getMap().bonusList.get(i);
+        for (int i = 0; i < getMap().bonusList.size(); i++){
+            Bonus bo = getMap().bonusList.get(i);
             Rectangle r=new Rectangle(bo.x[0],bo.y[0],bo.x[1]-bo.x[0],bo.y[2]-bo.y[1]);
             if(s.intersects(r)){
-                if(b.getSpaceShip().getFuel()<Constants.BASE_FUEL){
-                    if(b.getSpaceShip().getFuel()>Constants.BASE_FUEL - 500){
-                        b.getSpaceShip().setFuel(b.getSpaceShip().getFuel()+Constants.BASE_FUEL-b.getSpaceShip().getFuel());
+                if(getShip().getFuel()<Constants.BASE_FUEL){
+                    if(getShip().getFuel()>Constants.BASE_FUEL - 500){
+                        getShip().setFuel(getShip().getFuel()+Constants.BASE_FUEL-getShip().getFuel());
                     }else{
-                        b.getSpaceShip().setFuel(b.getSpaceShip().getFuel()+500);
+                        getShip().setFuel(getShip().getFuel()+500);
                     }
                 }
-                b.getSpaceShip().shield.add();
-                b.erase(bo);
-                b.getMap().bonusList.remove(bo);
+                getShip().shield.add();
+                view.erase(bo);
+                getMap().bonusList.remove(bo);
             }
         }
         return false;
@@ -163,11 +158,11 @@ public final class GameLoop implements Game, Runnable {
  * Update the ship's position
  */
     public final void updateShip() {
-        if (b.getSpaceShip().isVisible()) {
-            b.getSpaceShip().move();
-            b.getSpaceShip().acceleration();
-            b.getSpaceShip().deceleration();
-            if(b.getSpaceShip().moveFlag)b.getSpaceShip().consumeFuel();
+        if (getShip().isVisible()) {
+            getShip().move();
+            getShip().acceleration();
+            getShip().deceleration();
+            if(getShip().moveFlag)getShip().consumeFuel();
         }
     }
 
@@ -181,29 +176,29 @@ public final class GameLoop implements Game, Runnable {
             }
         }
         //detecter le collision du missile 
-        for(int i=0;i<b.getMissiles().size();i++) {
-            Missile m= b.getMissiles().get(i);
+        for(int i=0;i<getMissiles().size();i++) {
+            Missile m= getMissiles().get(i);
             Rectangle r=m.getBounds();
-            Rectangle s = b.getSpaceShip().getBounds();
+            Rectangle s = getShip().getBounds();
             if(r.intersects(s)){
-                if(b.getMissiles().get(i).shooter == 2){
-                    b.getMissiles().remove(m);
-                    if(b.getSpaceShip().shield.isActive()){
-                        b.getSpaceShip().shield.destroy();
-                        b.getSpaceShip().shield.disable();
+                if(getMissiles().get(i).shooter == 2){
+                    getMissiles().remove(m);
+                    if(getShip().shield.isActive()){
+                        getShip().shield.destroy();
+                        getShip().shield.disable();
                     }else{
-                        b.getSpaceShip().setHealth(b.getSpaceShip().getHealth()-100);
+                        getShip().setHealth(getShip().getHealth()-100);
                     }
                 }
             }
-            for(Obstacle ob:b.getMap().ListeObstacle){
+            for(Obstacle ob:getMap().ListeObstacle){
                 Rectangle o=new Rectangle(ob.x[0],ob.y[0],ob.x[1]-ob.x[0],ob.y[2]-ob.y[1]);
                 if(r.intersects(o) && (m instanceof MissileNormale || m instanceof MissileDiffusion)){
-                    b.getMissiles().remove(m);
+                    getMissiles().remove(m);
                 }else if(r.intersects(o) && (m instanceof Rocket)){
                     int angle;
                     if(((Rocket)m).rebounce == 3){
-                        b.getMissiles().remove(m);
+                        getMissiles().remove(m);
                     }
                     ((Rocket)m).rebounce += 1;
                     if(((Rocket)m).getdirection() < 0){
@@ -230,17 +225,20 @@ public final class GameLoop implements Game, Runnable {
     }
 
     public final void updateEnemies(){
-        for(Enemy e : b.getMap().enemies){
-            if(Math.sqrt(Math.pow(b.getSpaceShip().getX()-e.x, 2)+Math.pow(b.getSpaceShip().getY()-e.y,2))< Constants.RANGE && e.canShoot()){
-                b.getMissiles().add(new MissileNormale(e.x, e.y, (int)Math.toDegrees(e.getRad(b.getSpaceShip().getX(), b.getSpaceShip().getY())),2));
+        for(Enemy e : getMap().enemies){
+            if(Math.sqrt(Math.pow(getShip().getX()-e.x, 2)+Math.pow(getShip().getY()-e.y,2))< Constants.RANGE && e.canShoot()){
+                getMissiles().add(new MissileNormale(e.x, e.y, (int)Math.toDegrees(e.getRad(getShip().getX(), getShip().getY())),2));
             }
         }
     }
 
-    public final void updateBonus(){
-        if(System.currentTimeMillis() - b.getMap().lastTime > Constants.BONUS_SPAWNRATE){
-            b.getMap().addBonus();
-            b.drawBonus();
+    public final void updateBonus() {
+        if (System.currentTimeMillis() - getMap().lastTime > Constants.BONUS_SPAWNRATE) {
+            getMap().addBonus();
+            view.drawBonus();
+        }
+    }
+
     public boolean hasGamestarted() {
         return gameStarted;
     }
@@ -260,7 +258,7 @@ public final class GameLoop implements Game, Runnable {
     }
 
     @Override
-    public ArrayList<Missile> getMissile() {
+    public ArrayList<Missile> getMissiles() {
         return this.missile;
     }
 

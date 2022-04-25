@@ -4,57 +4,67 @@
  */
 package main;
 
-
-import game.GameView;
-//import menu.Menu;
 import menu.Menu;
-import menu.Settings;
+import game.GameLoop;
 
-import javax.swing.*;
 import java.awt.*;
-
-import java.awt.EventQueue;
 import java.io.IOException;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 public final class Window extends JFrame {
+
     public final static GraphicsEnvironment env = GraphicsEnvironment.getLocalGraphicsEnvironment();
     public final static GraphicsDevice device = env.getScreenDevices()[0];
     public static final Rectangle RECTANGLE = device.getDefaultConfiguration().getBounds();
     public static final int MAX_WIDTH = RECTANGLE.width;
     public static final int MAX_HEIGHT = RECTANGLE.height;
-    
+    public JPanel comp; // game
+    public Menu menu; // menu
 
-    // public static final Menu MENU = new Menu();
-    // public static final Window WINDOW = new Window();
-    // private static GameView MAINGAME = null;
-    public JPanel comp;
-    public Menu menu;
-
-    public Window(JPanel comp) {
+    public Window(JPanel comp, Menu menu) {
         super();
         this.comp = comp;
-        getContentPane().add(BorderLayout.CENTER,comp);
-        pack();
-        setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
-        repaint();
+        this.menu = menu;
+        this.setTitle("Xpilot");
+        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
+        this.launchMenu(true);
     }
         
 /**
  * Dispose the current frame and set the content pane to the menu
  */
-    public void launchMenu() {
-        this.dispose();
-        getContentPane().removeAll();
+    public final void launchMenu(boolean launch) {
+        Constants.isMenu = true;
+        if (launch) this.dispose();
+        this.setResizable(false);
+        this.getContentPane().removeAll();
         this.setContentPane(menu);
+        this.pack();
+        this.setLocationRelativeTo(null);
+        if (launch) {
+            this.setVisible(true);
+            menu.playMenuMusic();
+        }
+    }
+
+    /**
+ * This function is called when the user clicks the settings button. It removes all the other panels
+ * from the window and replaces them with a new settings panel
+ */
+
+    public void settingsPanel() {
+        this.setContentPane(menu.getSettingsPanel());
         pack();
-        setTitle("Xpilot");
         setLocationRelativeTo(null);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        menu.playMenuMusic();
+        this.setVisible(true);
+    }
+
+    public void helpPanel() {
+        this.setContentPane(menu.getHelpPanel());
+        pack();
+        setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
@@ -63,21 +73,19 @@ public final class Window extends JFrame {
  */
 
     public void launchGame() throws IOException, LineUnavailableException {
-        // MENU.stopMenuMusic();
+        Constants.isMenu = false;
+        menu.stopMenuMusic();
+        setResizable(true);
         dispose();
-        // MAINGAME = new GameView();
         getContentPane().removeAll();
+        setContentPane(new JPanel());
         getContentPane().add(BorderLayout.CENTER,comp);
         pack();
+        setLocationRelativeTo(null);
         setVisible(true);
-        setDefaultCloseOperation(EXIT_ON_CLOSE);
         repaint();
-        // MAINGAME.playGameMusic();
+        GameLoop.view.playGameMusic();
     }
-/**
- * This function is called when the user clicks the settings button. It removes all the other panels
- * from the window and replaces them with a new settings panel
- */
 
     public void setDimensionsToFullScreen() {
         Constants.B_HEIGHT = MAX_HEIGHT;
