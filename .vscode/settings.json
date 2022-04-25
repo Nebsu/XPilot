@@ -1,5 +1,7 @@
 {
     "java.project.sourcePaths": [
         "."
-    ]
+    ],
+    "docwriter.language": "English",
+    "docwriter.style": "Google"
 }

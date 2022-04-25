@@ -1,3 +1,6 @@
+/**
+ * The Map class is used to create the map and the obstacles on it
+ */
 package map;
 
 import java.awt.*;
@@ -17,8 +20,9 @@ public class Map {
     public final int MAP_SIZE = 50;
     public int[][] infor_map=new int[MAP_SIZE][MAP_SIZE];
     public Graphics2D g2;
-	public Ball ball;
+	public BallHolder ball;
 	public long lastTime;
+	public LinkedList<Enemy> enemies = new LinkedList<>();
 
     public Map() throws IOException{
         try{
@@ -33,6 +37,9 @@ public class Map {
         createInforAMap();
     }
 
+/**
+ * Add a bonus to the map
+ */
 	public void addBonus(){
 		lastTime = System.currentTimeMillis();
         Random r1 = new Random();
@@ -50,6 +57,9 @@ public class Map {
         }
     }
 
+/**
+ * Read the file "ressources/map/infor_map2.txt" and store the information in the array infor_map
+ */
  	public void createinfor(){
     	try{
 	        File fil = new File("ressources/map/infor_map2.txt");
@@ -75,6 +85,9 @@ public class Map {
 	    	}
     }
     
+/**
+ * It creates the obstacles and the goal in the map.
+ */
     public void createInforAMap() throws IOException {
     	for(int i=0;i<MAP_SIZE;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
@@ -93,10 +106,13 @@ public class Map {
 				}else if(infor_map[i][j]==3){
 					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
     		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
-    		        Ball ball=new Ball(x,y);
+    		        BallHolder ball=new BallHolder(x,y);
 					this.ball = ball;
     		        ListeObstacle.add(ball);
 					ball.draw(g2);
+				}else if(infor_map[i][j]==4){
+					Enemy e = new Enemy(i*48, j*48);
+					enemies.add(e);
 				}
     		}
     	}

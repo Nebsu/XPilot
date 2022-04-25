@@ -1,3 +1,6 @@
+/**
+ * It draws a polygon with the given x and y coordinates.
+ */
 package map;
 import java.awt.*;
 

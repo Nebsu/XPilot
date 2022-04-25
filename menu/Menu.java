@@ -1,3 +1,6 @@
+/**
+ * The menu class is the class that contains the menu of the game
+ */
 package menu;
 
 import main.Constants;
@@ -95,6 +98,10 @@ public final class Menu extends JPanel {
 		});
 	}
 
+	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    //                                                   FONCTIONS DE LA VUE                                                   //
+    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+	
 	@Override
 	protected final void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -102,6 +109,11 @@ public final class Menu extends JPanel {
 		draw(g2);
 	}
 	
+/**
+ * Draw the title and the menu options
+ * 
+ * @param g The Graphics2D object that we are drawing to.
+ */
 	public final void draw(Graphics2D g) {
 		// draw title
 		g.setColor(titleColor);
@@ -109,6 +121,9 @@ public final class Menu extends JPanel {
 		g.drawString("Xpilot", 200, 150);
 	}
 
+/**
+ * Plays the menu music.
+ */
 	public final void playMenuMusic() {
 		try {
 			this.menuMusic.playMusic();

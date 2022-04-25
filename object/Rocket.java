@@ -1,16 +1,13 @@
-/**
- * A missile that moves in a straight line
- */
 package object;
 
-public class MissileNormale extends Missile{
-
-    private final int MISSILE_SPEED = 20;
+public class Rocket extends Missile{
+    private final int MISSILE_SPEED = 30;
     private int direction;
+    public int rebounce = 0;
     public int shooter;
 
 
-    public MissileNormale(double x, double y, int rotation, int shooter) {
+    public Rocket(double x, double y, int rotation, int shooter) {
         super(x, y, shooter);
         direction = rotation;
     }
@@ -25,4 +22,7 @@ public class MissileNormale extends Missile{
         return this.direction;
     }
     
+    public void setDirection(int direction) {
+        this.direction = direction;
+    }
 }

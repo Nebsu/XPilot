@@ -1,3 +1,6 @@
+/**
+ * This class is used to handle the keyboard inputs
+ */
 package game;
 
 import main.*;
@@ -18,6 +21,17 @@ public final class GameKeys implements KeyListener {
 
     }
 
+/**
+ * * If the escape key is pressed, the game is stopped and the menu is launched.
+ * * If the shoot key is pressed, the spaceship fires a missile.
+ * * If the up key is pressed, the spaceship accelerates.
+ * * If the left key is pressed, the spaceship rotates to the left.
+ * * If the right key is pressed, the spaceship rotates to the right.
+ * * If the shield key is pressed, the spaceship activates or deactivates its shield.
+ * * If the switch key is pressed, the spaceship changes its missile type
+ * 
+ * @param e The KeyEvent object that contains information about the key that was pressed.
+ */
     @Override
     public void keyPressed(KeyEvent e) {
         int key = e.getKeyCode();

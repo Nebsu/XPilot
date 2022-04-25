@@ -1,3 +1,6 @@
+/**
+ * The goal is a red square that is drawn on the map
+ */
 package map;
 import java.awt.*;
 

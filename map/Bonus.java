@@ -1,3 +1,6 @@
+/**
+ * Bonus is a subclass of Obstacle. 
+ */
 package map;
 
 public class Bonus extends Obstacle{
