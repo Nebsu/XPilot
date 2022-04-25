@@ -4,6 +4,7 @@ import java.awt.event.KeyEvent;
 
 public final class CustomKeys {
 
+
     private int up = KeyEvent.VK_UP; // avancer
     private int left = KeyEvent.VK_LEFT; // rotation gauche
     private int right = KeyEvent.VK_RIGHT; // rotation droite
@@ -18,11 +19,24 @@ public final class CustomKeys {
     public final int getShield() {return shield;}
     public final int getSwitch() {return mode;}
 
-    public final void setUp(int up) {this.up = up;}
-    public final void setLeft(int left) {this.left = left;}
-    public final void setRight(int right) {this.right = right;}
-    public final void setShoot(int shoot) {this.shoot = shoot;}
-    public final void setShield(int shield) {this.shield = shield;}
-    public final void setMode(int mode) {this.mode = mode;}
+    public final void WASD_MODE(boolean status) {
+        Constants.WASD_MODE = status;
+        if (status) {
+            this.up = KeyEvent.VK_W;
+            this.left = KeyEvent.VK_A;
+            this.right = KeyEvent.VK_D;
+            this.shoot = KeyEvent.VK_SPACE;
+            this.shield = KeyEvent.VK_B;
+            this.mode = KeyEvent.VK_M;
+        } else {
+            this.up = KeyEvent.VK_UP;
+            this.left = KeyEvent.VK_LEFT;
+            this.right = KeyEvent.VK_RIGHT;
+            this.shoot = KeyEvent.VK_SPACE;
+            this.shield = KeyEvent.VK_C;
+            this.mode = KeyEvent.VK_X;
+        }
+    }
+
 
 }

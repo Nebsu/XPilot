@@ -12,7 +12,11 @@ public class SFX {
     private File file;
     private AudioInputStream audio;
     private Clip clip;
-    private static float volume = 1;
+    private FloatControl GAIN;
+    private static float SFX_VOLUME = 0.0f;
+
+    public final float getMusicVolume() {return SFX_VOLUME;}
+    public static final void setMusicVolume(float volume) {SFX_VOLUME = volume;}
 
     public SFX(String filepath) {
         try {
@@ -21,6 +25,7 @@ public class SFX {
                 this.audio = AudioSystem.getAudioInputStream(file);
                 this.clip = AudioSystem.getClip();
                 this.clip.open(this.audio); 
+                this.initVolume();
             } else throw new IllegalStateException();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,8 +35,12 @@ public class SFX {
         }
     }
 
+    private void initVolume() {
+        GAIN = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        GAIN.setValue(SFX_VOLUME); // Reduce volume by 10 decibels.
+    }
+
     public void playSound() throws LineUnavailableException, IOException {
-        this.setVolume();
         clip.start();
     }
 
@@ -41,13 +50,6 @@ public class SFX {
 
     public void kill() {
         clip.close();
-    }
-
-    public void setVolume() {
-        final FloatControl control =  (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        float range = control.getMaximum() - control.getMinimum();
-        float gain = (range * volume) + control.getMinimum();
-        control.setValue(gain);
     }
 
 }

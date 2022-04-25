@@ -29,6 +29,7 @@ public final class Menu extends JPanel {
 	// Getters :
 	public final Settings getSettingsPanel() {return settingsPanel;}
 	public final HelpPanel getHelpPanel() {return helpPanel;}
+	public final Music getMenuMusic() {return menuMusic;}
 
 	public Menu() {
 		// Initialisation du panel :
@@ -42,7 +43,7 @@ public final class Menu extends JPanel {
 		this.helpPanel = new HelpPanel();
 		// Fonts :
 		this.titleColor = new Color(128, 0, 0);
-		this.titleFont = new Font("Century Gothic", Font.PLAIN, 80);
+		this.titleFont = new Font("Century Gothic", Font.PLAIN, 150);
 		// Music :
 		String filepath = "ressources/audio/menuMusic.wav";
 		this.menuMusic = new Music(filepath);
@@ -100,7 +101,7 @@ public final class Menu extends JPanel {
 		// draw title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("Xpilot", 300, 150);
+		g.drawString("Xpilot", 200, 150);
 	}
 
 	public final void playMenuMusic() {

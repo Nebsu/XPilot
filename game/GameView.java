@@ -2,6 +2,7 @@ package game;
 
 import map.*;
 import sound.Music;
+import sound.SFX;
 import object.*;
 import main.Constants;
 import main.Window;
@@ -47,6 +48,7 @@ public final class GameView extends JPanel implements ActionListener {
     public final Timer getTimer() {return this.timer;}
     public final boolean isInGame() {return this.ingame;}
     public final void setInGame(boolean inGame) {this.ingame = inGame;}
+    public final Music getGameMusic() {return this.gameMusic;}
 
     public GameView() throws IOException {
         //Initialisation
@@ -275,9 +277,25 @@ public final class GameView extends JPanel implements ActionListener {
                     missiles.add(s.getDiffusion()[i]);
                 }
                 spaceship.missile_left -= 5;
+                try {
+                    SFX pew = new SFX("ressources/audio/pew.wav");
+                    pew.playSound();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2);
+                    System.exit(1);
+                }
             }else if(spaceship.missile_switch == 1){
                 missiles.add(new MissileNormale(spaceship.getX(), spaceship.getY(), spaceship.rotation));
                 spaceship.missile_left -= 1;
+                try {
+                    SFX pew = new SFX("ressources/audio/pew.wav");
+                    pew.playSound();
+                } catch (Exception e2) {
+                    e2.printStackTrace();
+                    System.out.println(e2);
+                    System.exit(1);
+                }
             }
         }
     }

@@ -19,7 +19,6 @@ public final class Constants {
 
     // Commandes :
     public static final CustomKeys CUSTOM_KEYS = new CustomKeys();
-
     public static boolean WASD_MODE = false;
     
 }

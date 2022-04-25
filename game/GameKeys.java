@@ -1,6 +1,5 @@
 package game;
 
-import sound.SFX;
 import main.*;
 
 import java.awt.event.KeyEvent;
@@ -36,14 +35,6 @@ public final class GameKeys implements KeyListener {
         }
         if (key == Constants.CUSTOM_KEYS.getShoot()){
             game.fire();
-            try {
-                SFX pew = new SFX("ressources/audio/pew.wav");
-                pew.playSound();
-            } catch (Exception e2) {
-                e2.printStackTrace();
-                System.out.println(e2);
-                System.exit(1);
-            }
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
             if(game.getSpaceShip().timerStartFlag){game.getSpaceShip().timerStartFlag = false;}

@@ -12,7 +12,11 @@ public class Music {
     private File musicPath;
     private AudioInputStream audio;
     private Clip clip;
-    private static float volume = 1;
+    private FloatControl GAIN;
+    private static float MUSIC_VOLUME = 0.0f;
+
+    public final float getMusicVolume() {return MUSIC_VOLUME;}
+    public static final void setMusicVolume(float volume) {MUSIC_VOLUME = volume;}
     
     public Music(String filepath) {
         try {
@@ -21,6 +25,7 @@ public class Music {
                 this.audio = AudioSystem.getAudioInputStream(musicPath);
                 this.clip = AudioSystem.getClip();
                 this.clip.open(this.audio);
+                this.initVolume();
             } else throw new FileNotFoundException();
         } catch (Exception e) {
             e.printStackTrace();
@@ -30,19 +35,19 @@ public class Music {
         }
     }
 
+    private void initVolume() {
+        GAIN = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+        GAIN.setValue(MUSIC_VOLUME);
+    }
+
+    public void changeGain(float gain) {
+        GAIN.setValue(gain);
+    }
+
     public void playMusic() throws LineUnavailableException, IOException {
-        this.setVolume();
         clip.setMicrosecondPosition(0);
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);
-        // Pause / Resume :
-        // JOptionPane.showMessageDialog(null, "Click ok to pause");
-        // long clipTimePosition = clip.getMicrosecondPosition();
-        // clip.stop();
-        // JOptionPane.showMessageDialog(null, "Hit ok to resume");
-        // clip.setMicrosecondPosition(clipTimePosition);
-        // clip.start();
-        // JOptionPane.showMessageDialog(null, "Press OK to stop playing");
     }
 
     public void stopMusic() {
@@ -51,13 +56,6 @@ public class Music {
 
     public void kill() {
         clip.close();
-    }
-
-    public void setVolume() {
-        final FloatControl control =  (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
-        float range = control.getMaximum() - control.getMinimum();
-        float gain = (range * volume) + control.getMinimum();
-        control.setValue(gain);
     }
 
 }
