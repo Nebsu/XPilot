@@ -1,6 +1,8 @@
-package game;
+package main;
 
 import java.io.IOException;
+
+import game.GameLoop;
 
 public class Launcher {
 
