@@ -1,8 +1,8 @@
-/**
- * The menu class is the class that contains the menu of the game
- */
 package menu;
 
+import game.Game;
+import game.GameLoop;
+import game.GameView;
 import main.Constants;
 import main.Window;
 import sound.Music;
@@ -32,19 +32,11 @@ public final class Menu extends JPanel {
 	// Getters :
 	public final Settings getSettingsPanel() {return settingsPanel;}
 	public final HelpPanel getHelpPanel() {return helpPanel;}
-	public final Music getMenuMusic() {return menuMusic;}
 
 	public Menu() {
 		// Initialisation du panel :
 		super();
 		setFocusable(true);
-		setBackground(Color.BLACK);
-		setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
-		requestFocus();
-		// Initialisation des sections :
-		this.settingsPanel = new Settings();
-		this.helpPanel = new HelpPanel();
-		// Fonts :
 		this.titleColor = new Color(128, 0, 0);
 		this.titleFont = new Font("Century Gothic", Font.PLAIN, 150);
 		// Music :
@@ -108,12 +100,7 @@ public final class Menu extends JPanel {
 		Graphics2D g2 = (Graphics2D) g;
 		draw(g2);
 	}
-	
-/**
- * Draw the title and the menu options
- * 
- * @param g The Graphics2D object that we are drawing to.
- */
+
 	public final void draw(Graphics2D g) {
 		// draw title
 		g.setColor(titleColor);
@@ -121,19 +108,18 @@ public final class Menu extends JPanel {
 		g.drawString("Xpilot", 200, 150);
 	}
 
-/**
- * Plays the menu music.
- */
 	public final void playMenuMusic() {
 		try {
 			this.menuMusic.playMusic();
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.out.println(e);
 			System.exit(1);
 		}
 	}
-
+	public void setSettingsPanel(){
+		add(BorderLayout.CENTER,settingsPanel);
+        this.repaint();
+	}
 	public final void stopMenuMusic() {
 		this.menuMusic.stopMusic();
 	}

@@ -6,8 +6,8 @@ package main;
 public final class Constants {
 
     // Dimensions de la fenêtre :
-    public static final int B_WIDTH = 800;
-    public static final int B_HEIGHT = 600;
+    public static int B_WIDTH = 800;
+    public static int B_HEIGHT = 600;
     
     // Coordonnées du vaisseau :
     public static final int ICRAFT_X = 200;

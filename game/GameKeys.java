@@ -10,10 +10,12 @@ import java.awt.event.KeyListener;
 
 public final class GameKeys implements KeyListener {
 
-    private final GameView game;
+    private final Game game;
+    private final GameView view;
     
-    public GameKeys(GameView g) {
+    public GameKeys(Game g, GameView view) {
         this.game = g;
+        this.view = view;
     }
 
     @Override
@@ -37,9 +39,7 @@ public final class GameKeys implements KeyListener {
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
             try {
-                Window.getMainGame().getTimer().cancel();
-                this.game.stopGameMusic();
-                Window.WINDOW.launchMenu(true);
+                this.view.stopGameMusic();
             } catch (Exception e1) {
                 e1.printStackTrace();
                 System.out.println(e1);
@@ -51,32 +51,37 @@ public final class GameKeys implements KeyListener {
             game.fire();
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
-            if(game.getSpaceShip().timerStartFlag){game.getSpaceShip().timerStartFlag = false;}
-            if(game.getSpaceShip().moveFlag == false)game.getSpaceShip().moveTime = System.currentTimeMillis();
-            game.getSpaceShip().canDecelerate = false;
-            game.getSpaceShip().moveFlag = true;
-            game.getSpaceShip().canAccelerate = true;
+            if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}
+            if(!game.getShip().moveFlag)game.getShip().moveTime = System.currentTimeMillis();
+            game.getShip().canDecelerate = false;
+            game.getShip().moveFlag = true;
+            game.getShip().canAccelerate = true;
+
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            if(game.getSpaceShip().timerStartFlag){game.getSpaceShip().timerStartFlag = false;}
-            game.getSpaceShip().leftRotationFlag = true;
+            if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}
+            game.getShip().leftRotationFlag = true;
         }
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            if(game.getSpaceShip().timerStartFlag){game.getSpaceShip().timerStartFlag = false;}
-            game.getSpaceShip().rightRotationFlag = true;
+            if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}
+            game.getShip().rightRotationFlag = true;
         }
         if (key == Constants.CUSTOM_KEYS.getShield()){
-            if(!game.getSpaceShip().shield.isActive() && game.getSpaceShip().shield.getQuantity() > 0){
-                game.getSpaceShip().shield.enable();
+            if(!game.getShip().shield.isActive() && game.getShip().shield.getQuantity() > 0){
+                game.getShip().shield.enable();
             }else{
-                game.getSpaceShip().shield.disable();
+                game.getShip().shield.disable();
             }
         }
         if (key == Constants.CUSTOM_KEYS.getSwitch()){
-            game.getSpaceShip().missile_switch += 1;
-            if(game.getSpaceShip().missile_switch > 2){
-                game.getSpaceShip().missile_switch = 1;
+            game.getShip().missile_switch += 1;
+            if(game.getShip().missile_switch > 2){
+                game.getShip().missile_switch = 1;
             }
+        }
+        if (key == Constants.CUSTOM_KEYS.getFullScreen()){
+            GameLoop.actFullScreen = true;
+            GameLoop.fullScreenMode = !GameLoop.fullScreenMode;
         }
     }
 
@@ -84,15 +89,15 @@ public final class GameKeys implements KeyListener {
     public void keyReleased(KeyEvent e) {
         int key = e.getKeyCode();
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            game.getSpaceShip().rightRotationFlag = false;
+            game.getShip().rightRotationFlag = false;
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            game.getSpaceShip().leftRotationFlag = false;
+            game.getShip().leftRotationFlag = false;
         }
         if (key == Constants.CUSTOM_KEYS.getUp()) {
-            game.getSpaceShip().canDecelerate = true;
-            game.getSpaceShip().canAccelerate = false;
-            game.getSpaceShip().moveFlag = false;
+            game.getShip().canDecelerate = true;
+            game.getShip().canAccelerate = false;
+            game.getShip().moveFlag = false;
         }
     }
     

@@ -6,76 +6,137 @@ package game;
 import map.*;
 import object.*;
 
-import java.util.TimerTask;
+import java.io.IOException;
+import java.util.ArrayList;
 
 import main.Constants;
 import main.Window;
+import menu.Menu;
 
 import java.awt.*;
 
-public final class GameLoop extends TimerTask {
+public final class GameLoop implements Game, Runnable {
+    public static boolean fullScreenMode = false;
+    public static boolean actFullScreen = false;
+    SpaceShip ship;
+    Map map;
+    ArrayList<Missile> missile;
+    private static GameView view;
+    public static Game game;
+    public static Window win;
+    boolean gameStarted = false;
 
-    private GameView b;
+    private final double updateRate = 1.0d / 60.0d;
+    private int fps, ups;
+    private boolean running;
+    private long nextStatTime;
 
-    public GameLoop(GameView b){
-        this.b=b;
+    public GameLoop() throws IOException {
+        //initialisation des champs
+        map = new Map();
+        ship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
+        game = this;
+        missile = new ArrayList<>();
+        view = new GameView(game);
+        GameKeys key = new GameKeys(game, view);
+        win = new Window(view);
+        win.addKeyListener(key);
+
     }
-    
- /**
-  * Game Loop
-  */
+
+    /**
+     * Game Loop
+     */
+
     @Override
     public void run() {
-        inGame();
-        b.getRadar().repaint();
-        if(!checkCollision())updateShip();
-        else{
-            if(b.getSpaceShip().canTakeDamage()){
-                if(b.getSpaceShip().shield.isActive()){
-                    b.getSpaceShip().shield.destroy();
-                    b.getSpaceShip().shield.disable();
-                }else{
-                    b.getSpaceShip().setHealth(b.getSpaceShip().getHealth()-50);
+        running = true;
+        double accumulator = 0;
+        long currentTime, lastUpdate = System.currentTimeMillis();
+        nextStatTime = System.currentTimeMillis() + 1000;
+
+
+        while (running) {
+
+            win.requestFocus();
+
+            currentTime = System.currentTimeMillis();
+            double lastRenderTimeSeconds = (currentTime - lastUpdate) / 1000d;
+            accumulator += lastRenderTimeSeconds;
+            lastUpdate = currentTime;
+
+            if (fullScreenMode && actFullScreen) {
+                win.setDimensionsToFullScreen();
+                try {
+                    view = new GameView(game);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
                 }
+                win.setFullScreen(view);
             }
+            if (!fullScreenMode && actFullScreen) {
+                win.setDimensionsToSmallScreen();
+                try {
+                    view = new GameView(game);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+                win.setSmallScreen(view);
+            }
+            actFullScreen = false;
+
+            if (accumulator >= updateRate) {
+                while (accumulator > updateRate) {
+                    game.update();
+                    accumulator -= updateRate;
+                }
+                repaint();
+            }
+            printStat();
         }
-        updateEnemies();
-        b.getSpaceShip().rotateRight();
-        b.getSpaceShip().rotateLeft();
-        updateMissiles();
-        updateBonus();
-        b.repaint();    
     }
 
-/**
- * If the player's health or fuel is less than or equal to zero, the game is over
- */
+    private void printStat() {
+        if (System.currentTimeMillis() > nextStatTime) {
+            System.out.println(String.format("FPS: %d, UPS: %d", fps, ups));
+            fps = 0;
+            ups = 0;
+            nextStatTime = System.currentTimeMillis() + 1000;
+        }
+    }
+
+    private void repaint() {
+        fps++;
+        view.repaint();
+    }
+
+
+    /**
+     * If the player's health or fuel is less than or equal to zero, the game is over
+     */
     public final void inGame() {
-        if(b.getSpaceShip().getFuel() <= 0 ||
-            b.getSpaceShip().getHealth() <= 0){
-            b.setInGame(false);
-        }
-        if (!b.isInGame()) {
-            Window.getMainGame().getTimer().cancel();
+        if (ship.getFuel() <= 0 ||
+                ship.getHealth() <= 0) {
+            view.setInGame(false);
         }
     }
 
-/**
- * Check if the ship collides with an obstacle
- * 
- * @return Nothing.
- */
-    public final boolean checkCollision(){
-        Rectangle s=new Rectangle((int)(b.getSpaceShip().getX()+b.getSpaceShip().SPEED * Math.cos(Math.toRadians(b.getSpaceShip().rotation))),(int)(b.getSpaceShip().getY()+b.getSpaceShip().SPEED*Math.sin(Math.toRadians(b.getSpaceShip().rotation))),16,16);
-        for (Obstacle obstacle : b.getMap().ListeObstacle) {
-            Rectangle o=new Rectangle(obstacle.x[0],obstacle.y[0],obstacle.x[1]-obstacle.x[0],obstacle.y[2]-obstacle.y[1]);
+    /**
+     * Check if the ship collides with an obstacle
+     *
+     * @return Nothing.
+     */
+    public final boolean checkCollision() {
+        Rectangle s = new Rectangle((int) (ship.getX() + ship.SPEED * Math.cos(Math.toRadians(ship.rotation))), (int) (ship.getY() + ship.SPEED * Math.sin(Math.toRadians(ship.rotation))), 16, 16);
+        for (Obstacle obstacle : map.ListeObstacle) {
+            Rectangle o = new Rectangle(obstacle.x[0], obstacle.y[0], obstacle.x[1] - obstacle.x[0], obstacle.y[2] - obstacle.y[1]);
             // Ship après le movement :
-            if(s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof BallHolder) && !(obstacle instanceof Bonus)){
+            if (s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof BallHolder) && !(obstacle instanceof Bonus)) {
                 return true;
-            }else if(s.intersects(o)&& obstacle instanceof BallHolder){
-                b.getMap().ball.take();
-            }else if(s.intersects(o)&& obstacle instanceof Goal && b.getMap().ball.isTaken()){
-                b.setInGame(false);
+            } else if (s.intersects(o) && obstacle instanceof BallHolder) {
+                map.ball.take();
+            } else if (s.intersects(o) && obstacle instanceof Goal && map.ball.isTaken()) {
+                view.setInGame(false);
             }
         }
 
@@ -110,11 +171,11 @@ public final class GameLoop extends TimerTask {
         }
     }
 
-/**
- * Update the position of all the missiles in the game
- */
-    public final void updateMissiles() {
-        for (Missile m : b.getMissiles()) {
+    /**
+     * Update the position of all the missiles in the game
+     */
+    public void updateMissiles() {
+        for (Missile m : missile) {
             if (m.isVisible()) {
                 m.move();
             }
@@ -180,7 +241,58 @@ public final class GameLoop extends TimerTask {
         if(System.currentTimeMillis() - b.getMap().lastTime > Constants.BONUS_SPAWNRATE){
             b.getMap().addBonus();
             b.drawBonus();
-        }
+    public boolean hasGamestarted() {
+        return gameStarted;
     }
 
+    public void gameStart() {
+        gameStarted = true;
+    }
+
+    @Override
+    public SpaceShip getShip() {
+        return ship;
+    }
+
+    @Override
+    public Map getMap() {
+        return map;
+    }
+
+    @Override
+    public ArrayList<Missile> getMissile() {
+        return this.missile;
+    }
+
+    @Override
+    public GameKeys getKeys() {
+        return null;
+    }
+
+    @Override
+    public void update() {
+        ups++;
+        inGame();
+        if (!checkCollision()) updateShip();
+        else {
+            if (ship.canTakeDamage()) {
+                if (ship.shield.isActive()) {
+                    ship.shield.destroy();
+                    ship.shield.disable();
+                } else {
+                    ship.setHealth(ship.getHealth() - 50);
+                }
+            }
+        }
+        ship.rotateRight();
+        ship.rotateLeft();
+        updateMissiles();
+        updateBonus();
+
+    }
+
+    @Override
+    public boolean hasGameStarted() {
+        return gameStarted;
+    }
 }
