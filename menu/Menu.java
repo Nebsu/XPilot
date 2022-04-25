@@ -78,8 +78,13 @@ public final class Menu extends JPanel {
 		this.settings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// Window.MENU.setVisible(false);
 				Window.WINDOW.settingsPanel();
+			}
+		});
+		this.help.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Window.WINDOW.helpPanel();
 			}
 		});
 		this.quit.addActionListener(new ActionListener() {

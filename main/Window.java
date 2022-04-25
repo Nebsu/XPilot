@@ -45,6 +45,13 @@ public final class Window extends JFrame {
         this.setVisible(true);
     }
 
+    public final void helpPanel() {
+        this.setContentPane(MENU.getHelpPanel());
+        this.pack();
+        this.setLocationRelativeTo(null);
+        this.setVisible(true);
+    }
+
     // Démarrage du jeu principal lorsque "Start" est sélectionné dans le menu :
     public final void launchGame() throws IOException, LineUnavailableException {
         MENU.stopMenuMusic();

@@ -35,9 +35,9 @@ public abstract class MyButton extends JButton {
         this.radius = 0;
         // Init color :
         this.color = Color.WHITE;
-        this.colorOver = new Color(179, 250, 160);
-        this.colorClick = new Color(152, 184, 144);
-        this.borderColor = new Color(30, 136, 56);
+        this.colorOver = new Color(240, 55, 55);
+        this.colorClick = new Color(255, 252, 74);
+        this.borderColor = new Color(255, 0, 0);
         this.setContentAreaFilled(false);
         // Add event mouse :
         this.addMouseListener(new MouseAdapter() {
