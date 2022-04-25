@@ -1,6 +1,5 @@
 package map;
 
-import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.awt.image.*;
