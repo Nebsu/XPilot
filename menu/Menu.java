@@ -64,7 +64,7 @@ public final class Menu extends JPanel {
 		this.add(settings);
 		this.add(help);
 		this.add(quit);
-		this.invalidate();
+		// this.invalidate();
 		this.repaint();
 		this.start.addActionListener(new ActionListener() {
 			@Override
