@@ -77,7 +77,7 @@ public final class Window extends JFrame {
         setResizable(true);
         dispose();
         setContentPane(new JPanel());
-        getContentPane().add(BorderLayout.CENTER,comp);
+        getContentPane().add(BorderLayout.CENTER, comp);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
