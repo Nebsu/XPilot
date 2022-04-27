@@ -8,7 +8,9 @@ public final class Constants {
     // Dimensions de la fenêtre :
     public static int B_WIDTH = 800;
     public static int B_HEIGHT = 600;
-    
+    //Screen ratio
+    public static int R_WIDTH = 1;
+    public static int R_HEIGHT = 1;
     // Coordonnées du vaisseau :
     public static final int ICRAFT_X = 200;
     public static final int ICRAFT_Y = 200;

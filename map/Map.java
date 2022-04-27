@@ -24,7 +24,7 @@ public class Map {
 	public long lastTime;
 	public LinkedList<Enemy> enemies = new LinkedList<>();
 
-    public Map() throws IOException{
+    public Map(){
         try{
             this.img_map=ImageIO.read(new File("ressources/images/background2.png"));
         }catch(IOException e){
@@ -88,7 +88,7 @@ public class Map {
 /**
  * It creates the obstacles and the goal in the map.
  */
-    public void createInforAMap() throws IOException {
+    public void createInforAMap(){
     	for(int i=0;i<MAP_SIZE;i++) {
     		for(int j=0;j<infor_map[i].length;j++) {
     			if(infor_map[i][j]==1) {
@@ -106,12 +106,22 @@ public class Map {
 				}else if(infor_map[i][j]==3){
 					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
     		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
-    		        BallHolder ball=new BallHolder(x,y);
+					BallHolder ball= null;
+					try {
+						ball = new BallHolder(x,y);
+					} catch (IOException e) {
+						throw new RuntimeException(e);
+					}
 					this.ball = ball;
     		        ListeObstacle.add(ball);
 					ball.draw(g2);
 				}else if(infor_map[i][j]==4){
-					Enemy e = new Enemy(i*48, j*48);
+					Enemy e = null;
+					try {
+						e = new Enemy(i*48, j*48);
+					} catch (IOException ex) {
+						throw new RuntimeException(ex);
+					}
 					enemies.add(e);
 				}
     		}

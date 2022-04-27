@@ -35,7 +35,6 @@ public final class Menu extends JPanel {
 		super();
 		setFocusable(true);
 		setBackground(Color.BLACK);
-		setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
 		requestFocus();
 		this.titleColor = new Color(128, 0, 0);
 		this.titleFont = new Font("Century Gothic", Font.PLAIN, 150);
@@ -47,27 +46,25 @@ public final class Menu extends JPanel {
 		this.settings = new TextButton("Settings");
 		this.help = new TextButton("Help");
 		this.quit = new TextButton("Quit");
-		this.start.setBounds(350, 250, 100, 50);
-		this.settings.setBounds(350, 325, 100, 50);
-		this.help.setBounds(350, 400, 100, 50);
-		this.quit.setBounds(350, 475, 100, 50);
+		this.start.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2 -60, 100, 50);
+		this.settings.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2, 100, 50);
+		this.help.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2 + 60, 100, 50);
+		this.quit.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2 + 120, 100, 50);
 		this.setLayout(null);
 		this.add(start);
 		this.add(settings);
 		this.add(help);
 		this.add(quit);
+		this.setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
 		this.invalidate();
 		this.repaint();
-		this.start.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				try {
-					GameLoop.win.launchGame();
-				} catch (IOException | LineUnavailableException e1) {
-					e1.printStackTrace();
-					System.out.println(e1);
-					System.exit(1);
-				}
+		this.start.addActionListener(e -> {
+			try {
+				GameLoop.win.launchGame(GameLoop.view);
+			} catch (IOException | LineUnavailableException e1) {
+				e1.printStackTrace();
+				System.out.println(e1);
+				System.exit(1);
 			}
 		});
 		this.settings.addActionListener(new ActionListener() {
@@ -93,7 +90,7 @@ public final class Menu extends JPanel {
 	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     //                                                   FONCTIONS DE LA VUE                                                   //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
+
 	@Override
 	protected final void paintComponent(Graphics g) {
 		super.paintComponent(g);
@@ -105,7 +102,7 @@ public final class Menu extends JPanel {
 		// draw title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("Xpilot", 200, 150);
+		g.drawString("Xpilot", Constants.B_WIDTH/3, 150);
 	}
 
 	public final void playMenuMusic() {

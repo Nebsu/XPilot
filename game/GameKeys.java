@@ -84,6 +84,18 @@ public final class GameKeys implements KeyListener {
         if (key == Constants.CUSTOM_KEYS.getFullScreen()){
             GameLoop.actFullScreen = true;
             GameLoop.fullScreenMode = !GameLoop.fullScreenMode;
+            if (GameLoop.fullScreenMode && GameLoop.actFullScreen) {
+                GameLoop.win.setDimensionsToFullScreen();
+                GameLoop.actFullScreen = false;
+                GameLoop.view = new GameView(game);
+                GameLoop.win.setFullScreen(GameLoop.view);
+            }
+            if (!GameLoop.fullScreenMode && GameLoop.actFullScreen) {
+                GameLoop.win.setDimensionsToSmallScreen();
+                GameLoop.actFullScreen = false;
+                GameLoop.view = new GameView(game);
+                GameLoop.win.setSmallScreen(GameLoop.view);
+            }
         }
     }
 

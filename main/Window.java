@@ -4,6 +4,7 @@
  */
 package main;
 
+import game.GameLoop;
 import menu.Menu;
 import game.GameView;
 
@@ -28,56 +29,64 @@ public final class Window extends JFrame {
         this.comp = comp;
         this.menu = menu;
         this.setTitle("Xpilot");
+        setSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.launchMenu(true);
     }
-        
-/**
- * Dispose the current frame and set the content pane to the menu
- */
+
+    /**
+     * Dispose the current frame and set the content pane to the menu
+     */
     public final void launchMenu(boolean launch) {
         Constants.isMenu = true;
         this.setResizable(false);
-        if (launch) this.dispose();
-        this.setContentPane(menu);
-        this.pack();
+        //if (launch) this.dispose();
+        getContentPane().removeAll();
+        getContentPane().add(new Menu());
         this.setLocationRelativeTo(null);
         if (launch) {
             this.setVisible(true);
             menu.playMenuMusic();
         }
+        repaint();
     }
 
     /**
- * This function is called when the user clicks the settings button. It removes all the other panels
- * from the window and replaces them with a new settings panel
- */
+     * This function is called when the user clicks the settings button. It removes all the other panels
+     * from the window and replaces them with a new settings panel
+     */
 
     public void settingsPanel() {
-        this.setContentPane(menu.getSettingsPanel());
+        dispose();
+        getContentPane().removeAll();
+        getContentPane().add(menu.getSettingsPanel());
         pack();
         setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
     public void helpPanel() {
-        this.setContentPane(menu.getHelpPanel());
+        dispose();
+        getContentPane().removeAll();
+        getContentPane().add(menu.getHelpPanel());
         pack();
         setLocationRelativeTo(null);
         this.setVisible(true);
     }
 
     /**
- * This function launches the game
- */
+     * This function launches the game
+     */
 
-    public void launchGame() throws IOException, LineUnavailableException {
+    public void launchGame(JPanel comp) throws LineUnavailableException, IOException {
         Constants.isMenu = false;
         menu.stopMenuMusic();
-        setResizable(true);
         dispose();
-        setContentPane(new JPanel());
+        getContentPane().removeAll();
+        System.out.println(comp.getWidth());
         getContentPane().add(BorderLayout.CENTER, comp);
+        if (GameLoop.fullScreenMode)
+            device.setFullScreenWindow(this);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
@@ -88,6 +97,8 @@ public final class Window extends JFrame {
     public void setDimensionsToFullScreen() {
         Constants.B_HEIGHT = MAX_HEIGHT;
         Constants.B_WIDTH = MAX_WIDTH;
+        Constants.R_WIDTH = MAX_WIDTH / 800;
+        Constants.R_HEIGHT = MAX_HEIGHT / 600;
     }
 
     public void setDimensionsToSmallScreen() {
@@ -98,23 +109,21 @@ public final class Window extends JFrame {
     public void setSmallScreen(JPanel comp) {
         dispose();
         getContentPane().removeAll();
-        setLayout(new BorderLayout());
-        getContentPane().add(BorderLayout.CENTER,comp);
-        comp.setPreferredSize(new Dimension(Constants.B_WIDTH , Constants.B_HEIGHT));
+        getContentPane().add(BorderLayout.CENTER, comp);
         setLocationRelativeTo(null);
         pack();
         setVisible(true);
-        repaint();
+        comp.repaint();
     }
 
     public void setFullScreen(JPanel comp) {
         dispose();
         getContentPane().removeAll();
-        getContentPane().add(BorderLayout.CENTER,comp);
+        getContentPane().add(BorderLayout.CENTER, comp);
         device.setFullScreenWindow(this);
         pack();
         setVisible(true);
-        repaint();
+        comp.repaint();
     }
 
 }

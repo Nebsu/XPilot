@@ -41,7 +41,7 @@ public final class GameView extends JPanel implements ActionListener {
 
     public final Music getGameMusic() {return this.gameMusic;} 
 
-    public GameView(Game game) throws IOException {
+    public GameView(Game game) {
         this.game = game;
         //Initialisation
         setBackground(Color.BLACK);
@@ -49,12 +49,18 @@ public final class GameView extends JPanel implements ActionListener {
         setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
 
         game.getMap().addBonus();
+
         try {
             this.singleShot = ImageIO.read(new File("ressources/images/overlay_single_shot.png"));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        try {
             this.multiShot = ImageIO.read(new File("ressources/images/overlay_volley_shot.png"));
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new RuntimeException(e);
         }
+
 
     }
 
