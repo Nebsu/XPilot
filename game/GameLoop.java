@@ -8,9 +8,8 @@ import map.*;
 import object.*;
 import main.Constants;
 import main.Window;
-import menu.Menu;
+import sound.Music;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.awt.*;
 
@@ -33,6 +32,9 @@ public final class GameLoop implements Game, Runnable {
     private int fps, ups;
     private boolean running;
     private long nextStatTime;
+    // Music :
+    private static final String musicPath = "ressources/audio/gamemusic.wav";
+    public static final Music gameMusic = new Music(musicPath);
 
     public GameLoop()  {
         //initialisation des champs
@@ -41,8 +43,8 @@ public final class GameLoop implements Game, Runnable {
         game = this;
         missile = new ArrayList<>();
         view = new GameView(game);
-        GameKeys key = new GameKeys(game, view);
-        win = new Window(view, new Menu());
+        GameKeys key = new GameKeys();
+        win = new Window();
         win.addKeyListener(key);
     }
 
@@ -278,4 +280,5 @@ public final class GameLoop implements Game, Runnable {
     public boolean hasGameStarted() {
         return gameStarted;
     }
+
 }

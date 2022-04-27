@@ -129,9 +129,9 @@ public class Settings extends JPanel {
 		else volume = -20.0f + (float) value / 10 * 2.0f; // valeur slider
 		if (isMusic) {
 			Music.setMusicVolume(volume);
-			GameLoop.win.menu.getMenuMusic().changeGain(volume);
+			Menu.menuMusic.changeGain(volume);
 			if (GameLoop.view!=null) 
-				GameLoop.view.getGameMusic().changeGain(volume);
+				GameLoop.gameMusic.changeGain(volume);
 		} else {
 			SFX.setMusicVolume(volume);
 		}

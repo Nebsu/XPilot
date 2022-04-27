@@ -6,7 +6,6 @@ package main;
 
 import game.GameLoop;
 import menu.Menu;
-import game.GameView;
 
 import java.awt.*;
 import java.io.IOException;
@@ -21,13 +20,13 @@ public final class Window extends JFrame {
     public static final Rectangle RECTANGLE = device.getDefaultConfiguration().getBounds();
     public static final int MAX_WIDTH = RECTANGLE.width;
     public static final int MAX_HEIGHT = RECTANGLE.height;
-    public JPanel comp; // game
-    public Menu menu; // menu
 
-    public Window(JPanel comp, Menu menu) {
+    private Menu menu;
+
+    public Menu getMenu() {return menu;}
+
+    public Window() {
         super();
-        this.comp = comp;
-        this.menu = menu;
         this.setTitle("Xpilot");
         setSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
@@ -36,17 +35,25 @@ public final class Window extends JFrame {
 
     /**
      * Dispose the current frame and set the content pane to the menu
+     * @throws IOException
+     * @throws LineUnavailableException
      */
     public final void launchMenu(boolean launch) {
         Constants.isMenu = true;
         this.setResizable(false);
-        //if (launch) this.dispose();
         getContentPane().removeAll();
-        getContentPane().add(new Menu());
+        this.menu = new Menu();
+        getContentPane().add(menu);
         this.setLocationRelativeTo(null);
+        this.setVisible(true);
         if (launch) {
-            this.setVisible(true);
-            menu.playMenuMusic();
+            try {
+                Menu.menuMusic.playMusic();
+            } catch (LineUnavailableException | IOException e) {
+                e.printStackTrace();
+                System.out.println(e);
+				System.exit(1);
+            }
         }
         repaint();
     }
@@ -78,20 +85,19 @@ public final class Window extends JFrame {
      * This function launches the game
      */
 
-    public void launchGame(JPanel comp) throws LineUnavailableException, IOException {
+    public void launchGame() throws LineUnavailableException, IOException {
+        Menu.menuMusic.stopMusic();
         Constants.isMenu = false;
-        menu.stopMenuMusic();
         dispose();
         getContentPane().removeAll();
-        System.out.println(comp.getWidth());
-        getContentPane().add(BorderLayout.CENTER, comp);
+        getContentPane().add(BorderLayout.CENTER, GameLoop.view);
         if (GameLoop.fullScreenMode)
             device.setFullScreenWindow(this);
         pack();
         setLocationRelativeTo(null);
         setVisible(true);
         repaint();
-        ((GameView) comp).playGameMusic();
+        GameLoop.gameMusic.playMusic();
     }
 
     public void setDimensionsToFullScreen() {
@@ -120,6 +126,7 @@ public final class Window extends JFrame {
         dispose();
         getContentPane().removeAll();
         getContentPane().add(BorderLayout.CENTER, comp);
+        this.setUndecorated(true);
         device.setFullScreenWindow(this);
         pack();
         setVisible(true);

@@ -15,11 +15,14 @@ public final class Menu extends JPanel {
 	// Vue :
 	private final Color titleColor;
 	private final Font titleFont;
-	private final Music menuMusic;
 	private final JButton start;
 	private final JButton settings;
 	private final JButton help;
 	private final JButton quit;
+
+	// Music :
+	private static final String filepath = "ressources/audio/menuMusic.wav";
+	public static final Music menuMusic = new Music(filepath);
 
 	// Sections :
 	private final Settings settingsPanel = new Settings();
@@ -28,7 +31,10 @@ public final class Menu extends JPanel {
 	// Getters :
 	public final Settings getSettingsPanel() {return settingsPanel;}
 	public final HelpPanel getHelpPanel() {return helpPanel;}
-	public final Music getMenuMusic() {return menuMusic;}
+
+	// Size constants :
+	private static final int WIDTH = 120;
+	private static final int HEIGHT = 60;
 
 	public Menu() {
 		// Initialisation du panel :
@@ -37,19 +43,16 @@ public final class Menu extends JPanel {
 		setBackground(Color.BLACK);
 		requestFocus();
 		this.titleColor = new Color(128, 0, 0);
-		this.titleFont = new Font("Century Gothic", Font.PLAIN, 150);
-		// Music :
-		String filepath = "ressources/audio/menuMusic.wav";
-		this.menuMusic = new Music(filepath);
+		this.titleFont = new Font("Century Gothic", Font.PLAIN, Constants.B_WIDTH/5);
 		// Ajout des boutons :
 		this.start = new TextButton("Start");
 		this.settings = new TextButton("Settings");
 		this.help = new TextButton("Help");
 		this.quit = new TextButton("Quit");
-		this.start.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2 -60, 100, 50);
-		this.settings.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2, 100, 50);
-		this.help.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2 + 60, 100, 50);
-		this.quit.setBounds(Constants.B_WIDTH/2 - 40, Constants.B_HEIGHT/2 + 120, 100, 50);
+		this.start.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2 - (3*HEIGHT/2), WIDTH, HEIGHT);
+		this.settings.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2, WIDTH, HEIGHT);
+		this.help.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2 + (3*HEIGHT/2), WIDTH, HEIGHT);
+		this.quit.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2 + (6*HEIGHT/2), WIDTH, HEIGHT);
 		this.setLayout(null);
 		this.add(start);
 		this.add(settings);
@@ -60,7 +63,7 @@ public final class Menu extends JPanel {
 		this.repaint();
 		this.start.addActionListener(e -> {
 			try {
-				GameLoop.win.launchGame(GameLoop.view);
+				GameLoop.win.launchGame();
 			} catch (IOException | LineUnavailableException e1) {
 				e1.printStackTrace();
 				System.out.println(e1);
@@ -102,23 +105,12 @@ public final class Menu extends JPanel {
 		// draw title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("Xpilot", Constants.B_WIDTH/3, 150);
+		g.drawString("Xpilot", Constants.B_WIDTH/5 + 35, Constants.B_HEIGHT/4);
 	}
 
-	public final void playMenuMusic() {
-		try {
-			this.menuMusic.playMusic();
-		} catch (Exception e) {
-			e.printStackTrace();
-			System.exit(1);
-		}
-	}
 	public void setSettingsPanel(){
 		add(BorderLayout.CENTER,settingsPanel);
         this.repaint();
-	}
-	public final void stopMenuMusic() {
-		this.menuMusic.stopMusic();
 	}
 
 }

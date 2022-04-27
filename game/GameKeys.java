@@ -10,21 +10,13 @@ import java.awt.event.KeyListener;
 
 public final class GameKeys implements KeyListener {
 
-    private final Game game;
-    private final GameView view;
-    
-    public GameKeys(Game g, GameView view) {
-        this.game = g;
-        this.view = view;
-    }
-
     @Override
     public void keyTyped(KeyEvent e) {
 
     }
 
 /**
- * * If the escape key is pressed, the game is stopped and the menu is launched.
+ * * If the escape key is pressed, the GameLoop.game is stopped and the menu is launched.
  * * If the shoot key is pressed, the spaceship fires a missile.
  * * If the up key is pressed, the spaceship accelerates.
  * * If the left key is pressed, the spaceship rotates to the left.
@@ -40,45 +32,45 @@ public final class GameKeys implements KeyListener {
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
             try {
-                this.view.stopGameMusic();
+                GameLoop.gameMusic.stopMusic();
                 GameLoop.win.launchMenu(true);
             } catch (Exception e1) {
                 e1.printStackTrace();
                 System.out.println(e1);
-               System.exit(1);
+                System.exit(1);
             }
             return;
         }
         if (key == Constants.CUSTOM_KEYS.getShoot()){
-            view.fire();
+            GameLoop.view.fire();
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
-            if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}
-            if(!game.getShip().moveFlag)game.getShip().moveTime = System.currentTimeMillis();
-            game.getShip().canDecelerate = false;
-            game.getShip().moveFlag = true;
-            game.getShip().canAccelerate = true;
+            if(GameLoop.game.getShip().timerStartFlag){GameLoop.game.getShip().timerStartFlag = false;}
+            if(!GameLoop.game.getShip().moveFlag)GameLoop.game.getShip().moveTime = System.currentTimeMillis();
+            GameLoop.game.getShip().canDecelerate = false;
+            GameLoop.game.getShip().moveFlag = true;
+            GameLoop.game.getShip().canAccelerate = true;
 
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}
-            game.getShip().leftRotationFlag = true;
+            if(GameLoop.game.getShip().timerStartFlag){GameLoop.game.getShip().timerStartFlag = false;}
+            GameLoop.game.getShip().leftRotationFlag = true;
         }
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            if(game.getShip().timerStartFlag){game.getShip().timerStartFlag = false;}
-            game.getShip().rightRotationFlag = true;
+            if(GameLoop.game.getShip().timerStartFlag){GameLoop.game.getShip().timerStartFlag = false;}
+            GameLoop.game.getShip().rightRotationFlag = true;
         }
         if (key == Constants.CUSTOM_KEYS.getShield()){
-            if(!game.getShip().shield.isActive() && game.getShip().shield.getQuantity() > 0){
-                game.getShip().shield.enable();
+            if(!GameLoop.game.getShip().shield.isActive() && GameLoop.game.getShip().shield.getQuantity() > 0){
+                GameLoop.game.getShip().shield.enable();
             }else{
-                game.getShip().shield.disable();
+                GameLoop.game.getShip().shield.disable();
             }
         }
         if (key == Constants.CUSTOM_KEYS.getSwitch()){
-            game.getShip().missile_switch += 1;
-            if(game.getShip().missile_switch > 2){
-                game.getShip().missile_switch = 1;
+            GameLoop.game.getShip().missile_switch += 1;
+            if(GameLoop.game.getShip().missile_switch > 2){
+                GameLoop.game.getShip().missile_switch = 1;
             }
         }
         if (key == Constants.CUSTOM_KEYS.getFullScreen()){
@@ -87,13 +79,13 @@ public final class GameKeys implements KeyListener {
             if (GameLoop.fullScreenMode && GameLoop.actFullScreen) {
                 GameLoop.win.setDimensionsToFullScreen();
                 GameLoop.actFullScreen = false;
-                GameLoop.view = new GameView(game);
+                GameLoop.view = new GameView(GameLoop.game);
                 GameLoop.win.setFullScreen(GameLoop.view);
             }
             if (!GameLoop.fullScreenMode && GameLoop.actFullScreen) {
                 GameLoop.win.setDimensionsToSmallScreen();
                 GameLoop.actFullScreen = false;
-                GameLoop.view = new GameView(game);
+                GameLoop.view = new GameView(GameLoop.game);
                 GameLoop.win.setSmallScreen(GameLoop.view);
             }
         }
@@ -104,15 +96,15 @@ public final class GameKeys implements KeyListener {
         if (Constants.isMenu) return;
         int key = e.getKeyCode();
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            game.getShip().rightRotationFlag = false;
+            GameLoop.game.getShip().rightRotationFlag = false;
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            game.getShip().leftRotationFlag = false;
+            GameLoop.game.getShip().leftRotationFlag = false;
         }
         if (key == Constants.CUSTOM_KEYS.getUp()) {
-            game.getShip().canDecelerate = true;
-            game.getShip().canAccelerate = false;
-            game.getShip().moveFlag = false;
+            GameLoop.game.getShip().canDecelerate = true;
+            GameLoop.game.getShip().canAccelerate = false;
+            GameLoop.game.getShip().moveFlag = false;
         }
     }
     

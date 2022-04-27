@@ -25,7 +25,6 @@ public final class GameView extends JPanel implements ActionListener {
     private BufferedImage bgImage;
     private BufferedImage singleShot;
     private BufferedImage multiShot;
-    private Music gameMusic;
     public boolean back = false;
     public boolean settings = false;
     // Varaibles modèle :
@@ -38,8 +37,6 @@ public final class GameView extends JPanel implements ActionListener {
     public final void setInGame(boolean inGame) {
         this.ingame = inGame;
     }
-
-    public final Music getGameMusic() {return this.gameMusic;} 
 
     public GameView(Game game) {
         this.game = game;
@@ -345,28 +342,6 @@ public final class GameView extends JPanel implements ActionListener {
                 }
             }
         }
-    }
-
-
-    /**
-     * Plays the game music.
-     */
-    public final void playGameMusic() throws LineUnavailableException, IOException {
-        try {
-            // Music :
-            String filepath = "ressources/audio/gamemusic.wav";
-            this.gameMusic = new Music(filepath);
-            gameMusic.playMusic();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Stops the game music
-     */
-    public final void stopGameMusic() {
-        this.gameMusic.stopMusic();
     }
 
     @Override
