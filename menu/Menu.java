@@ -26,11 +26,11 @@ public final class Menu extends JPanel {
 
 	// Sections :
 	private final Settings settingsPanel = new Settings();
-	private final HelpPanel helpPanel = new HelpPanel();
+	private final Help helpPanel = new Help();
 
 	// Getters :
 	public final Settings getSettingsPanel() {return settingsPanel;}
-	public final HelpPanel getHelpPanel() {return helpPanel;}
+	public final Help getHelpPanel() {return helpPanel;}
 
 	// Size constants :
 	private static final int WIDTH = 120;

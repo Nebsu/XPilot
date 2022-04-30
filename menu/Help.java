@@ -7,7 +7,7 @@ import java.awt.event.*;
 import javax.swing.JPanel;
 import java.awt.*;
 
-public class HelpPanel extends JPanel {
+public class Help extends JPanel {
 
     // Vue :
 	private final Color titleColor;
@@ -16,7 +16,7 @@ public class HelpPanel extends JPanel {
     private final Font textFont;
 	private final IconButton backButton;
 
-	public HelpPanel() {
+	public Help() {
 		// Panel :
 		super();
 		setFocusable(true);
@@ -32,7 +32,7 @@ public class HelpPanel extends JPanel {
 		// Back button :
 		this.setLayout(null);
 		this.backButton = new IconButton("ressources/images/backbutton.png");
-		this.backButton.setBounds(10, 10, 50, 50);
+		this.backButton.setBounds(Constants.B_WIDTH/80, Constants.B_WIDTH/80, Constants.B_WIDTH/16, Constants.B_WIDTH/16);
 		this.add(this.backButton);
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
