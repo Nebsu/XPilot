@@ -1,7 +1,6 @@
 package menu;
 
-import main.Constants;
-import game.GameLoop;
+import main.Global;
 
 import java.awt.event.*;
 import javax.swing.JPanel;
@@ -21,7 +20,7 @@ public class Help extends JPanel {
 		super();
 		setFocusable(true);
 		setBackground(Color.BLACK);
-		setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+		setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
 		requestFocus();
 		// Title :
 		this.titleColor = new Color(128, 0, 0);
@@ -32,12 +31,12 @@ public class Help extends JPanel {
 		// Back button :
 		this.setLayout(null);
 		this.backButton = new IconButton("ressources/images/backbutton.png");
-		this.backButton.setBounds(Constants.B_WIDTH/80, Constants.B_WIDTH/80, Constants.B_WIDTH/16, Constants.B_WIDTH/16);
+		this.backButton.setBounds(Global.W_WIDTH()/80, Global.W_WIDTH()/80, Global.W_WIDTH()/16, Global.W_WIDTH()/16);
 		this.add(this.backButton);
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameLoop.win.launchMenu(false);
+				Global.MAINGAME().getWindow().launchMenu(false);
 			}
 		});
 		// Repaint :
@@ -64,7 +63,7 @@ public class Help extends JPanel {
         // draw commands :
         String[] commands1 = {"Up Key", "Left Key", "Right Key", "Space", "C", "X"}; 
         String[] commands2 = {"W", "A", "D", "Space", "B", "M"};
-        String[] commands = (Constants.WASD_MODE)? commands2 : commands1;
+        String[] commands = (Global.WASD_MODE())? commands2 : commands1;
         g.setColor(textColor);
         g.setFont(textFont);
         g.drawString("Keys :", 350, 250);

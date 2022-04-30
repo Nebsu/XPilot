@@ -1,10 +1,10 @@
 package game;
 
 import map.*;
-import sound.Music;
 import sound.SFX;
 import object.*;
 import main.Constants;
+import main.Global;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -12,13 +12,11 @@ import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import java.awt.geom.AffineTransform;
 
 public final class GameView extends JPanel implements ActionListener {
 
-    final Game game;
     // Variables vue :
     private AffineTransform af = new AffineTransform();
     private Graphics2D g2;
@@ -27,26 +25,22 @@ public final class GameView extends JPanel implements ActionListener {
     private BufferedImage multiShot;
     public boolean back = false;
     public boolean settings = false;
+
     // Varaibles modèle :
+    private final Game game;
     private boolean ingame;
 
-    public final boolean isInGame() {
-        return this.ingame;
-    }
-
-    public final void setInGame(boolean inGame) {
-        this.ingame = inGame;
-    }
+    // Getters / Setters :
+    public final boolean isInGame() {return this.ingame;}
+    public final void setInGame(boolean inGame) {this.ingame = inGame;}
 
     public GameView(Game game) {
         this.game = game;
         //Initialisation
         setBackground(Color.BLACK);
         this.ingame = true;
-        setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
-
+        setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
         game.getMap().addBonus();
-
         try {
             this.singleShot = ImageIO.read(new File("ressources/images/overlay_single_shot.png"));
         } catch (IOException e) {
@@ -57,8 +51,6 @@ public final class GameView extends JPanel implements ActionListener {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
-
-
     }
 
     @Override
@@ -87,7 +79,6 @@ public final class GameView extends JPanel implements ActionListener {
         }
     }
 
-
     /**
      * Draw the objects on the screen
      *
@@ -99,7 +90,7 @@ public final class GameView extends JPanel implements ActionListener {
         Graphics2D g3 = image.createGraphics();
         g3.drawImage(game.getMap().img_map, 0, 0, null);
 
-        bgImage = new BufferedImage(Constants.B_WIDTH, Constants.B_HEIGHT, BufferedImage.TYPE_INT_BGR);
+        bgImage = new BufferedImage(Global.W_WIDTH(), Global.W_HEIGHT(), BufferedImage.TYPE_INT_BGR);
         g2 = bgImage.createGraphics();
         AffineTransform af2 = new AffineTransform();
         if (game.getShip().isVisible()) {
@@ -133,22 +124,22 @@ public final class GameView extends JPanel implements ActionListener {
             }
 
             //Camera affiche la position de vaisseau dans le seconde image
-            g2.drawImage(image, (int) (-game.getShip().getX()) + Constants.B_WIDTH / 2, (int) (-game.getShip().getY()) + Constants.B_HEIGHT / 2, null);
+            g2.drawImage(image, (int) (-game.getShip().getX()) + Global.W_WIDTH() / 2, (int) (-game.getShip().getY()) + Global.W_HEIGHT() / 2, null);
 
             //Vaisseau
             af.setToIdentity();
-            af.translate(Constants.B_WIDTH / 2, Constants.B_HEIGHT / 2);
+            af.translate(Global.W_WIDTH() / 2, Global.W_HEIGHT() / 2);
             af.rotate(Math.toRadians(game.getShip().rotation), game.getShip().getImage().getWidth(this) / 2, game.getShip().getImage().getHeight(this) / 2);
             g2.drawImage(game.getShip().getImage(), af, null);
 
             //Boule
             if (game.getMap().ball.isTaken()) {
                 g2.setColor(Color.WHITE);
-                g2.drawOval(10, Constants.B_HEIGHT - 40, 33, 33);
-                g2.fillOval(10, Constants.B_HEIGHT - 40, 33, 33);
+                g2.drawOval(10, Global.W_HEIGHT() - 40, 33, 33);
+                g2.fillOval(10, Global.W_HEIGHT() - 40, 33, 33);
             } else {
                 g2.setColor(Color.WHITE);
-                g2.drawOval(10, Constants.B_HEIGHT - 40, 33, 33);
+                g2.drawOval(10, Global.W_HEIGHT() - 40, 33, 33);
             }
             //afficher dans g
             g.drawImage(bgImage, 0, 0, null);
@@ -161,30 +152,29 @@ public final class GameView extends JPanel implements ActionListener {
      * @param g The Graphics2D object that is used to draw the shield.
      */
     private final void drawShield(Graphics2D g) {
-        //Quantité de bouclier
+        // Quantité de bouclier :
         String msg = Integer.toString(game.getShip().shield.getQuantity());
         g.setColor(Color.GREEN);
         Font ft = new Font("Helvetica", Font.BOLD, 20);
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
         if (game.getShip().shield.getQuantity() >= 10) {
-            g.drawString(msg, Constants.B_WIDTH - fm.stringWidth(msg) - 19, 38);
+            g.drawString(msg, Global.W_WIDTH() - fm.stringWidth(msg) - 19, 38);
         } else {
-            g.drawString(msg, Constants.B_WIDTH - fm.stringWidth(msg) - 24, 38);
+            g.drawString(msg, Global.W_WIDTH() - fm.stringWidth(msg) - 24, 38);
         }
-
-        //Indicateur du bouclier :
+        // Indicateur du bouclier :
         Polygon p = new Polygon();
         for (int i = 0; i < 6; i++)
-            p.addPoint((int) (Constants.B_WIDTH - 30 - 20 * Math.cos(i * 2 * Math.PI / 6)), (int) (30 + 20 * Math.sin(i * 2 * Math.PI / 6)));
+            p.addPoint((int) (Global.W_WIDTH() - 30 - 20 * Math.cos(i * 2 * Math.PI / 6)), (int) (30 + 20 * Math.sin(i * 2 * Math.PI / 6)));
         g.drawPolygon(p);
 
-        //Bouclier autour du vaisseau :
+        // Bouclier autour du vaisseau :
         Polygon p2 = new Polygon();
         if (game.getShip().shield.isActive()) {
             // g.setColor(Color.WHITE);
             for (int i = 0; i < 6; i++)
-                p2.addPoint((int) (Constants.B_WIDTH / 2 + 6 + 20 * Math.cos(i * 2 * Math.PI / 6)), (int) (Constants.B_HEIGHT / 2 + 6 + 20 * Math.sin(i * 2 * Math.PI / 6)));
+                p2.addPoint((int) (Global.W_WIDTH() / 2 + 6 + 20 * Math.cos(i * 2 * Math.PI / 6)), (int) (Global.W_HEIGHT() / 2 + 6 + 20 * Math.sin(i * 2 * Math.PI / 6)));
             g.drawPolygon(p2);
         }
     }
@@ -197,15 +187,15 @@ public final class GameView extends JPanel implements ActionListener {
     private final void drawHealthBar(Graphics2D g) {
         //Fond de la barre
         g.setColor(Color.WHITE);
-        g.drawString("HP", Constants.B_WIDTH / 4 - 30, Constants.B_HEIGHT / 50 + 12);
-        g.fillRect(Constants.B_WIDTH / 4, Constants.B_HEIGHT / 50, Constants.B_WIDTH / 2, 15);
+        g.drawString("HP", Global.W_WIDTH() / 4 - 30, Global.W_HEIGHT() / 50 + 12);
+        g.fillRect(Global.W_WIDTH() / 4, Global.W_HEIGHT() / 50, Global.W_WIDTH() / 2, 15);
         //Barre de vie
         g.setColor(Color.RED);
-        float width = (Constants.B_WIDTH / 2 - 4) * ((float) game.getShip().getHealth() / (float) game.getShip().getMaxHealth());
-        g.fillRect(Constants.B_WIDTH / 4 + 2, Constants.B_HEIGHT / 50 + 2, (int) Math.round(width), 15 - 4);
+        float width = (Global.W_WIDTH() / 2 - 4) * ((float) game.getShip().getHealth() / (float) game.getShip().getMaxHealth());
+        g.fillRect(Global.W_WIDTH() / 4 + 2, Global.W_HEIGHT() / 50 + 2, (int) Math.round(width), 15 - 4);
         //Nombre
         g.setColor(Color.GRAY);
-        g.drawString("" + game.getShip().getHealth(), Constants.B_WIDTH / 2 - 10, Constants.B_HEIGHT / 50 + 12);
+        g.drawString("" + game.getShip().getHealth(), Global.W_WIDTH() / 2 - 10, Global.W_HEIGHT() / 50 + 12);
     }
 
     /**
@@ -216,15 +206,15 @@ public final class GameView extends JPanel implements ActionListener {
     private final void drawFuelBar(Graphics2D g) {
         //Fond de la barre
         g.setColor(Color.WHITE);
-        g.drawString("Fuel", Constants.B_WIDTH / 4 - 30, Constants.B_HEIGHT / 20 + 12);
-        g.fillRect(Constants.B_WIDTH / 4, Constants.B_HEIGHT / 20, Constants.B_WIDTH / 2, 15);
+        g.drawString("Fuel", Global.W_WIDTH() / 4 - 30, Global.W_HEIGHT() / 20 + 12);
+        g.fillRect(Global.W_WIDTH() / 4, Global.W_HEIGHT() / 20, Global.W_WIDTH() / 2, 15);
         //Barre de fuel
         g.setColor(Color.GREEN);
-        float width = (Constants.B_WIDTH / 2 - 4) * ((float) game.getShip().getFuel() / (float) Constants.BASE_FUEL);
-        g.fillRect(Constants.B_WIDTH / 4 + 2, Constants.B_HEIGHT / 20 + 2, (int) Math.round(width), 15 - 4);
+        float width = (Global.W_WIDTH() / 2 - 4) * ((float) game.getShip().getFuel() / (float) Constants.BASE_FUEL);
+        g.fillRect(Global.W_WIDTH() / 4 + 2, Global.W_HEIGHT() / 20 + 2, (int) Math.round(width), 15 - 4);
         //Nombre
         g.setColor(Color.GRAY);
-        g.drawString("" + game.getShip().getFuel(), Constants.B_WIDTH / 2 - 10, Constants.B_HEIGHT / 20 + 12);
+        g.drawString("" + game.getShip().getFuel(), Global.W_WIDTH() / 2 - 10, Global.W_HEIGHT() / 20 + 12);
     }
 
     /**
@@ -276,8 +266,7 @@ public final class GameView extends JPanel implements ActionListener {
 
     public void drawMinimap(Graphics g) throws IOException {
         BufferedImage bi = ImageIO.read(new File("ressources/images/minimap.png"));
-        g.translate(Constants.B_WIDTH - 150, Constants.B_HEIGHT - 150);
-
+        g.translate(Global.W_WIDTH() - 150, Global.W_HEIGHT() - 150);
         for (int i = 0; i < game.getMap().infor_map.length; i++) {
             for (int j = 0; j < game.getMap().infor_map.length; j++) {
                 if (game.getMap().infor_map[i][j] == 0) {
@@ -307,12 +296,11 @@ public final class GameView extends JPanel implements ActionListener {
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
         g.setColor(Color.white);
-        g.drawString(msg, (Constants.B_WIDTH - fm.stringWidth(msg)) / 2,
-                Constants.B_HEIGHT / 2);
+        g.drawString(msg, (Global.W_WIDTH() - fm.stringWidth(msg)) / 2,
+                Global.W_HEIGHT() / 2);
     }
 
-    //Autres fonctions
-
+    // Autres fonctions :
     public final void fire() {
         if (game.getShip().missile_left > 0) {
             if(game.getShip().missile_switch == 2 && game.getShip().missile_left >= 5){
@@ -345,8 +333,6 @@ public final class GameView extends JPanel implements ActionListener {
     }
 
     @Override
-    public void actionPerformed(ActionEvent e) {
-
-    }
+    public void actionPerformed(ActionEvent e) {}
 
 }

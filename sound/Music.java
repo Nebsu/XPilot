@@ -1,19 +1,19 @@
 /**
  * This class is used to play music
  */
+
 package sound;
+
+import main.Global;
 
 import java.io.*;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
 import javax.sound.sampled.LineUnavailableException;
-
-import main.Constants;
-
 import javax.sound.sampled.AudioInputStream;
 
-public class Music {
+public final class Music {
 
     private File musicPath;
     private AudioInputStream audio;
@@ -43,28 +43,24 @@ public class Music {
         }
     }
 
-    private void initVolume() {
+    private final void initVolume() {
         GAIN = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         GAIN.setValue(MUSIC_VOLUME);
     }
 
-    public void changeGain(float gain) {
+    public final void changeGain(float gain) {
         GAIN.setValue(gain);
     }
 
-    public void playMusic() throws LineUnavailableException, IOException {
-        if (Constants.isMenu) clip.setMicrosecondPosition(startPos);
+    public final void playMusic() throws LineUnavailableException, IOException {
+        if (Global.isMenu()) clip.setMicrosecondPosition(startPos);
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
-    public void stopMusic() {
-        if (Constants.isMenu) startPos = clip.getMicrosecondPosition();
+    public final void stopMusic() {
+        if (Global.isMenu()) startPos = clip.getMicrosecondPosition();
         clip.stop();
-    }
-
-    public void kill() {
-        clip.close();
     }
 
 }

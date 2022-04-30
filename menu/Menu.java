@@ -1,8 +1,6 @@
 package menu;
 
-import game.GameLoop;
-import main.Constants;
-import sound.Music;
+import main.Global;
 
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
@@ -19,10 +17,6 @@ public final class Menu extends JPanel {
 	private final JButton settings;
 	private final JButton help;
 	private final JButton quit;
-
-	// Music :
-	private static final String filepath = "ressources/audio/menuMusic.wav";
-	public static final Music menuMusic = new Music(filepath);
 
 	// Sections :
 	private final Settings settingsPanel = new Settings();
@@ -43,27 +37,27 @@ public final class Menu extends JPanel {
 		setBackground(Color.BLACK);
 		requestFocus();
 		this.titleColor = new Color(128, 0, 0);
-		this.titleFont = new Font("Century Gothic", Font.PLAIN, Constants.B_WIDTH/5);
+		this.titleFont = new Font("Century Gothic", Font.PLAIN, Global.W_WIDTH()/5);
 		// Ajout des boutons :
 		this.start = new TextButton("Start");
 		this.settings = new TextButton("Settings");
 		this.help = new TextButton("Help");
 		this.quit = new TextButton("Quit");
-		this.start.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2 - (3*HEIGHT/2), WIDTH, HEIGHT);
-		this.settings.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2, WIDTH, HEIGHT);
-		this.help.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2 + (3*HEIGHT/2), WIDTH, HEIGHT);
-		this.quit.setBounds(Constants.B_WIDTH/2 - WIDTH/2, Constants.B_HEIGHT/2 + (6*HEIGHT/2), WIDTH, HEIGHT);
+		this.start.setBounds(Global.W_WIDTH()/2 - WIDTH/2, Global.W_HEIGHT()/2 - (3*HEIGHT/2), WIDTH, HEIGHT);
+		this.settings.setBounds(Global.W_WIDTH()/2 - WIDTH/2, Global.W_HEIGHT()/2, WIDTH, HEIGHT);
+		this.help.setBounds(Global.W_WIDTH()/2 - WIDTH/2, Global.W_HEIGHT()/2 + (3*HEIGHT/2), WIDTH, HEIGHT);
+		this.quit.setBounds(Global.W_WIDTH()/2 - WIDTH/2, Global.W_HEIGHT()/2 + (6*HEIGHT/2), WIDTH, HEIGHT);
 		this.setLayout(null);
 		this.add(start);
 		this.add(settings);
 		this.add(help);
 		this.add(quit);
-		this.setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+		this.setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
 		this.invalidate();
 		this.repaint();
 		this.start.addActionListener(e -> {
 			try {
-				GameLoop.win.launchGame();
+				Global.MAINGAME().getWindow().launchGame();
 			} catch (IOException | LineUnavailableException e1) {
 				e1.printStackTrace();
 				System.out.println(e1);
@@ -73,13 +67,13 @@ public final class Menu extends JPanel {
 		this.settings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameLoop.win.settingsPanel();
+				Global.MAINGAME().getWindow().settingsPanel();
 			}
 		});
 		this.help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameLoop.win.helpPanel();
+				Global.MAINGAME().getWindow().helpPanel();
 			}
 		});
 		this.quit.addActionListener(new ActionListener() {
@@ -105,11 +99,11 @@ public final class Menu extends JPanel {
 		// draw title
 		g.setColor(titleColor);
 		g.setFont(titleFont);
-		g.drawString("Xpilot", Constants.B_WIDTH/5 + 35, Constants.B_HEIGHT/4);
+		g.drawString("Xpilot", Global.W_WIDTH()/5 + 35, Global.W_HEIGHT()/4);
 	}
 
-	public void setSettingsPanel(){
-		add(BorderLayout.CENTER,settingsPanel);
+	public final void setSettingsPanel() {
+		add(BorderLayout.CENTER, settingsPanel);
         this.repaint();
 	}
 

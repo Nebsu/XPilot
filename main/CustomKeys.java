@@ -25,7 +25,7 @@ public final class CustomKeys {
     public final int getFullScreen() {return fullScreen;}
 
     public final void WASD_MODE(boolean status) {
-        Constants.WASD_MODE = status;
+        Global.setWASD_MODE(status);
         if (status) {
             this.up = KeyEvent.VK_W;
             this.left = KeyEvent.VK_A;

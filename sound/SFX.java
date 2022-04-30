@@ -1,6 +1,7 @@
 /**
  * This class is used to play sound effects
  */
+
 package sound;
 
 import java.io.*;
@@ -38,21 +39,17 @@ public class SFX {
         }
     }
 
-    private void initVolume() {
+    private final void initVolume() {
         GAIN = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         GAIN.setValue(SFX_VOLUME); // Reduce volume by 10 decibels.
     }
 
-    public void playSound() throws LineUnavailableException, IOException {
+    public final void playSound() throws LineUnavailableException, IOException {
         clip.start();
     }
 
-    public void stopSound() {
+    public final void stopSound() {
         clip.stop();
-    }
-
-    public void kill() {
-        clip.close();
     }
 
 }

@@ -1,9 +1,9 @@
 package menu;
 
 import main.Constants;
+import main.Global;
 import sound.Music;
 import sound.SFX;
-import game.GameLoop;
 
 import java.awt.event.*;
 import javax.swing.JPanel;
@@ -13,7 +13,7 @@ import javax.swing.event.ChangeListener;
 import javax.swing.JLabel;
 import java.awt.*;
 
-public class Settings extends JPanel {
+public final class Settings extends JPanel {
 
 	// Vue :
 	private final Color titleColor;
@@ -31,7 +31,7 @@ public class Settings extends JPanel {
 		super();
 		setFocusable(true);
 		setBackground(Color.BLACK);
-		setPreferredSize(new Dimension(Constants.B_WIDTH, Constants.B_HEIGHT));
+		setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
 		requestFocus();
 		// Title :
 		this.titleColor = new Color(128, 0, 0);
@@ -44,7 +44,7 @@ public class Settings extends JPanel {
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				GameLoop.win.launchMenu(false);
+				Global.MAINGAME().getWindow().launchMenu(false);
 			}
 		});
 		// Music Sliders :
@@ -79,7 +79,7 @@ public class Settings extends JPanel {
 		wasdMode.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Constants.WASD_MODE) {
+				if (Global.WASD_MODE()) {
 					Constants.CUSTOM_KEYS.WASD_MODE(false);
 					wasdLabel.setText("Status : OFF");
 				} else {
@@ -100,7 +100,7 @@ public class Settings extends JPanel {
     //                                                 FONCTIONS DU MODELE                                                     //
     /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-	public class MusEvent implements ChangeListener {
+	public final class MusEvent implements ChangeListener {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
@@ -111,7 +111,7 @@ public class Settings extends JPanel {
 
 	}
 
-	public class SFXEvent implements ChangeListener {
+	public final class SFXEvent implements ChangeListener {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
@@ -122,16 +122,16 @@ public class Settings extends JPanel {
 
 	}
 
-	public void setSoundVolume(int value, boolean isMusic) {
+	public final void setSoundVolume(int value, boolean isMusic) {
 		float volume = -80.0f;
 		if (value==0) volume = -80.0f; // muet
 		else if (value==100) volume = 0.0f; // son à max
 		else volume = -20.0f + (float) value / 10 * 2.0f; // valeur slider
 		if (isMusic) {
 			Music.setMusicVolume(volume);
-			Menu.menuMusic.changeGain(volume);
-			if (GameLoop.view!=null) 
-				GameLoop.gameMusic.changeGain(volume);
+			Constants.MENU_MUSIC.changeGain(volume);
+			if (Global.MAINGAME().getView()!=null) 
+				Constants.GAME_MUSIC.changeGain(volume);
 		} else {
 			SFX.setMusicVolume(volume);
 		}

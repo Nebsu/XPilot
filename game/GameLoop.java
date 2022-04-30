@@ -7,51 +7,63 @@ package game;
 import map.*;
 import object.*;
 import main.Constants;
+import main.Global;
 import main.Window;
-import sound.Music;
 
 import java.util.ArrayList;
 import java.awt.*;
 
 public final class GameLoop implements Game, Runnable {
 
-    // Fullscreen / UI :
-    public static boolean fullScreenMode = false;
-    public static boolean actFullScreen = false;
+    // Fenêtre :
+    private Window win;
 
-    public static GameView view;
-    public static Window win;
+    // Vue :
+    private GameView view;
+
     // Game Objects :
-    SpaceShip ship;
-    Map map;
-    ArrayList<Missile> missile;
+    private SpaceShip ship;
+    private Map map;
+    private ArrayList<Missile> missile;
+
+    // Inputs :
+    private GameKeys keys;
+
     // Gameloop :
-    public static Game game;
-    boolean gameStarted = false;
+    private Game game;
+    private boolean gameStarted = false;
     private final double updateRate = 1.0d / 60.0d;
     private int fps, ups;
     private boolean running;
     private long nextStatTime;
-    // Music :
-    private static final String musicPath = "ressources/audio/gamemusic.wav";
-    public static final Music gameMusic = new Music(musicPath);
+
+    // Getters :
+    public final Window getWindow() {return win;}
+    public final GameView getView() {return view;}
+    public final Game getGame() {return game;}
+    @Override public void gameStart() {gameStarted = true;}
+    @Override public SpaceShip getShip() {return ship;}
+    @Override public Map getMap() {return map;}
+    @Override public ArrayList<Missile> getMissiles() {return this.missile;}
+    @Override public GameKeys getKeys() {return keys;}
+    @Override public boolean hasGameStarted() {return gameStarted;}
 
     public GameLoop()  {
-        //initialisation des champs
+        // Initialisation des champs :
         map = new Map();
         ship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         game = this;
         missile = new ArrayList<>();
         view = new GameView(game);
-        GameKeys key = new GameKeys();
+        keys = new GameKeys();
         win = new Window();
-        win.addKeyListener(key);
+        win.addKeyListener(keys);
+        Global.initMainGame(this);
     }
 
     /**
      * Game Loop
      */
-
     @Override
     public void run() {
         running = true;
@@ -60,12 +72,11 @@ public final class GameLoop implements Game, Runnable {
         nextStatTime = System.currentTimeMillis() + 1000;
         while (running) {
             win.requestFocus();
-            if (!Constants.isMenu) {
+            if (!Global.isMenu()) {
                 currentTime = System.currentTimeMillis();
                 double lastRenderTimeSeconds = (currentTime - lastUpdate) / 1000d;
                 accumulator += lastRenderTimeSeconds;
                 lastUpdate = currentTime;
-
                 if (accumulator >= updateRate) {
                     while (accumulator > updateRate) {
                         game.update();
@@ -78,16 +89,16 @@ public final class GameLoop implements Game, Runnable {
         }
     }
 
-    private void printStat() {
+    private final void printStat() {
         if (System.currentTimeMillis() > nextStatTime) {
-            //System.out.println(String.format("FPS: %d, UPS: %d", fps, ups));
+            System.out.println(String.format("FPS: %d, UPS: %d", fps, ups));
             fps = 0;
             ups = 0;
             nextStatTime = System.currentTimeMillis() + 1000;
         }
     }
 
-    private void repaint() {
+    private final void repaint() {
         fps++;
         view.repaint();
     }
@@ -156,13 +167,13 @@ public final class GameLoop implements Game, Runnable {
     /**
      * Update the position of all the missiles in the game
      */
-    public void updateMissiles() {
+    public final void updateMissiles() {
         for (Missile m : missile) {
             if (m.isVisible()) {
                 m.move();
             }
         }
-        //detecter le collision du missile 
+        // Detecter le collision du missile 
         for (int i = 0; i < getMissiles().size(); i++) {
             Missile m = getMissiles().get(i);
             Rectangle r = m.getBounds();
@@ -226,34 +237,6 @@ public final class GameLoop implements Game, Runnable {
         }
     }
 
-    public boolean hasGamestarted() {
-        return gameStarted;
-    }
-
-    public void gameStart() {
-        gameStarted = true;
-    }
-
-    @Override
-    public SpaceShip getShip() {
-        return ship;
-    }
-
-    @Override
-    public Map getMap() {
-        return map;
-    }
-
-    @Override
-    public ArrayList<Missile> getMissiles() {
-        return this.missile;
-    }
-
-    @Override
-    public GameKeys getKeys() {
-        return null;
-    }
-
     @Override
     public void update() {
         ups++;
@@ -276,9 +259,21 @@ public final class GameLoop implements Game, Runnable {
 
     }
 
-    @Override
-    public boolean hasGameStarted() {
-        return gameStarted;
+    public final void switchFullScreenMode() {
+        Global.setACT_FULLSCREEN(true);
+        Global.setFULLSCREEN(!Global.FULLSCREEN());
+        if (Global.FULLSCREEN() && Global.ACT_FULLSCREEN()) {
+            win.setDimensionsToFullScreen();
+            Global.setACT_FULLSCREEN(false);
+            view = new GameView(game);
+            win.setFullScreen(view);
+        }
+        if (!Global.FULLSCREEN() && Global.ACT_FULLSCREEN()) {
+            win.setDimensionsToSmallScreen();
+            Global.setACT_FULLSCREEN(false);
+            view = new GameView(game);
+            win.setSmallScreen(view);
+        }
     }
 
 }

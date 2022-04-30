@@ -1,16 +1,22 @@
 /**
  * The Constants class contains all the constants used in the game
  */
+
 package main;
+
+import sound.Music;
+
+import java.awt.*;
 
 public final class Constants {
 
-    // Dimensions de la fenêtre :
-    public static int B_WIDTH = 800;
-    public static int B_HEIGHT = 600;
-    //Screen ratio
-    public static int R_WIDTH = 1;
-    public static int R_HEIGHT = 1;
+    // Fullscreen variables :
+    public final static GraphicsEnvironment ENV = GraphicsEnvironment.getLocalGraphicsEnvironment();
+    public final static GraphicsDevice DEVICE = ENV.getScreenDevices()[0];
+    public static final Rectangle RECTANGLE = DEVICE.getDefaultConfiguration().getBounds();
+    public static final int MAX_WIDTH = RECTANGLE.width;
+    public static final int MAX_HEIGHT = RECTANGLE.height;
+
     // Coordonnées du vaisseau :
     public static final int ICRAFT_X = 200;
     public static final int ICRAFT_Y = 200;
@@ -26,7 +32,7 @@ public final class Constants {
     public static final int BONUS_SPAWNRATE = 5000;
     
     // Speed and Rotation :
-    public static final int rotationRate = 8;
+    public static final int ROTATION_RATE = 8;
     public static final float MAX_SPEED = 10, BASE_SPEED = 4;
 
     // Ennemis :
@@ -46,8 +52,9 @@ public final class Constants {
     
     // Commandes :
     public static final CustomKeys CUSTOM_KEYS = new CustomKeys();
-    public static boolean WASD_MODE = false;
 
-    public static boolean isMenu = true;
+    // Music :
+    public static final Music GAME_MUSIC = new Music("ressources/audio/gamemusic.wav");
+	public static final Music MENU_MUSIC = new Music("ressources/audio/menuMusic.wav");
     
 }
