@@ -269,7 +269,7 @@ public final class GameView extends JPanel implements ActionListener {
         g.translate(Global.W_WIDTH() - 150, Global.W_HEIGHT() - 150);
         for (int i = 0; i < game.getMap().infor_map.length; i++) {
             for (int j = 0; j < game.getMap().infor_map.length; j++) {
-                if (game.getMap().infor_map[i][j] == 0) {
+                if (game.getMap().infor_map[i][j] == 0 || game.getMap().infor_map[i][j] == 3 || game.getMap().infor_map[i][j] == 4) {
                     g.setColor(Color.BLACK);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 }
