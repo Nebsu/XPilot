@@ -6,40 +6,50 @@ import sound.Music;
 import sound.SFX;
 
 import java.awt.event.*;
+import java.awt.image.BufferedImage;
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.JSlider;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
-import javax.swing.JLabel;
 import java.awt.*;
+import javax.swing.JLabel;
+import java.io.*;
+import java.awt.Color;
 
 public final class Settings extends JPanel {
 
 	// Vue :
-	private final Color titleColor;
-	private final Font titleFont;
+	private final BufferedImage logo;
 	private final IconButton backButton;
 	private final JSlider musicVolumeSlider;
 	private final JSlider sfxVolumeSlider;
-	private final JLabel musicVolumeLabel;
-	private final JLabel sfxVolumeLabel;
+	private final JLabel musicVolInfo;
+	private final JLabel sfxVolInfo;
 	private final TextButton wasdMode;
-	private final JLabel wasdLabel;
+	private final JLabel wasdInfo;
+	private final Font textFont;
+	private final Color textColor;
 
-	public Settings() {
+	// Size constants :
+	private static final int titleWidth = 550;
+	private static final int titleHeight = 115;
+	private static final int bW = 150;
+	private static final int bH = 50;
+
+	public Settings() throws IOException {
 		// Panel :
 		super();
 		setFocusable(true);
 		setBackground(Color.BLACK);
 		setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
 		requestFocus();
-		// Title :
-		this.titleColor = new Color(128, 0, 0);
-		this.titleFont = new Font("Century Gothic", Font.PLAIN, 150);
+		// Logo :
+		this.logo = ImageIO.read(new File("ressources/images/logo1.png"));
 		// Back button :
 		this.setLayout(null);
 		this.backButton = new IconButton("ressources/images/backbutton.png");
-		this.backButton.setBounds(10, 10, 50, 50);
+		this.backButton.setBounds(Global.W_WIDTH()/80, Global.W_HEIGHT()/60, 50, 50);
 		this.add(this.backButton);
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
@@ -58,39 +68,50 @@ public final class Settings extends JPanel {
 		// this.sfxVolumeSlider.setSnapToTicks(true);
 		this.musicVolumeSlider.setBackground(Color.BLACK);
 		this.sfxVolumeSlider.setBackground(Color.BLACK);
-		this.musicVolumeSlider.setBounds(300, 250, 200, 50);
-		this.sfxVolumeSlider.setBounds(300, 350, 200, 50);
-		this.musicVolumeLabel = new JLabel("Music Volume : 100");
-		this.sfxVolumeLabel = new JLabel("SFX Volume : 100");
-		this.musicVolumeLabel.setBounds(350, 200, 200, 50);
-		this.sfxVolumeLabel.setBounds(350, 300, 200, 50);
+		this.musicVolumeSlider.setBounds(slider1X(), slider1Y(), slider1W(), slider1H());
+		this.sfxVolumeSlider.setBounds(slider2X(), slider2Y(), slider2W(), slider2H());
 		this.add(musicVolumeSlider);
 		this.add(sfxVolumeSlider);
-		this.add(musicVolumeLabel);
-		this.add(sfxVolumeLabel);
 		MusEvent e1 = new MusEvent();
 		musicVolumeSlider.addChangeListener(e1);
 		SFXEvent e2 = new SFXEvent();
 		sfxVolumeSlider.addChangeListener(e2);
-		// WASD Mode button :
-		this.wasdMode = new TextButton("WASD MODE");
-		this.wasdMode.setBounds(325, 450, 150, 50);
-		this.add(this.wasdMode);
-		wasdMode.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				if (Global.WASD_MODE()) {
-					Constants.CUSTOM_KEYS.WASD_MODE(false);
-					wasdLabel.setText("Status : OFF");
-				} else {
-					Constants.CUSTOM_KEYS.WASD_MODE(true);
-					wasdLabel.setText("Status : ON");
-				}
-			}
-		});
-		this.wasdLabel = new JLabel("Status : OFF");
-		this.wasdLabel.setBounds(362, 475, 100, 100);
-		this.add(this.wasdLabel);
+				// WASD Mode button :
+				this.wasdMode = new TextButton("WASD MODE");
+				this.wasdMode.setBounds(bX(), bY(), bW, bH);
+				this.add(this.wasdMode);
+				wasdMode.addActionListener(new ActionListener() {
+					@Override
+					public void actionPerformed(ActionEvent e) {
+						if (Global.WASD_MODE()) {
+							Constants.CUSTOM_KEYS.WASD_MODE(false);
+							wasdInfo.setText("Status : OFF");
+						} else {
+							Constants.CUSTOM_KEYS.WASD_MODE(true);
+							wasdInfo.setText("Status : ON");
+						}
+						wasdInfo.repaint();
+						repaint();
+					}
+				});
+		// Text Labels :
+		this.textFont = new Font("Tahoma", Font.PLAIN, 22);
+		this.textColor = new Color(148, 148, 148);
+		this.musicVolInfo = new JLabel("Music Volume : 100");
+		this.musicVolInfo.setBounds(slider1X(), text1Y(), slider1W(), 30);
+		this.musicVolInfo.setFont(this.textFont);
+		this.musicVolInfo.setForeground(this.textColor);
+		this.add(this.musicVolInfo);
+		this.sfxVolInfo = new JLabel("SFX Volume : 100");
+		this.sfxVolInfo.setBounds(slider2X(), text2Y(), slider2W(), 30);
+		this.sfxVolInfo.setFont(this.textFont);
+		this.sfxVolInfo.setForeground(this.textColor);
+		this.add(this.sfxVolInfo);
+		this.wasdInfo = new JLabel("Status : OFF");
+		this.wasdInfo.setBounds(bX(), text3Y(), bW, 30);
+		this.wasdInfo.setFont(this.textFont);
+		this.wasdInfo.setForeground(this.textColor);
+		this.add(this.wasdInfo);
 		// Repaint :
 		this.invalidate();
 		this.repaint();
@@ -105,8 +126,10 @@ public final class Settings extends JPanel {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			int value = musicVolumeSlider.getValue();
-			musicVolumeLabel.setText("Music Volume : "+value);
+			musicVolInfo.setText("Music Volume : " + String.valueOf(value));
 			setSoundVolume(value, true);
+			musicVolInfo.repaint();
+			repaint();
 		}
 
 	}
@@ -116,8 +139,10 @@ public final class Settings extends JPanel {
 		@Override
 		public void stateChanged(ChangeEvent e) {
 			int value = sfxVolumeSlider.getValue();
-			sfxVolumeLabel.setText("SFX Volume : "+value);
+			sfxVolInfo.setText("SFX Volume : " + String.valueOf(value));
 			setSoundVolume(value, false);
+			sfxVolInfo.repaint();
+			repaint();
 		}
 
 	}
@@ -144,15 +169,63 @@ public final class Settings extends JPanel {
 	@Override
 	protected final void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		Graphics2D g2 = (Graphics2D) g;
-		draw(g2);
+		g.drawImage(logo, Global.W_WIDTH() / 2 - titleWidth / 2, Global.W_HEIGHT() / 8 - titleHeight / 8, null);
+		Graphics2D g2d = (Graphics2D) g;
+		g2d.setFont(textFont);
+		g2d.setColor(textColor);
+		// g2d.drawString(sfxVolInfo, slider2X(), slider2Y() - Global.W_HEIGHT() / 64);
+		// g2d.drawString(wasdInfo, bX(), bY() + Global.W_HEIGHT() / 8);
 	}
-	
-	public final void draw(Graphics2D g) {
-		// draw title
-		g.setColor(titleColor);
-		g.setFont(titleFont);
-		g.drawString("Xpilot", 200, 150);
+
+	private static final int slider1X() {
+		return Global.W_WIDTH() / 2 - (Global.W_WIDTH() / 4) / 2;
+	}
+
+	private static final int slider1Y() {
+		return (Global.W_HEIGHT() / 2) - ((Global.W_HEIGHT() / 12) / 2);
+	}
+
+	private static final int slider1W() {
+		return Global.W_WIDTH() / 4;
+	}
+
+	private static final int slider1H() {
+		return Global.W_HEIGHT() / 32;
+	}
+	private static final int slider2X() {
+		return Global.W_WIDTH() / 2 - (Global.W_WIDTH() / 4) / 2;
+	}
+
+	private static final int slider2Y() { 
+		return (Global.W_HEIGHT() / 2 - (Global.W_HEIGHT() / 12) / 2) + Global.W_HEIGHT() / 6;
+	}
+
+	private static final int slider2W() {
+		return Global.W_WIDTH() / 4;
+	}
+
+	private static final int slider2H() {
+		return Global.W_HEIGHT() / 32;
+	}
+
+	private static final int bX() {
+		return Global.W_WIDTH()/2 - bW/2;
+	}
+
+	private static final int bY(){
+		return slider2Y() + Global.W_WIDTH() / 12;
+	}
+
+	private static final int text1Y() {
+		return slider1Y() - Global.W_HEIGHT() / 16;
+	}
+
+	private static final int text2Y() {
+		return slider2Y() - Global.W_HEIGHT() / 16;
+	}
+
+	private static final int text3Y() {
+		return bY() + Global.W_HEIGHT() / 12;
 	}
 
 }

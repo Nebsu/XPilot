@@ -36,7 +36,13 @@ public final class Window extends JFrame {
         Global.changeMenuState(true);
         this.setResizable(false);
         getContentPane().removeAll();
-        this.menu = new Menu();
+        try {
+            this.menu = new Menu();
+        } catch (IOException e1) {
+            e1.printStackTrace();
+            System.out.println(e1);
+            System.exit(1);
+        }
         getContentPane().add(menu);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
