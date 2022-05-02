@@ -53,13 +53,13 @@ public final class Music {
     }
 
     public final void playMusic() throws LineUnavailableException, IOException {
-        if (Global.isMenu()) clip.setMicrosecondPosition(startPos);
+        if (Global.IS_MENU()) clip.setMicrosecondPosition(startPos);
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);
     }
 
     public final void stopMusic() {
-        if (Global.isMenu()) startPos = clip.getMicrosecondPosition();
+        if (Global.IS_MENU()) startPos = clip.getMicrosecondPosition();
         clip.stop();
     }
 

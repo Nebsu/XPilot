@@ -72,7 +72,7 @@ public final class GameLoop implements Game, Runnable {
         nextStatTime = System.currentTimeMillis() + 1000;
         while (running) {
             win.requestFocus();
-            if (!Global.isMenu()) {
+            if (!Global.IS_MENU()) {
                 currentTime = System.currentTimeMillis();
                 double lastRenderTimeSeconds = (currentTime - lastUpdate) / 1000d;
                 accumulator += lastRenderTimeSeconds;

@@ -17,25 +17,32 @@ public final class Constants {
     public static final int MAX_WIDTH = RECTANGLE.width;
     public static final int MAX_HEIGHT = RECTANGLE.height;
 
-    // Coordonnées du vaisseau :
+    // Music :
+    public static final Music GAME_MUSIC = new Music("ressources/audio/gamemusic.wav");
+    public static final Music MENU_MUSIC = new Music("ressources/audio/menuMusic.wav");
+
+    // Commands :
+    public static final CustomKeys CUSTOM_KEYS = new CustomKeys();
+
+    // Spaceship position :
     public static final int ICRAFT_X = 200;
     public static final int ICRAFT_Y = 200;
 
     // Spaceship Health :
     public static final int MAX_HEALTH = 1000;
     
-    // Coordonnées de la balle :
+    // Ball position :
     public static final int BALL_X = 100;
     public static final int BALL_Y = 200;
     
-    // Temps d'apparition des bonus :
+    // Bonus spawnrate :
     public static final int BONUS_SPAWNRATE = 5000;
     
     // Speed and Rotation :
     public static final int ROTATION_RATE = 8;
     public static final float MAX_SPEED = 10, BASE_SPEED = 4;
 
-    // Ennemis :
+    // Ennemies :
     public static final int RANGE = 100;
     public static final int SHOOT_RATE = 1000;
 
@@ -49,12 +56,5 @@ public final class Constants {
 
     // Damage tick :
     public static final long COOLDOWN = 1000;
-    
-    // Commandes :
-    public static final CustomKeys CUSTOM_KEYS = new CustomKeys();
-
-    // Music :
-    public static final Music GAME_MUSIC = new Music("ressources/audio/gamemusic.wav");
-	public static final Music MENU_MUSIC = new Music("ressources/audio/menuMusic.wav");
     
 }

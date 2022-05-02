@@ -4,12 +4,12 @@ import game.GameLoop;
 
 public final class Global {
 
-    // JEU PRINCIPAL :
+    // Main game :
     private static GameLoop MAINGAME;
     public static GameLoop MAINGAME() {return MAINGAME;}
     public static void initMainGame(GameLoop g) {MAINGAME = g;}
 
-    // Dimensions de la fenêtre :
+    // Window dimensions :
     private static int W_WIDTH = 800;
     private static int W_HEIGHT = 600;
     public static final int W_WIDTH() {return W_WIDTH;}
@@ -33,14 +33,22 @@ public final class Global {
     public static final boolean ACT_FULLSCREEN() {return ACT_FULLSCREEN;}
     public static final void setACT_FULLSCREEN(boolean b) {ACT_FULLSCREEN = b;}
 
-    // Commande en WASD :
+    // Menu State :
+    private static boolean IS_MENU = true;
+    public static final boolean IS_MENU() {return IS_MENU;}
+    public static final void changeMenuState(boolean b) {IS_MENU = b;} 
+
+    // Volumes :
+    private static int MUSIC_VOLUME = 100;
+    private static int SFX_VOLUME = 100;
+    public static final int MUSIC_VOLUME() {return MUSIC_VOLUME;}
+    public static final void setMUSIC_VOLUME(int v) {MUSIC_VOLUME = v;}
+    public static final int SFX_VOLUME() {return SFX_VOLUME;}
+    public static final void setSFX_VOLUME(int v) {SFX_VOLUME = v;}
+
+    // WASD command mode :
     private static boolean WASD_MODE = false;
     public static final boolean WASD_MODE() {return WASD_MODE;}
     public static final void setWASD_MODE(boolean b) {WASD_MODE = b;}
-
-    // Menu State :
-    private static boolean isMenu = true;
-    public static final boolean isMenu() {return isMenu;}
-    public static final void changeMenuState(boolean b) {isMenu = b;} 
     
 }

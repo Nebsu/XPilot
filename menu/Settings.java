@@ -44,10 +44,10 @@ public final class Settings extends JPanel {
 		setBackground(Color.BLACK);
 		setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
 		requestFocus();
+		this.setLayout(null);
 		// Logo :
 		this.logo = ImageIO.read(new File("ressources/images/logo1.png"));
 		// Back button :
-		this.setLayout(null);
 		this.backButton = new IconButton("ressources/images/backbutton.png");
 		this.backButton.setBounds(Global.W_WIDTH()/80, Global.W_HEIGHT()/60, 50, 50);
 		this.add(this.backButton);
@@ -58,8 +58,8 @@ public final class Settings extends JPanel {
 			}
 		});
 		// Music Sliders :
-		this.musicVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
-		this.sfxVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, 100);
+		this.musicVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, Global.MUSIC_VOLUME());
+		this.sfxVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, Global.SFX_VOLUME());
 		this.musicVolumeSlider.setMajorTickSpacing(10);
 		this.sfxVolumeSlider.setMajorTickSpacing(10);
 		// this.musicVolumeSlider.setPaintTicks(true);
@@ -76,38 +76,39 @@ public final class Settings extends JPanel {
 		musicVolumeSlider.addChangeListener(e1);
 		SFXEvent e2 = new SFXEvent();
 		sfxVolumeSlider.addChangeListener(e2);
-				// WASD Mode button :
-				this.wasdMode = new TextButton("WASD MODE");
-				this.wasdMode.setBounds(bX(), bY(), bW, bH);
-				this.add(this.wasdMode);
-				wasdMode.addActionListener(new ActionListener() {
-					@Override
-					public void actionPerformed(ActionEvent e) {
-						if (Global.WASD_MODE()) {
-							Constants.CUSTOM_KEYS.WASD_MODE(false);
-							wasdInfo.setText("Status : OFF");
-						} else {
-							Constants.CUSTOM_KEYS.WASD_MODE(true);
-							wasdInfo.setText("Status : ON");
-						}
-						wasdInfo.repaint();
-						repaint();
-					}
-				});
+		// WASD Mode button :
+		this.wasdMode = new TextButton("WASD MODE");
+		this.wasdMode.setBounds(bX(), bY(), bW, bH);
+		this.add(this.wasdMode);
+		wasdMode.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				if (Global.WASD_MODE()) {
+					Constants.CUSTOM_KEYS.WASD_MODE(false);
+					wasdInfo.setText("Status : OFF");
+				} else {
+					Constants.CUSTOM_KEYS.WASD_MODE(true);
+					wasdInfo.setText("Status : ON");
+				}
+				wasdInfo.repaint();
+				repaint();
+			}
+		});
 		// Text Labels :
 		this.textFont = new Font("Tahoma", Font.PLAIN, 22);
 		this.textColor = new Color(148, 148, 148);
-		this.musicVolInfo = new JLabel("Music Volume : 100");
+		this.musicVolInfo = new JLabel("Music Volume : " + String.valueOf(Global.MUSIC_VOLUME()));
 		this.musicVolInfo.setBounds(slider1X(), text1Y(), slider1W(), 30);
 		this.musicVolInfo.setFont(this.textFont);
 		this.musicVolInfo.setForeground(this.textColor);
 		this.add(this.musicVolInfo);
-		this.sfxVolInfo = new JLabel("SFX Volume : 100");
+		this.sfxVolInfo = new JLabel("SFX Volume : " + String.valueOf(Global.SFX_VOLUME()));
 		this.sfxVolInfo.setBounds(slider2X(), text2Y(), slider2W(), 30);
 		this.sfxVolInfo.setFont(this.textFont);
 		this.sfxVolInfo.setForeground(this.textColor);
 		this.add(this.sfxVolInfo);
-		this.wasdInfo = new JLabel("Status : OFF");
+		String status = (Global.WASD_MODE())? "ON" : "OFF";
+		this.wasdInfo = new JLabel("Status : " + status);
 		this.wasdInfo.setBounds(bX(), text3Y(), bW, 30);
 		this.wasdInfo.setFont(this.textFont);
 		this.wasdInfo.setForeground(this.textColor);
@@ -116,10 +117,12 @@ public final class Settings extends JPanel {
 		this.invalidate();
 		this.repaint();
 	}
-	
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                 FONCTIONS DU MODELE                                                     //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+	@Override
+	protected final void paintComponent(Graphics g) {
+		super.paintComponent(g);
+		g.drawImage(logo, Global.W_WIDTH() / 2 - titleWidth / 2, Global.W_HEIGHT() / 8 - titleHeight / 8, null);
+	}
 
 	public final class MusEvent implements ChangeListener {
 
@@ -128,6 +131,7 @@ public final class Settings extends JPanel {
 			int value = musicVolumeSlider.getValue();
 			musicVolInfo.setText("Music Volume : " + String.valueOf(value));
 			setSoundVolume(value, true);
+			Global.setMUSIC_VOLUME(value);
 			musicVolInfo.repaint();
 			repaint();
 		}
@@ -141,6 +145,7 @@ public final class Settings extends JPanel {
 			int value = sfxVolumeSlider.getValue();
 			sfxVolInfo.setText("SFX Volume : " + String.valueOf(value));
 			setSoundVolume(value, false);
+			Global.setSFX_VOLUME(value);
 			sfxVolInfo.repaint();
 			repaint();
 		}
@@ -160,21 +165,6 @@ public final class Settings extends JPanel {
 		} else {
 			SFX.setMusicVolume(volume);
 		}
-	}
-
-	/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    //                                                   FONCTIONS DE LA VUE                                                   //
-    /////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-	
-	@Override
-	protected final void paintComponent(Graphics g) {
-		super.paintComponent(g);
-		g.drawImage(logo, Global.W_WIDTH() / 2 - titleWidth / 2, Global.W_HEIGHT() / 8 - titleHeight / 8, null);
-		Graphics2D g2d = (Graphics2D) g;
-		g2d.setFont(textFont);
-		g2d.setColor(textColor);
-		// g2d.drawString(sfxVolInfo, slider2X(), slider2Y() - Global.W_HEIGHT() / 64);
-		// g2d.drawString(wasdInfo, bX(), bY() + Global.W_HEIGHT() / 8);
 	}
 
 	private static final int slider1X() {
