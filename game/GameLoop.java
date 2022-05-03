@@ -38,9 +38,11 @@ public final class GameLoop implements Game, Runnable {
     private boolean running;
     private long nextStatTime;
 
+    private int level = 1;
+
     public GameLoop()  {
-        map = new Map();
-        ship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
+        map = new Map("ressources/map/level1.txt");
+        ship = new SpaceShip(map.getShipX(), map.getShipY());
         game = this;
         missile = new ArrayList<>();
         view = new GameView(game);
@@ -101,6 +103,16 @@ public final class GameLoop implements Game, Runnable {
         view.repaint();
     }
 
+    public void switchLevel(){
+        this.level++;
+        switch(this.level){
+            case 1 : break;
+            case 2 : this.map = new Map(Levels.LEVEL2.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
+            case 3 : this.map = new Map(Levels.LEVEL3.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
+            case 4 : view.setInGame(false); break;
+        }
+    }
+
     /**
      * If the player's health or fuel is less than or equal to zero, the game is over
      */
@@ -129,7 +141,7 @@ public final class GameLoop implements Game, Runnable {
             } else if (s.intersects(o) && obstacle instanceof BallHolder) {
                 map.getBall().take();
             } else if (s.intersects(o) && obstacle instanceof Goal && map.getBall().isTaken()) {
-                view.setInGame(false);
+                switchLevel();
             }
         }
         for (int i = 0; i < getMap().getBonuses().size(); i++) {

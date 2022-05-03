@@ -266,15 +266,14 @@ public final class GameView extends JPanel implements ActionListener {
         g.translate(Global.W_WIDTH() - 150, Global.W_HEIGHT() - 150);
         for (int i = 0; i < game.getMap().getInforMap().length; i++) {
             for (int j = 0; j < game.getMap().getInforMap().length; j++) {
-                if (game.getMap().getInforMap()[i][j] == 0 || game.getMap().getInforMap()[i][j] == 3 || 
-                    game.getMap().getInforMap()[i][j] == 4) {
+                if (game.getMap().getInforMap()[i][j] == '-' || game.getMap().getInforMap()[i][j] == 'X' || game.getMap().getInforMap()[i][j] == 'B' || game.getMap().getInforMap()[i][j] == 'S') {
                     g.setColor(Color.BLACK);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 }
-                if (game.getMap().getInforMap()[i][j] == 1) {
+                if (game.getMap().getInforMap()[i][j] == 'W') {
                     g.setColor(Color.YELLOW);
                     g.fillRect(i * 3, j * 3, 3, 3);
-                } else if (game.getMap().getInforMap()[i][j] == 2) {
+                } else if (game.getMap().getInforMap()[i][j] == 'G') {
                     g.setColor(Color.RED);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 }
