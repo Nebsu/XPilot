@@ -49,7 +49,7 @@ public class Help extends JPanel {
 		this.textColor = new Color(148, 148, 148);
 		this.textLabels = new ArrayList<JLabel>();
 		String[] commands1 = {"Up Key", "Left Key", "Right Key", "Space", "C", "X", "F"}; 
-        String[] commands2 = {"W", "A", "D", "Space", "B", "M", "P"};
+        String[] commands2 = {"W", "A", "D", "Enter", "L", "M", "P"};
         String[] commands = (Global.WASD_MODE())? commands2 : commands1;
 		textLabels.add(new JLabel("Move : " + commands[0]));
 		textLabels.add(new JLabel("RotateLeft : " + commands[1]));

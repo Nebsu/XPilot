@@ -1,3 +1,5 @@
+/** The Launcher class launches the application and contains the main method. */
+
 package main;
 
 import game.GameLoop;

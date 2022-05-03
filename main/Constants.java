@@ -1,6 +1,4 @@
-/**
- * The Constants class contains all the constants used in the game
- */
+/** The Constants class contains all the global constants variables used in the game */
 
 package main;
 

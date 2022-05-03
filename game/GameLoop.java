@@ -1,5 +1,6 @@
 /**
- * The GameLoop class is the main loop of the game. It is responsible for the game logic
+ * The GameLoop class is the main loop of the game. 
+ * It is responsible for the game logic.
  */
 
 package game;
@@ -15,10 +16,10 @@ import java.awt.*;
 
 public final class GameLoop implements Game, Runnable {
 
-    // Fenêtre :
+    // Frame :
     private Window win;
 
-    // Vue :
+    // View :
     private GameView view;
 
     // Game Objects :
@@ -37,19 +38,7 @@ public final class GameLoop implements Game, Runnable {
     private boolean running;
     private long nextStatTime;
 
-    // Getters :
-    public final Window getWindow() {return win;}
-    public final GameView getView() {return view;}
-    public final Game getGame() {return game;}
-    @Override public void gameStart() {gameStarted = true;}
-    @Override public SpaceShip getShip() {return ship;}
-    @Override public Map getMap() {return map;}
-    @Override public ArrayList<Missile> getMissiles() {return this.missile;}
-    @Override public GameKeys getKeys() {return keys;}
-    @Override public boolean hasGameStarted() {return gameStarted;}
-
     public GameLoop()  {
-        // Initialisation des champs :
         map = new Map();
         ship = new SpaceShip(Constants.ICRAFT_X, Constants.ICRAFT_Y);
         game = this;
@@ -61,9 +50,18 @@ public final class GameLoop implements Game, Runnable {
         Global.initMainGame(this);
     }
 
-    /**
-     * Game Loop
-     */
+    // Getters :
+    @Override public Window getWindow() {return win;}
+    @Override public GameView getView() {return view;}
+    @Override public Game getGame() {return game;}
+    @Override public void gameStart() {gameStarted = true;}
+    @Override public SpaceShip getShip() {return ship;}
+    @Override public Map getMap() {return map;}
+    @Override public ArrayList<Missile> getMissiles() {return this.missile;}
+    @Override public GameKeys getKeys() {return keys;}
+    @Override public boolean hasGameStarted() {return gameStarted;}
+
+    /** Game Loop */
     @Override
     public void run() {
         running = true;
@@ -103,7 +101,6 @@ public final class GameLoop implements Game, Runnable {
         view.repaint();
     }
 
-
     /**
      * If the player's health or fuel is less than or equal to zero, the game is over
      */
@@ -120,22 +117,24 @@ public final class GameLoop implements Game, Runnable {
      * @return Nothing.
      */
     public final boolean checkCollision() {
-        Rectangle s = new Rectangle((int) (ship.getX() + ship.SPEED * Math.cos(Math.toRadians(ship.rotation))), (int) (ship.getY() + ship.SPEED * Math.sin(Math.toRadians(ship.rotation))), 16, 16);
-        for (Obstacle obstacle : map.ListeObstacle) {
-            Rectangle o = new Rectangle(obstacle.x[0], obstacle.y[0], obstacle.x[1] - obstacle.x[0], obstacle.y[2] - obstacle.y[1]);
-            // Ship après le movement :
-            if (s.intersects(o) && !(obstacle instanceof Goal) && !(obstacle instanceof BallHolder) && !(obstacle instanceof Bonus)) {
+        Rectangle s = new Rectangle((int) (ship.getX() + ship.SPEED * Math.cos(Math.toRadians(ship.rotation))), 
+                      (int) (ship.getY() + ship.SPEED * Math.sin(Math.toRadians(ship.rotation))), 16, 16);
+        for (Obstacle obstacle : map.getObstacles()) {
+            Rectangle o = new Rectangle(obstacle.getX()[0], obstacle.getY()[0], obstacle.getX()[1] - obstacle.getX()[0], 
+                                        obstacle.getY()[2] - obstacle.getY()[1]);
+            // Ship after move :
+            if (s.intersects(o) && !(obstacle instanceof Goal) && 
+                !(obstacle instanceof BallHolder) && !(obstacle instanceof Bonus)) {
                 return true;
             } else if (s.intersects(o) && obstacle instanceof BallHolder) {
-                map.ball.take();
-            } else if (s.intersects(o) && obstacle instanceof Goal && map.ball.isTaken()) {
+                map.getBall().take();
+            } else if (s.intersects(o) && obstacle instanceof Goal && map.getBall().isTaken()) {
                 view.setInGame(false);
             }
         }
-
-        for (int i = 0; i < getMap().bonusList.size(); i++) {
-            Bonus bo = getMap().bonusList.get(i);
-            Rectangle r = new Rectangle(bo.x[0], bo.y[0], bo.x[1] - bo.x[0], bo.y[2] - bo.y[1]);
+        for (int i = 0; i < getMap().getBonuses().size(); i++) {
+            Bonus bo = getMap().getBonuses().get(i);
+            Rectangle r = new Rectangle(bo.getX()[0], bo.getY()[0], bo.getX()[1] - bo.getX()[0], bo.getY()[2] - bo.getY()[1]);
             if (s.intersects(r)) {
                 if (getShip().getFuel() < Constants.BASE_FUEL) {
                     if (getShip().getFuel() > Constants.BASE_FUEL - 500) {
@@ -146,15 +145,13 @@ public final class GameLoop implements Game, Runnable {
                 }
                 getShip().shield.add();
                 view.erase(bo);
-                getMap().bonusList.remove(bo);
+                getMap().getBonuses().remove(bo);
             }
         }
         return false;
     }
 
-    /**
-     * Update the ship's position
-     */
+    /** Update the ship's position */
     public final void updateShip() {
         if (getShip().isVisible()) {
             getShip().move();
@@ -164,16 +161,14 @@ public final class GameLoop implements Game, Runnable {
         }
     }
 
-    /**
-     * Update the position of all the missiles in the game
-     */
+    /** Update the position of all the missiles in the game */
     public final void updateMissiles() {
         for (Missile m : missile) {
             if (m.isVisible()) {
                 m.move();
             }
         }
-        // Detecter le collision du missile 
+        // Missile collision detection :
         for (int i = 0; i < getMissiles().size(); i++) {
             Missile m = getMissiles().get(i);
             Rectangle r = m.getBounds();
@@ -189,8 +184,8 @@ public final class GameLoop implements Game, Runnable {
                     }
                 }
             }
-            for (Obstacle ob : getMap().ListeObstacle) {
-                Rectangle o = new Rectangle(ob.x[0], ob.y[0], ob.x[1] - ob.x[0], ob.y[2] - ob.y[1]);
+            for (Obstacle ob : getMap().getObstacles()) {
+                Rectangle o = new Rectangle(ob.getX()[0], ob.getY()[0], ob.getX()[1] - ob.getX()[0], ob.getY()[2] - ob.getY()[1]);
                 if (r.intersects(o) && (m instanceof MissileNormale || m instanceof MissileDiffusion)) {
                     getMissiles().remove(m);
                 } else if (r.intersects(o) && (m instanceof Rocket)) {
@@ -223,15 +218,17 @@ public final class GameLoop implements Game, Runnable {
     }
 
     public final void updateEnemies() {
-        for (Enemy e : getMap().enemies) {
-            if (Math.sqrt(Math.pow(getShip().getX() - e.x, 2) + Math.pow(getShip().getY() - e.y, 2)) < Constants.RANGE && e.canShoot()) {
-                getMissiles().add(new MissileNormale(e.x, e.y, (int) Math.toDegrees(e.getRad(getShip().getX(), getShip().getY())), 2));
+        for (Enemy e : getMap().getEnemies()) {
+            double f = Math.sqrt(Math.pow(getShip().getX() - e.getX(), 2) + Math.pow(getShip().getY() - e.getY(), 2));
+            if (f < Constants.RANGE && e.canShoot()) {
+                getMissiles().add(new MissileNormale(e.getX(), e.getY(),
+                                  (int) Math.toDegrees(e.getRad(getShip().getX(), getShip().getY())), 2));
             }
         }
     }
 
     public final void updateBonus() {
-        if (System.currentTimeMillis() - getMap().lastTime > Constants.BONUS_SPAWNRATE) {
+        if (System.currentTimeMillis() - getMap().getLastTime() > Constants.BONUS_SPAWNRATE) {
             getMap().addBonus();
             view.drawBonus();
         }
@@ -256,7 +253,6 @@ public final class GameLoop implements Game, Runnable {
         ship.rotateLeft();
         updateMissiles();
         updateBonus();
-
     }
 
     public final void switchFullScreenMode() {

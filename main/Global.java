@@ -1,3 +1,5 @@
+/** The Constants class contains all the global not constants variables used in the game */
+
 package main;
 
 import game.GameLoop;

@@ -1,6 +1,4 @@
-/**
- * This class is used to handle the keyboard inputs
- */
+/** This class is used to handle the keyboard inputs. */
 
 package game;
 
@@ -21,7 +19,7 @@ public final class GameKeys implements KeyListener {
      * * If the left key is pressed, the spaceship rotates to the left.
      * * If the right key is pressed, the spaceship rotates to the right.
      * * If the shield key is pressed, the spaceship activates or deactivates its shield.
-     * * If the switch key is pressed, the spaceship changes its missile type
+     * * If the switch key is pressed, the spaceship changes its missile type.
      * 
      * @param e The KeyEvent object that contains information about the key that was pressed.
      */
@@ -44,23 +42,31 @@ public final class GameKeys implements KeyListener {
             Global.MAINGAME().getView().fire();
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
-            if(Global.MAINGAME().getGame().getShip().timerStartFlag){Global.MAINGAME().getGame().getShip().timerStartFlag = false;}
-            if(!Global.MAINGAME().getGame().getShip().moveFlag)Global.MAINGAME().getGame().getShip().moveTime = System.currentTimeMillis();
+            if(Global.MAINGAME().getGame().getShip().timerStartFlag){
+                Global.MAINGAME().getGame().getShip().timerStartFlag = false;
+            }
+            if(!Global.MAINGAME().getGame().getShip().moveFlag)
+                Global.MAINGAME().getGame().getShip().moveTime = System.currentTimeMillis();
             Global.MAINGAME().getGame().getShip().canDecelerate = false;
             Global.MAINGAME().getGame().getShip().moveFlag = true;
             Global.MAINGAME().getGame().getShip().canAccelerate = true;
 
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            if(Global.MAINGAME().getGame().getShip().timerStartFlag){Global.MAINGAME().getGame().getShip().timerStartFlag = false;}
+            if(Global.MAINGAME().getGame().getShip().timerStartFlag){
+                Global.MAINGAME().getGame().getShip().timerStartFlag = false;
+            }
             Global.MAINGAME().getGame().getShip().leftRotationFlag = true;
         }
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            if(Global.MAINGAME().getGame().getShip().timerStartFlag){Global.MAINGAME().getGame().getShip().timerStartFlag = false;}
+            if(Global.MAINGAME().getGame().getShip().timerStartFlag){
+                Global.MAINGAME().getGame().getShip().timerStartFlag = false;
+            }
             Global.MAINGAME().getGame().getShip().rightRotationFlag = true;
         }
         if (key == Constants.CUSTOM_KEYS.getShield()){
-            if(!Global.MAINGAME().getGame().getShip().shield.isActive() && Global.MAINGAME().getGame().getShip().shield.getQuantity() > 0){
+            if(!Global.MAINGAME().getGame().getShip().shield.isActive() && 
+                Global.MAINGAME().getGame().getShip().shield.getQuantity() > 0){
                 Global.MAINGAME().getGame().getShip().shield.enable();
             }else{
                 Global.MAINGAME().getGame().getShip().shield.disable();

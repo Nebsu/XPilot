@@ -1,16 +1,15 @@
-/**
- * The BallHolder class is an obstacle that can be taken by the player
- */
+/** The BallHolder class is an obstacle that can be taken by the player */
+
 package map;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
-
 import javax.imageio.ImageIO;
 
-public class BallHolder extends Obstacle {
+public final class BallHolder extends Obstacle {
+
     private boolean taken = false;
     private BufferedImage ball_img;
     
@@ -19,22 +18,20 @@ public class BallHolder extends Obstacle {
         this.ball_img = ImageIO.read(new File("ressources/images/ball.png"));
     }
 
-    public void draw(Graphics g){
+    public final BufferedImage getImage() {return ball_img;}
+
+    public final void draw(Graphics g){
         g.setColor(Color.WHITE);
         Polygon polygon=new Polygon(x,y,Math.min(x.length,y.length));
         g.fillPolygon(polygon);
     } 
 
-    public void take(){
+    public final void take(){
         this.taken = true;
     }
 
-    public boolean isTaken(){
+    public final boolean isTaken(){
         return taken;
-    }
-
-    public BufferedImage getImage(){
-        return ball_img;
     }
 
 }

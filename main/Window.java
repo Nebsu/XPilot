@@ -1,6 +1,6 @@
 /**
- * The Window class is the main class of the game. It contains the main menu, the game panel, and the
- * settings panel
+ * The Window class is the main Jframe of the game. 
+ * It switches between the main menu view, the sub menus view and the main game view
  */
 
 package main;
@@ -17,8 +17,6 @@ public final class Window extends JFrame {
 
     private Menu menu;
 
-    public Menu getMenu() {return menu;}
-
     public Window() {
         super();
         this.setTitle("Xpilot");
@@ -26,6 +24,8 @@ public final class Window extends JFrame {
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.launchMenu(true);
     }
+
+    public final Menu getMenu() {return menu;}
 
     /**
      * Dispose the current frame and set the content pane to the menu
@@ -59,8 +59,8 @@ public final class Window extends JFrame {
     }
 
     /**
-     * This function is called when the user clicks the settings button. It removes all the other panels
-     * from the window and replaces them with a new settings panel
+     * This function is called when the user clicks the settings button. 
+     * It removes all the other panels from the window and replaces them with the settings panel.
      */
     public final void settingsPanel() {
         dispose();
@@ -81,7 +81,8 @@ public final class Window extends JFrame {
     }
 
     /**
-     * This function launches the game
+     * This function is called when the user clicks the start button. 
+     * It removes all the other panels from the window and replaces them with the settings game panel.
      */
     public final void launchGame() throws LineUnavailableException, IOException {
         Constants.MENU_MUSIC.stopMusic();
@@ -98,6 +99,7 @@ public final class Window extends JFrame {
         Constants.GAME_MUSIC.playMusic();
     }
 
+    // Fullscreen functions :
     public final void setDimensionsToFullScreen() {
         Global.setW_HEIGHT(Constants.MAX_HEIGHT);
         Global.setW_WIDTH(Constants.MAX_WIDTH);
