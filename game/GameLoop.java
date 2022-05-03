@@ -41,7 +41,7 @@ public final class GameLoop implements Game, Runnable {
     private int level = 1;
 
     public GameLoop()  {
-        map = new Map("ressources/map/level1.txt");
+        map = new Map(Levels.LEVEL1.pathname);
         ship = new SpaceShip(map.getShipX(), map.getShipY());
         game = this;
         missile = new ArrayList<>();
@@ -106,7 +106,7 @@ public final class GameLoop implements Game, Runnable {
     public void switchLevel(){
         this.level++;
         switch(this.level){
-            case 1 : break;
+            case 1 : this.map = new Map(Levels.LEVEL1.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
             case 2 : this.map = new Map(Levels.LEVEL2.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
             case 3 : this.map = new Map(Levels.LEVEL3.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
             case 4 : view.setInGame(false); break;
@@ -265,6 +265,7 @@ public final class GameLoop implements Game, Runnable {
         ship.rotateLeft();
         updateMissiles();
         updateBonus();
+        updateEnemies();
     }
 
     public final void switchFullScreenMode() {

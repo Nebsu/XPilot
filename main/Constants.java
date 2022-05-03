@@ -51,7 +51,7 @@ public final class Constants {
     public static final float MAX_SPEED = 10, BASE_SPEED = 4;
 
     // Ennemies :
-    public static final int RANGE = 100;
+    public static final int RANGE = 300;
     public static final int SHOOT_RATE = 1000;
 
     // Missiles :

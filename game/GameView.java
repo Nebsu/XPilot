@@ -1,6 +1,7 @@
 package game;
 
 import map.*;
+import menu.TextButton;
 import sound.SFX;
 import object.*;
 import main.Constants;
@@ -69,6 +70,12 @@ public final class GameView extends JPanel implements ActionListener {
             }
         } else {
             drawGameOver(g);
+            // setLayout(null);
+            // TextButton quit = new TextButton("Quit");
+            // quit.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+            //                      Global.W_HEIGHT()/2 - (3*Constants.BUTTON_HEIGHT/2), 
+            //                      Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
+            // add(quit);
         }
     }
 
