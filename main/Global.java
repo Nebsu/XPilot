@@ -39,6 +39,9 @@ public final class Global {
     private static boolean IS_MENU = true;
     public static final boolean IS_MENU() {return IS_MENU;}
     public static final void changeMenuState(boolean b) {IS_MENU = b;} 
+    private static boolean IS_TOP_MENU = false;
+    public static final boolean IS_TOP_MENU() {return IS_TOP_MENU;}
+    public static final void changeTopMenuState(boolean b) {IS_TOP_MENU = b;}
 
     // Volumes :
     private static int MUSIC_VOLUME = 100;

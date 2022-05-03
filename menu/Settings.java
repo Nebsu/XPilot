@@ -30,7 +30,7 @@ public final class Settings extends JPanel {
 	private final Font textFont;
 	private final Color textColor;
 
-	public Settings() throws IOException {
+	public Settings(boolean beginning) throws IOException {
 		// Panel :
 		super();
 		setFocusable(true);
@@ -47,7 +47,7 @@ public final class Settings extends JPanel {
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Global.MAINGAME().getWindow().launchMenu(false);
+				Global.MAINGAME().getWindow().launchMenu(false, beginning);
 			}
 		});
 		// Music Sliders :

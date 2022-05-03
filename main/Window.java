@@ -22,7 +22,7 @@ public final class Window extends JFrame {
         this.setTitle("Xpilot");
         setSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.launchMenu(true);
+        this.launchMenu(true, true);	
     }
 
     public final Menu getMenu() {return menu;}
@@ -32,12 +32,12 @@ public final class Window extends JFrame {
      * @throws IOException
      * @throws LineUnavailableException
      */
-    public final void launchMenu(boolean launch) {
+    public final void launchMenu(boolean music, boolean beginning) {
         Global.changeMenuState(true);
         this.setResizable(false);
         getContentPane().removeAll();
         try {
-            this.menu = new Menu();
+            this.menu = new Menu(beginning);
         } catch (IOException e1) {
             e1.printStackTrace();
             System.out.println(e1);
@@ -46,7 +46,7 @@ public final class Window extends JFrame {
         getContentPane().add(menu);
         this.setLocationRelativeTo(null);
         this.setVisible(true);
-        if (launch) {
+        if (music) {
             try {
                 Constants.MENU_MUSIC.playMusic();
             } catch (LineUnavailableException | IOException e) {

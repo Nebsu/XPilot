@@ -30,7 +30,7 @@ public final class GameKeys implements KeyListener {
         if (key==KeyEvent.VK_ESCAPE) {
             try {
                 Constants.GAME_MUSIC.stopMusic();
-                Global.MAINGAME().getWindow().launchMenu(true);
+                Global.MAINGAME().getWindow().launchMenu(true, false);
             } catch (Exception e1) {
                 e1.printStackTrace();
                 System.out.println(e1);

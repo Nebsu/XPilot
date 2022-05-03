@@ -20,7 +20,7 @@ public final class Help extends JPanel {
 	private final Font textFont;
 	private final Color textColor;
 
-	public Help() throws IOException {
+	public Help(boolean beginning) throws IOException {
 		// Panel :
 		super();
 		setFocusable(true);
@@ -37,7 +37,7 @@ public final class Help extends JPanel {
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Global.MAINGAME().getWindow().launchMenu(false);
+				Global.MAINGAME().getWindow().launchMenu(false, beginning);
 			}
 		});
 		// Text lines :

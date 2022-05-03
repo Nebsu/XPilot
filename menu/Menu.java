@@ -20,13 +20,20 @@ public final class Menu extends JPanel {
 	private final JButton help;
 	private final JButton quit;
 
-	// Sub sections :
-	private final Settings settingsPanel = new Settings();
-	private final Help helpPanel = new Help();
+	// Is main menu or level menu :
+	private final boolean beginning;
 
-	public Menu() throws IOException {
+	// Sub sections :
+	private final Settings settingsPanel;
+	private final Help helpPanel;
+
+	public Menu(boolean b) throws IOException {
 		// Panel initialisation :
 		super();
+		this.beginning = b;
+		Global.changeMenuState(this.beginning);
+		this.settingsPanel = new Settings(this.beginning);
+		this.helpPanel = new Help(this.beginning);
 		setFocusable(true);
 		setBackground(Color.BLACK);
 		requestFocus();
@@ -35,10 +42,12 @@ public final class Menu extends JPanel {
 		// Logo :
 		this.logo = ImageIO.read(new File("ressources/images/logo1.png"));
 		// Buttons :
-		this.start = new TextButton("Start");
+		String s1 = (beginning)? "Start" : "Resume";
+		this.start = new TextButton(s1);
 		this.settings = new TextButton("Settings");
 		this.help = new TextButton("Help");
-		this.quit = new TextButton("Quit");
+		String s2 = (beginning)? "Exit" : "Quit Level";
+		this.quit = new TextButton(s2);
 		this.start.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
 							 Global.W_HEIGHT()/2 - (3*Constants.BUTTON_HEIGHT/2), 
 							 Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
@@ -81,10 +90,15 @@ public final class Menu extends JPanel {
 		this.quit.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				System.exit(0);
+				if (beginning)
+					System.exit(0);
+				else 
+					Global.MAINGAME().getWindow().launchMenu(true, true);
 			}
 		});
 	}
+
+	public final boolean isBeginning() {return beginning;}
 
 	@Override
 	protected void paintComponent(Graphics g) {
