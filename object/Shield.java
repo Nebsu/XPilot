@@ -1,14 +1,13 @@
 /**
  * Shields are used to protect the ship from enemy fire
  */
+
 package object;
 
-public class Shield {
+public final class Shield {
     
     private boolean active = false;
     private int quantity = 5;
-    
-    public Shield(){}
 
     public void destroy(){
         quantity -= 1;
@@ -33,4 +32,5 @@ public class Shield {
     public void add(){
         quantity += 1;
     }
+    
 }

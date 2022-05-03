@@ -117,8 +117,8 @@ public final class GameLoop implements Game, Runnable {
      * @return Nothing.
      */
     public final boolean checkCollision() {
-        Rectangle s = new Rectangle((int) (ship.getX() + ship.SPEED * Math.cos(Math.toRadians(ship.rotation))), 
-                      (int) (ship.getY() + ship.SPEED * Math.sin(Math.toRadians(ship.rotation))), 16, 16);
+        Rectangle s = new Rectangle((int) (ship.getX() + ship.getSpeed() * Math.cos(Math.toRadians(ship.getRotation()))), 
+                      (int) (ship.getY() + ship.getSpeed() * Math.sin(Math.toRadians(ship.getRotation()))), 16, 16);
         for (Obstacle obstacle : map.getObstacles()) {
             Rectangle o = new Rectangle(obstacle.getX()[0], obstacle.getY()[0], obstacle.getX()[1] - obstacle.getX()[0], 
                                         obstacle.getY()[2] - obstacle.getY()[1]);
@@ -143,7 +143,7 @@ public final class GameLoop implements Game, Runnable {
                         getShip().setFuel(getShip().getFuel() + 500);
                     }
                 }
-                getShip().shield.add();
+                getShip().getShield().add();
                 view.erase(bo);
                 getMap().getBonuses().remove(bo);
             }
@@ -157,7 +157,7 @@ public final class GameLoop implements Game, Runnable {
             getShip().move();
             getShip().acceleration();
             getShip().deceleration();
-            if (getShip().moveFlag) getShip().consumeFuel();
+            if (getShip().getMoveFlag()) getShip().consumeFuel();
         }
     }
 
@@ -174,11 +174,11 @@ public final class GameLoop implements Game, Runnable {
             Rectangle r = m.getBounds();
             Rectangle s = getShip().getBounds();
             if (r.intersects(s)) {
-                if (getMissiles().get(i).shooter == 2) {
+                if (getMissiles().get(i).getShooter() == 2) {
                     getMissiles().remove(m);
-                    if (getShip().shield.isActive()) {
-                        getShip().shield.destroy();
-                        getShip().shield.disable();
+                    if (getShip().getShield().isActive()) {
+                        getShip().getShield().destroy();
+                        getShip().getShield().disable();
                     } else {
                         getShip().setHealth(getShip().getHealth() - 100);
                     }
@@ -186,7 +186,7 @@ public final class GameLoop implements Game, Runnable {
             }
             for (Obstacle ob : getMap().getObstacles()) {
                 Rectangle o = new Rectangle(ob.getX()[0], ob.getY()[0], ob.getX()[1] - ob.getX()[0], ob.getY()[2] - ob.getY()[1]);
-                if (r.intersects(o) && (m instanceof MissileNormale || m instanceof MissileDiffusion)) {
+                if (r.intersects(o) && (m instanceof MissileNormal || m instanceof MissileDiffusion)) {
                     getMissiles().remove(m);
                 } else if (r.intersects(o) && (m instanceof Rocket)) {
                     int angle;
@@ -194,10 +194,10 @@ public final class GameLoop implements Game, Runnable {
                         getMissiles().remove(m);
                     }
                     ((Rocket) m).rebounce += 1;
-                    if (((Rocket) m).getdirection() < 0) {
-                        angle = ((Rocket) m).getdirection() + 360;
+                    if (((Rocket) m).getDirection() < 0) {
+                        angle = ((Rocket) m).getDirection() + 360;
                     } else {
-                        angle = ((Rocket) m).getdirection();
+                        angle = ((Rocket) m).getDirection();
                     }
                     if (angle > 270) {
                         // ((Rocket)m).setDirection(180-angle);
@@ -221,7 +221,7 @@ public final class GameLoop implements Game, Runnable {
         for (Enemy e : getMap().getEnemies()) {
             double f = Math.sqrt(Math.pow(getShip().getX() - e.getX(), 2) + Math.pow(getShip().getY() - e.getY(), 2));
             if (f < Constants.RANGE && e.canShoot()) {
-                getMissiles().add(new MissileNormale(e.getX(), e.getY(),
+                getMissiles().add(new MissileNormal(e.getX(), e.getY(),
                                   (int) Math.toDegrees(e.getRad(getShip().getX(), getShip().getY())), 2));
             }
         }
@@ -241,9 +241,9 @@ public final class GameLoop implements Game, Runnable {
         if (!checkCollision()) updateShip();
         else {
             if (ship.canTakeDamage()) {
-                if (ship.shield.isActive()) {
-                    ship.shield.destroy();
-                    ship.shield.disable();
+                if (ship.getShield().isActive()) {
+                    ship.getShield().destroy();
+                    ship.getShield().disable();
                 } else {
                     ship.setHealth(ship.getHealth() - 50);
                 }

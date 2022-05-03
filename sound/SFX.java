@@ -1,6 +1,4 @@
-/**
- * This class is used to play sound effects
- */
+/** This class is used to play the sound effects files*/
 
 package sound;
 
@@ -18,9 +16,6 @@ public class SFX {
     private Clip clip;
     private FloatControl GAIN;
     private static float SFX_VOLUME = 0.0f;
-
-    public final float getMusicVolume() {return SFX_VOLUME;}
-    public static final void setMusicVolume(float volume) {SFX_VOLUME = volume;}
 
     public SFX(String filepath) {
         try {
@@ -43,6 +38,10 @@ public class SFX {
         GAIN = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         GAIN.setValue(SFX_VOLUME); // Reduce volume by 10 decibels.
     }
+
+    // Getters / Setters :
+    public final float getMusicVolume() {return SFX_VOLUME;}
+    public static final void setMusicVolume(float volume) {SFX_VOLUME = volume;}
 
     public final void playSound() throws LineUnavailableException, IOException {
         clip.start();

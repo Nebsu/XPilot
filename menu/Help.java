@@ -1,5 +1,6 @@
 package menu;
 
+import main.Constants;
 import main.Global;
 
 import java.awt.event.*;
@@ -11,18 +12,13 @@ import java.io.*;
 import java.util.ArrayList;
 import javax.swing.JLabel;
 
-public class Help extends JPanel {
+public final class Help extends JPanel {
 
-	// Vue :
 	private final BufferedImage logo;
 	private final IconButton backButton;
 	private final ArrayList<JLabel> textLabels;
 	private final Font textFont;
 	private final Color textColor;
-
-	// Size constants :
-	private static final int titleWidth = 550;
-	private static final int titleHeight = 115;
 
 	public Help() throws IOException {
 		// Panel :
@@ -74,9 +70,10 @@ public class Help extends JPanel {
 	}
 	
 	@Override
-	protected final void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(logo, Global.W_WIDTH() / 2 - titleWidth / 2, Global.W_HEIGHT() / 8 - titleHeight / 8, null);
+		g.drawImage(logo, Global.W_WIDTH() / 2 - Constants.TITLE_WIDTH / 2, 
+					Global.W_HEIGHT() / 8 - Constants.TITLE_HEIGHT / 8, null);
 	}
 
 	private static final int textW() {

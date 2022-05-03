@@ -1,11 +1,10 @@
 package object;
 
-public class Rocket extends Missile{
+public final class Rocket extends Missile {
+
     private final int MISSILE_SPEED = 30;
     private int direction;
     public int rebounce = 0;
-    public int shooter;
-
 
     public Rocket(double x, double y, int rotation, int shooter) {
         super(x, y, shooter);
@@ -18,11 +17,12 @@ public class Rocket extends Missile{
     }
 
     @Override
-    public int getdirection() {
+    public int getDirection() {
         return this.direction;
     }
     
-    public void setDirection(int direction) {
+    public final void setDirection(int direction) {
         this.direction = direction;
     }
+
 }

@@ -19,6 +19,16 @@ public final class Constants {
     public static final Music GAME_MUSIC = new Music("ressources/audio/gamemusic.wav");
     public static final Music MENU_MUSIC = new Music("ressources/audio/menuMusic.wav");
 
+    // Menu title properties :
+    public static final int TITLE_WIDTH = 550;
+	public static final int TITLE_HEIGHT = 115;
+
+    // Buttons properties :
+    public static final int BUTTON_WIDTH = 120;
+	public static final int BUTTON_HEIGHT = 60;
+    public static final int WASD_B_WIDTH = 150;
+	public static final int WASD_B_HEIGHT = 50;
+
     // Commands :
     public static final CustomKeys CUSTOM_KEYS = new CustomKeys();
 

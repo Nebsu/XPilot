@@ -42,40 +42,41 @@ public final class GameKeys implements KeyListener {
             Global.MAINGAME().getView().fire();
         }
         if (key == Constants.CUSTOM_KEYS.getUp()){
-            if(Global.MAINGAME().getGame().getShip().timerStartFlag){
-                Global.MAINGAME().getGame().getShip().timerStartFlag = false;
+            if(Global.MAINGAME().getGame().getShip().getTimerStartFlag()){
+                Global.MAINGAME().getGame().getShip().setTimerStartFlag(false);
             }
-            if(!Global.MAINGAME().getGame().getShip().moveFlag)
-                Global.MAINGAME().getGame().getShip().moveTime = System.currentTimeMillis();
-            Global.MAINGAME().getGame().getShip().canDecelerate = false;
-            Global.MAINGAME().getGame().getShip().moveFlag = true;
-            Global.MAINGAME().getGame().getShip().canAccelerate = true;
+            if(!Global.MAINGAME().getGame().getShip().getMoveFlag())
+                Global.MAINGAME().getGame().getShip().setMoveTime( System.currentTimeMillis());
+            Global.MAINGAME().getGame().getShip().setCanDecelerate(false);
+            Global.MAINGAME().getGame().getShip().setMoveFlag(true);
+            Global.MAINGAME().getGame().getShip().setCanAccelerate(true);
 
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            if(Global.MAINGAME().getGame().getShip().timerStartFlag){
-                Global.MAINGAME().getGame().getShip().timerStartFlag = false;
+            if(Global.MAINGAME().getGame().getShip().getTimerStartFlag()){
+                Global.MAINGAME().getGame().getShip().setTimerStartFlag(false);
             }
-            Global.MAINGAME().getGame().getShip().leftRotationFlag = true;
+            Global.MAINGAME().getGame().getShip().setLeftRotationFlag(true);
         }
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            if(Global.MAINGAME().getGame().getShip().timerStartFlag){
-                Global.MAINGAME().getGame().getShip().timerStartFlag = false;
+            if(Global.MAINGAME().getGame().getShip().getTimerStartFlag()){
+                Global.MAINGAME().getGame().getShip().setTimerStartFlag(false);
             }
-            Global.MAINGAME().getGame().getShip().rightRotationFlag = true;
+            Global.MAINGAME().getGame().getShip().setRightRotationFlag(true);
         }
         if (key == Constants.CUSTOM_KEYS.getShield()){
-            if(!Global.MAINGAME().getGame().getShip().shield.isActive() && 
-                Global.MAINGAME().getGame().getShip().shield.getQuantity() > 0){
-                Global.MAINGAME().getGame().getShip().shield.enable();
+            if(!Global.MAINGAME().getGame().getShip().getShield().isActive() && 
+                Global.MAINGAME().getGame().getShip().getShield().getQuantity() > 0){
+                Global.MAINGAME().getGame().getShip().getShield().enable();
             }else{
-                Global.MAINGAME().getGame().getShip().shield.disable();
+                Global.MAINGAME().getGame().getShip().getShield().disable();
             }
         }
         if (key == Constants.CUSTOM_KEYS.getSwitch()){
-            Global.MAINGAME().getGame().getShip().missile_switch += 1;
-            if(Global.MAINGAME().getGame().getShip().missile_switch > 2){
-                Global.MAINGAME().getGame().getShip().missile_switch = 1;
+            Global.MAINGAME().getGame().getShip().setMissileSwitch(
+            Global.MAINGAME().getGame().getShip().getMissileSwitch() + 1);
+            if(Global.MAINGAME().getGame().getShip().getMissileSwitch() > 2){
+                Global.MAINGAME().getGame().getShip().setMissileSwitch(1);
             }
         }
         if (key == Constants.CUSTOM_KEYS.getFullScreen()){
@@ -88,15 +89,15 @@ public final class GameKeys implements KeyListener {
         if (Global.IS_MENU()) return;
         int key = e.getKeyCode();
         if (key == Constants.CUSTOM_KEYS.getRight()) {
-            Global.MAINGAME().getGame().getShip().rightRotationFlag = false;
+            Global.MAINGAME().getGame().getShip().setRightRotationFlag(false);
         }
         if (key == Constants.CUSTOM_KEYS.getLeft()) {
-            Global.MAINGAME().getGame().getShip().leftRotationFlag = false;
+            Global.MAINGAME().getGame().getShip().setLeftRotationFlag(false);
         }
         if (key == Constants.CUSTOM_KEYS.getUp()) {
-            Global.MAINGAME().getGame().getShip().canDecelerate = true;
-            Global.MAINGAME().getGame().getShip().canAccelerate = false;
-            Global.MAINGAME().getGame().getShip().moveFlag = false;
+            Global.MAINGAME().getGame().getShip().setCanDecelerate(true);
+            Global.MAINGAME().getGame().getShip().setCanAccelerate(false);
+            Global.MAINGAME().getGame().getShip().setMoveFlag(false);
         }
     }
     

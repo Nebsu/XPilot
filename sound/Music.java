@@ -1,6 +1,4 @@
-/**
- * This class is used to play music
- */
+/** This class is used to play the music files */
 
 package sound;
 
@@ -21,9 +19,6 @@ public final class Music {
     private FloatControl GAIN;
     private static float MUSIC_VOLUME = 0.0f;
     private long startPos;
-
-    public final float getMusicVolume() {return MUSIC_VOLUME;}
-    public static final void setMusicVolume(float volume) {MUSIC_VOLUME = volume;}
     
     public Music(String filepath) {
         try {
@@ -47,6 +42,10 @@ public final class Music {
         GAIN = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
         GAIN.setValue(MUSIC_VOLUME);
     }
+
+    // Getters / Setters :
+    public final float getMusicVolume() {return MUSIC_VOLUME;}
+    public static final void setMusicVolume(float volume) {MUSIC_VOLUME = volume;}
 
     public final void changeGain(float gain) {
         GAIN.setValue(gain);

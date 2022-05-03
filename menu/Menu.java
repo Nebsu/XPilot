@@ -1,5 +1,6 @@
 package menu;
 
+import main.Constants;
 import main.Global;
 
 import javax.imageio.ImageIO;
@@ -12,29 +13,19 @@ import java.io.*;
 
 public final class Menu extends JPanel {
 
-	// Vue :
+	// View :
 	private final BufferedImage logo;
 	private final JButton start;
 	private final JButton settings;
 	private final JButton help;
 	private final JButton quit;
 
-	// Sections :
+	// Sub sections :
 	private final Settings settingsPanel = new Settings();
 	private final Help helpPanel = new Help();
 
-	// Getters :
-	public final Settings getSettingsPanel() {return settingsPanel;}
-	public final Help getHelpPanel() {return helpPanel;}
-
-	// Size constants :
-	private static final int buttonWidth = 120;
-	private static final int buttonHeight = 60;
-	private static final int titleWidth = 550;
-	private static final int titleHeight = 115;
-
 	public Menu() throws IOException {
-		// Initialisation du panel :
+		// Panel initialisation :
 		super();
 		setFocusable(true);
 		setBackground(Color.BLACK);
@@ -43,22 +34,29 @@ public final class Menu extends JPanel {
 		this.setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
 		// Logo :
 		this.logo = ImageIO.read(new File("ressources/images/logo1.png"));
-		// Ajout des boutons :
+		// Buttons :
 		this.start = new TextButton("Start");
 		this.settings = new TextButton("Settings");
 		this.help = new TextButton("Help");
 		this.quit = new TextButton("Quit");
-		this.start.setBounds(Global.W_WIDTH()/2 - buttonWidth/2, Global.W_HEIGHT()/2 - (3*buttonHeight/2), buttonWidth, buttonHeight);
-		this.settings.setBounds(Global.W_WIDTH()/2 - buttonWidth/2, Global.W_HEIGHT()/2, buttonWidth, buttonHeight);
-		this.help.setBounds(Global.W_WIDTH()/2 - buttonWidth/2, Global.W_HEIGHT()/2 + (3*buttonHeight/2), buttonWidth, buttonHeight);
-		this.quit.setBounds(Global.W_WIDTH()/2 - buttonWidth/2, Global.W_HEIGHT()/2 + (6*buttonHeight/2), buttonWidth, buttonHeight);
+		this.start.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+							 Global.W_HEIGHT()/2 - (3*Constants.BUTTON_HEIGHT/2), 
+							 Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
+		this.settings.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, Global.W_HEIGHT()/2, 
+								Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
+		this.help.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+							Global.W_HEIGHT()/2 + (3*Constants.BUTTON_HEIGHT/2), 
+							Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
+		this.quit.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+							Global.W_HEIGHT()/2 + (6*Constants.BUTTON_HEIGHT/2), 
+							Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
 		this.add(start);
 		this.add(settings);
 		this.add(help);
 		this.add(quit);
 		this.invalidate();
 		this.repaint();
-		// Action Listener des boutons :
+		// Buttons action listeners :
 		this.start.addActionListener(e -> {
 			try {
 				Global.MAINGAME().getWindow().launchGame();
@@ -89,14 +87,14 @@ public final class Menu extends JPanel {
 	}
 
 	@Override
-	protected final void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(logo, Global.W_WIDTH()/2 - titleWidth/2, Global.W_HEIGHT()/8 - titleHeight/8, null);
+		g.drawImage(logo, Global.W_WIDTH()/2 - Constants.TITLE_WIDTH/2, 
+					Global.W_HEIGHT()/8 - Constants.TITLE_HEIGHT/8, null);
 	}
 
-	public final void setSettingsPanel() {
-		add(BorderLayout.CENTER, settingsPanel);
-        this.repaint();
-	}
+	// Getters :
+	public final Settings getSettingsPanel() {return settingsPanel;}
+	public final Help getHelpPanel() {return helpPanel;}
 
 }

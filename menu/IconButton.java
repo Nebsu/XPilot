@@ -11,8 +11,6 @@ public final class IconButton extends MyButton {
 
     private final Image iconImage;
     private final Icon icon;
-    
-    public final Icon getIcon() {return icon;}
 
     public IconButton(String filepath) {
         super();
@@ -30,5 +28,7 @@ public final class IconButton extends MyButton {
         }
         return null;
     }
+
+    public final Icon getIcon() {return icon;}
     
 }

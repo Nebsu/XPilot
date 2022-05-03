@@ -19,7 +19,6 @@ import java.awt.Color;
 
 public final class Settings extends JPanel {
 
-	// Vue :
 	private final BufferedImage logo;
 	private final IconButton backButton;
 	private final JSlider musicVolumeSlider;
@@ -30,12 +29,6 @@ public final class Settings extends JPanel {
 	private final JLabel wasdInfo;
 	private final Font textFont;
 	private final Color textColor;
-
-	// Size constants :
-	private static final int titleWidth = 550;
-	private static final int titleHeight = 115;
-	private static final int bW = 150;
-	private static final int bH = 50;
 
 	public Settings() throws IOException {
 		// Panel :
@@ -78,7 +71,7 @@ public final class Settings extends JPanel {
 		sfxVolumeSlider.addChangeListener(e2);
 		// WASD Mode button :
 		this.wasdMode = new TextButton("WASD MODE");
-		this.wasdMode.setBounds(bX(), bY(), bW, bH);
+		this.wasdMode.setBounds(bX(), bY(), Constants.WASD_B_WIDTH, Constants.WASD_B_HEIGHT);
 		this.add(this.wasdMode);
 		wasdMode.addActionListener(new ActionListener() {
 			@Override
@@ -94,7 +87,7 @@ public final class Settings extends JPanel {
 				repaint();
 			}
 		});
-		// Text Labels :
+		// Text labels :
 		this.textFont = new Font("Tahoma", Font.PLAIN, 22);
 		this.textColor = new Color(148, 148, 148);
 		this.musicVolInfo = new JLabel("Music Volume : " + String.valueOf(Global.MUSIC_VOLUME()));
@@ -109,7 +102,7 @@ public final class Settings extends JPanel {
 		this.add(this.sfxVolInfo);
 		String status = (Global.WASD_MODE())? "ON" : "OFF";
 		this.wasdInfo = new JLabel("Status : " + status);
-		this.wasdInfo.setBounds(bX(), text3Y(), bW, 30);
+		this.wasdInfo.setBounds(bX(), text3Y(), Constants.WASD_B_WIDTH, 30);
 		this.wasdInfo.setFont(this.textFont);
 		this.wasdInfo.setForeground(this.textColor);
 		this.add(this.wasdInfo);
@@ -119,12 +112,13 @@ public final class Settings extends JPanel {
 	}
 
 	@Override
-	protected final void paintComponent(Graphics g) {
+	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(logo, Global.W_WIDTH() / 2 - titleWidth / 2, Global.W_HEIGHT() / 8 - titleHeight / 8, null);
+		g.drawImage(logo, Global.W_WIDTH() / 2 - Constants.TITLE_WIDTH / 2, 
+					Global.W_HEIGHT() / 8 - Constants.TITLE_HEIGHT / 8, null);
 	}
 
-	public final class MusEvent implements ChangeListener {
+	private final class MusEvent implements ChangeListener {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
@@ -138,7 +132,7 @@ public final class Settings extends JPanel {
 
 	}
 
-	public final class SFXEvent implements ChangeListener {
+	private final class SFXEvent implements ChangeListener {
 
 		@Override
 		public void stateChanged(ChangeEvent e) {
@@ -154,9 +148,9 @@ public final class Settings extends JPanel {
 
 	public final void setSoundVolume(int value, boolean isMusic) {
 		float volume = -80.0f;
-		if (value==0) volume = -80.0f; // muet
-		else if (value==100) volume = 0.0f; // son à max
-		else volume = -20.0f + (float) value / 10 * 2.0f; // valeur slider
+		if (value==0) volume = -80.0f; // mute
+		else if (value==100) volume = 0.0f; // maximum volume (cliping above 0 db)
+		else volume = -20.0f + (float) value / 10 * 2.0f; // slider value
 		if (isMusic) {
 			Music.setMusicVolume(volume);
 			Constants.MENU_MUSIC.changeGain(volume);
@@ -182,6 +176,7 @@ public final class Settings extends JPanel {
 	private static final int slider1H() {
 		return Global.W_HEIGHT() / 32;
 	}
+	
 	private static final int slider2X() {
 		return Global.W_WIDTH() / 2 - (Global.W_WIDTH() / 4) / 2;
 	}
@@ -199,7 +194,7 @@ public final class Settings extends JPanel {
 	}
 
 	private static final int bX() {
-		return Global.W_WIDTH()/2 - bW/2;
+		return Global.W_WIDTH()/2 - Constants.WASD_B_WIDTH/2;
 	}
 
 	private static final int bY(){

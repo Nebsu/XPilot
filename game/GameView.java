@@ -94,17 +94,17 @@ public final class GameView extends JPanel implements ActionListener {
                 // Paint Missile in the second image :
                 if (missile instanceof MissileDiffusion) {
                     MissileDiffusion represent = (MissileDiffusion) missile;
-                    for (MissileNormale tmp : represent.getDiffusion()) {
+                    for (MissileNormal tmp : represent.getDiffusion()) {
                         af2.setToIdentity();
                         af2.translate((int) tmp.getX(), (int) tmp.getY());
-                        af2.rotate(Math.toRadians(tmp.getdirection()), tmp.getImage().getWidth(this) / 2, 
+                        af2.rotate(Math.toRadians(tmp.getDirection()), tmp.getImage().getWidth(this) / 2, 
                                    tmp.getImage().getHeight(this) / 2);
                         g3.drawImage(tmp.getImage(), af2, null);
                     }
                 } else {
                     af2.setToIdentity();
                     af2.translate((int) missile.getX(), (int) missile.getY());
-                    af2.rotate(Math.toRadians(missile.getdirection()), missile.getImage().getWidth(this) / 2, 
+                    af2.rotate(Math.toRadians(missile.getDirection()), missile.getImage().getWidth(this) / 2, 
                                missile.getImage().getHeight(this) / 2);
                     g3.drawImage(missile.getImage(), af2, null);
                 }
@@ -126,7 +126,7 @@ public final class GameView extends JPanel implements ActionListener {
             // Spaceship functions :
             af.setToIdentity();
             af.translate(Global.W_WIDTH() / 2, Global.W_HEIGHT() / 2);
-            af.rotate(Math.toRadians(game.getShip().rotation), game.getShip().getImage().getWidth(this) / 2, 
+            af.rotate(Math.toRadians(game.getShip().getRotation()), game.getShip().getImage().getWidth(this) / 2, 
                       game.getShip().getImage().getHeight(this) / 2);
             g2.drawImage(game.getShip().getImage(), af, null);
             // Ball functions :
@@ -150,12 +150,12 @@ public final class GameView extends JPanel implements ActionListener {
      */
     private final void drawShield(Graphics2D g) {
         // Shield quantity :
-        String msg = Integer.toString(game.getShip().shield.getQuantity());
+        String msg = Integer.toString(game.getShip().getShield().getQuantity());
         g.setColor(Color.GREEN);
         Font ft = new Font("Helvetica", Font.BOLD, 20);
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
-        if (game.getShip().shield.getQuantity() >= 10) {
+        if (game.getShip().getShield().getQuantity() >= 10) {
             g.drawString(msg, Global.W_WIDTH() - fm.stringWidth(msg) - 19, 38);
         } else {
             g.drawString(msg, Global.W_WIDTH() - fm.stringWidth(msg) - 24, 38);
@@ -168,7 +168,7 @@ public final class GameView extends JPanel implements ActionListener {
         g.drawPolygon(p);
         // Shield protecting ship :
         Polygon p2 = new Polygon();
-        if (game.getShip().shield.isActive()) {
+        if (game.getShip().getShield().isActive()) {
             // g.setColor(Color.WHITE);
             for (int i = 0; i < 6; i++)
                 p2.addPoint((int) (Global.W_WIDTH() / 2 + 6 + 20 * Math.cos(i * 2 * Math.PI / 6)), 
@@ -244,17 +244,17 @@ public final class GameView extends JPanel implements ActionListener {
      */
     public final void drawMissileIndicator(Graphics2D g) {
         g.setColor(Color.GREEN);
-        if (game.getShip().missile_switch == 1) {
+        if (game.getShip().getMissileSwitch() == 1) {
             g.drawImage(singleShot, 10, 15, null);
         } else {
             g.drawImage(multiShot, 10, 15, null);
         }
-        String msg = Integer.toString(game.getShip().missile_left);
+        String msg = Integer.toString(game.getShip().getMissileLeft());
         g.setColor(Color.GREEN);
         Font ft = new Font("Helvetica", Font.BOLD, 20);
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
-        if (game.getShip().missile_left >= 10) {
+        if (game.getShip().getMissileLeft() >= 10) {
             g.drawString(msg, fm.stringWidth(msg) + 20, 37);
         } else {
             g.drawString(msg, fm.stringWidth(msg) + 35, 37);
@@ -304,14 +304,14 @@ public final class GameView extends JPanel implements ActionListener {
      *  Plays the shooting sound efffect.
      */
     public final void fire() {
-        if (game.getShip().missile_left > 0) {
-            if(game.getShip().missile_switch == 2 && game.getShip().missile_left >= 5){
+        if (game.getShip().getMissileLeft()> 0) {
+            if(game.getShip().getMissileSwitch() == 2 && game.getShip().getMissileLeft() >= 5){
                 MissileDiffusion s = new MissileDiffusion(game.getShip().getX(), game.getShip().getY(), 
-                                    game.getShip().rotation, 1);
+                                    game.getShip().getRotation(), 1);
                 for(int i=0;i<5;i++){
                     game.getMissiles().add(s.getDiffusion()[i]);
                 }
-                game.getShip().missile_left -= 5;
+                game.getShip().setMissileLeft(game.getShip().getMissileLeft() - 5);
                 try {
                     SFX pew = new SFX("ressources/audio/pew.wav");
                     pew.playSound();
@@ -320,10 +320,10 @@ public final class GameView extends JPanel implements ActionListener {
                     System.out.println(e2);
                     System.exit(1);
                 }
-            }else if(game.getShip().missile_switch == 1){
+            }else if(game.getShip().getMissileSwitch() == 1){
                 game.getMissiles().add(new Rocket(game.getShip().getX(), game.getShip().getY(), 
-                                                  game.getShip().rotation, 1));
-                game.getShip().missile_left -= 1;
+                                                  game.getShip().getRotation(), 1));
+                game.getShip().setMissileLeft(game.getShip().getMissileLeft() - 1);
                 try {
                     SFX pew = new SFX("ressources/audio/pew.wav");
                     pew.playSound();

@@ -9,24 +9,11 @@ import java.awt.event.*;
 
 public abstract class MyButton extends JButton {
 
-    private boolean over;
-    private Color color;
-    private Color colorOver;
-    private Color borderColor;
-    private int radius;
-
-    public final boolean isOver() {return over;}
-    public final Color getColor() {return color;}
-    public final Color getColorOver() {return colorOver;}
-    public final Color getBorderColor() {return borderColor;}
-    public final int getRadius() {return radius;}
-
-    public final void setOver(boolean over) {this.over = over;}
-    public final void setColor(Color color) {this.color = color;}
-    public final void setColorOver(Color c) {this.colorOver = c;}
-    public final void setBorderColor(Color color) {this.borderColor = color;}
-    public final void setRadius(int radius) {this.radius = radius;}
-
+    protected boolean over;
+    protected Color color;
+    protected Color colorOver;
+    protected Color borderColor;
+    protected int radius;
 
     public MyButton() {
         this.radius = 0;
