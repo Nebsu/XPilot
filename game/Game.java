@@ -19,5 +19,6 @@ public interface Game {
     public void update();
     public boolean hasGameStarted();
     public void gameStart();
+    public GameLoop getLoop();
 
 }

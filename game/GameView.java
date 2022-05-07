@@ -13,6 +13,7 @@ import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
+import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import java.awt.geom.AffineTransform;
 
@@ -70,12 +71,7 @@ public final class GameView extends JPanel implements ActionListener {
             }
         } else {
             drawGameOver(g);
-            // setLayout(null);
-            // TextButton quit = new TextButton("Quit");
-            // quit.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
-            //                      Global.W_HEIGHT()/2 - (3*Constants.BUTTON_HEIGHT/2), 
-            //                      Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
-            // add(quit);
+
         }
     }
 
@@ -301,6 +297,29 @@ public final class GameView extends JPanel implements ActionListener {
         g.setFont(ft);
         g.setColor(Color.white);
         g.drawString(msg, (Global.W_WIDTH() - fm.stringWidth(msg)) / 2, Global.W_HEIGHT() / 2);
+        
+        setLayout(null);
+        TextButton replay = new TextButton("Play Again");
+        replay.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+                             Global.W_HEIGHT() - (3*Constants.BUTTON_HEIGHT/2), 
+                             Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
+        add(replay);
+        replay.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.getLoop().resetLevel();
+                game.getLoop().switchLevel();
+                setInGame(true);
+                try {
+                    Constants.GAME_MUSIC.stopMusic();
+                    Global.MAINGAME().getWindow().launchMenu(true, true);
+                } catch (Exception e1) {
+                    e1.printStackTrace();
+                    System.out.println(e1);
+                    System.exit(1);
+                }
+            }
+        });
     }
 
     /** 

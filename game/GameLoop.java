@@ -62,6 +62,7 @@ public final class GameLoop implements Game, Runnable {
     @Override public ArrayList<Missile> getMissiles() {return this.missile;}
     @Override public GameKeys getKeys() {return keys;}
     @Override public boolean hasGameStarted() {return gameStarted;}
+    @Override public GameLoop getLoop() {return this;}
 
     /** Game Loop */
     @Override
@@ -113,6 +114,10 @@ public final class GameLoop implements Game, Runnable {
         }
     }
 
+    public void resetLevel(){
+        this.level = 0;
+    }
+
     /**
      * If the player's health or fuel is less than or equal to zero, the game is over
      */
@@ -125,8 +130,6 @@ public final class GameLoop implements Game, Runnable {
 
     /**
      * Check if the ship collides with an obstacle
-     *
-     * @return Nothing.
      */
     public final boolean checkCollision() {
         Rectangle s = new Rectangle((int) (ship.getX() + ship.getSpeed() * Math.cos(Math.toRadians(ship.getRotation()))), 

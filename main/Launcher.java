@@ -10,5 +10,4 @@ public final class Launcher {
     public static void main(String[] args) throws IOException {
         new Thread(new GameLoop()).start();
     }
-
 }
