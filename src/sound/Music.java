@@ -2,8 +2,6 @@
 
 package src.sound;
 
-import src.main.Globals;
-
 import java.io.*;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
