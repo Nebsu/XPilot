@@ -6,6 +6,8 @@ import sound.Music;
 
 import java.awt.*;
 
+import game.CustomKeys;
+
 public final class Constants {
 
     // Fullscreen variables :

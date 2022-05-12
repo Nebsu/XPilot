@@ -276,19 +276,24 @@ public final class GameView extends JPanel implements ActionListener {
         for (int i = 0; i < game.getMap().getInforMap().length; i++) {
             for (int j = 0; j < game.getMap().getInforMap().length; j++) {
                 if (game.getMap().getInforMap()[i][j] == '-' || game.getMap().getInforMap()[i][j] == 'X' || game.getMap().getInforMap()[i][j] == 'B' || game.getMap().getInforMap()[i][j] == 'S') {
+                    // Dessine la partie libre/ non affichée
                     g.setColor(Color.BLACK);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 }
                 if (game.getMap().getInforMap()[i][j] == 'W') {
+                    // Dessine le mur
                     g.setColor(Color.YELLOW);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 } else if (game.getMap().getInforMap()[i][j] == 'G') {
+                    // Dessine l'arrivée
                     g.setColor(Color.GREEN);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 } else if (game.getMap().getInforMap()[i][j] == 'X') {
+                    // Dessine les ennemies
                     g.setColor(Color.RED);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 } else if (game.getMap().getInforMap()[i][j] == 'O') {
+                    // Dessine les murs cassables
                     g.setColor(Color.ORANGE);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 } 

@@ -3,9 +3,11 @@
  *  designed for left handed users.
  */
 
-package main;
+package game;
 
 import java.awt.event.KeyEvent;
+
+import main.Global;
 
 public final class CustomKeys {
 
