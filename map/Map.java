@@ -10,6 +10,8 @@ import java.util.LinkedList;
 import java.util.Random;
 import javax.imageio.*;
 
+import object.Enemy;
+
 public final class Map {
 	
     private BufferedImage img_map;

@@ -1,4 +1,4 @@
-package map;
+package object;
 
 import main.Constants;
 
