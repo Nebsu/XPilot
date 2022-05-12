@@ -2,7 +2,7 @@
 
 package sound;
 
-import main.Global;
+import main.Globals;
 
 import java.io.*;
 import javax.sound.sampled.AudioSystem;
@@ -52,8 +52,8 @@ public final class Music {
     }
 
     public final void playMusic() throws LineUnavailableException, IOException {
-        if (Global.IS_MENU()) {
-            if (!Global.IS_TOP_MENU()) {
+        if (Globals.IS_MENU()) {
+            if (!Globals.IS_TOP_MENU()) {
                 this.startPos = 0;
                 clip.setMicrosecondPosition(startPos);
             } else {
@@ -65,7 +65,7 @@ public final class Music {
     }
 
     public final void stopMusic() {
-        if (Global.IS_MENU()) startPos = clip.getMicrosecondPosition();
+        if (Globals.IS_MENU()) startPos = clip.getMicrosecondPosition();
         clip.stop();
     }
 

@@ -8,7 +8,7 @@ package game;
 import map.*;
 import object.*;
 import main.Constants;
-import main.Global;
+import main.Globals;
 import main.Window;
 
 import java.util.ArrayList;
@@ -49,7 +49,7 @@ public final class GameLoop implements Game, Runnable {
         keys = new GameKeys();
         win = new Window();
         win.addKeyListener(keys);
-        Global.initMainGame(this);
+        Globals.initMainGame(this);
     }
 
     // Getters :
@@ -73,7 +73,7 @@ public final class GameLoop implements Game, Runnable {
         nextStatTime = System.currentTimeMillis() + 1000;
         while (running) {
             win.requestFocus();
-            if (!Global.IS_MENU()) {
+            if (!Globals.IS_MENU()) {
                 currentTime = System.currentTimeMillis();
                 double lastRenderTimeSeconds = (currentTime - lastUpdate) / 1000d;
                 accumulator += lastRenderTimeSeconds;
@@ -304,17 +304,17 @@ public final class GameLoop implements Game, Runnable {
     }
 
     public final void switchFullScreenMode() {
-        Global.setACT_FULLSCREEN(true);
-        Global.setFULLSCREEN(!Global.FULLSCREEN());
-        if (Global.FULLSCREEN() && Global.ACT_FULLSCREEN()) {
+        Globals.setACT_FULLSCREEN(true);
+        Globals.setFULLSCREEN(!Globals.FULLSCREEN());
+        if (Globals.FULLSCREEN() && Globals.ACT_FULLSCREEN()) {
             win.setDimensionsToFullScreen();
-            Global.setACT_FULLSCREEN(false);
+            Globals.setACT_FULLSCREEN(false);
             view = new GameView(game);
             win.setFullScreen(view);
         }
-        if (!Global.FULLSCREEN() && Global.ACT_FULLSCREEN()) {
+        if (!Globals.FULLSCREEN() && Globals.ACT_FULLSCREEN()) {
             win.setDimensionsToSmallScreen();
-            Global.setACT_FULLSCREEN(false);
+            Globals.setACT_FULLSCREEN(false);
             view = new GameView(game);
             win.setSmallScreen(view);
         }

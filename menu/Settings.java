@@ -1,7 +1,7 @@
 package menu;
 
 import main.Constants;
-import main.Global;
+import main.Globals;
 import sound.Music;
 import sound.SFX;
 
@@ -35,24 +35,24 @@ public final class Settings extends JPanel {
 		super();
 		setFocusable(true);
 		setBackground(Color.BLACK);
-		setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
+		setPreferredSize(new Dimension(Globals.W_WIDTH(), Globals.W_HEIGHT()));
 		requestFocus();
 		this.setLayout(null);
 		// Logo :
 		this.logo = ImageIO.read(new File("ressources/images/logo1.png"));
 		// Back button :
 		this.backButton = new IconButton("ressources/images/backbutton.png");
-		this.backButton.setBounds(Global.W_WIDTH()/80, Global.W_HEIGHT()/60, 50, 50);
+		this.backButton.setBounds(Globals.W_WIDTH()/80, Globals.W_HEIGHT()/60, 50, 50);
 		this.add(this.backButton);
 		this.backButton.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Global.MAINGAME().getWindow().launchMenu(false, beginning);
+				Globals.MAINGAME().getWindow().launchMenu(false, beginning);
 			}
 		});
 		// Music Sliders :
-		this.musicVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, Global.MUSIC_VOLUME());
-		this.sfxVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, Global.SFX_VOLUME());
+		this.musicVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, Globals.MUSIC_VOLUME());
+		this.sfxVolumeSlider = new JSlider(JSlider.HORIZONTAL, 0, 100, Globals.SFX_VOLUME());
 		this.musicVolumeSlider.setMajorTickSpacing(10);
 		this.sfxVolumeSlider.setMajorTickSpacing(10);
 		// this.musicVolumeSlider.setPaintTicks(true);
@@ -76,7 +76,7 @@ public final class Settings extends JPanel {
 		wasdMode.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				if (Global.WASD_MODE()) {
+				if (Globals.WASD_MODE()) {
 					Constants.CUSTOM_KEYS.WASD_MODE(false);
 					wasdInfo.setText("Status : OFF");
 				} else {
@@ -90,17 +90,17 @@ public final class Settings extends JPanel {
 		// Text labels :
 		this.textFont = new Font("Tahoma", Font.PLAIN, 22);
 		this.textColor = new Color(148, 148, 148);
-		this.musicVolInfo = new JLabel("Music Volume : " + String.valueOf(Global.MUSIC_VOLUME()));
+		this.musicVolInfo = new JLabel("Music Volume : " + String.valueOf(Globals.MUSIC_VOLUME()));
 		this.musicVolInfo.setBounds(slider1X(), text1Y(), slider1W(), 30);
 		this.musicVolInfo.setFont(this.textFont);
 		this.musicVolInfo.setForeground(this.textColor);
 		this.add(this.musicVolInfo);
-		this.sfxVolInfo = new JLabel("SFX Volume : " + String.valueOf(Global.SFX_VOLUME()));
+		this.sfxVolInfo = new JLabel("SFX Volume : " + String.valueOf(Globals.SFX_VOLUME()));
 		this.sfxVolInfo.setBounds(slider2X(), text2Y(), slider2W(), 30);
 		this.sfxVolInfo.setFont(this.textFont);
 		this.sfxVolInfo.setForeground(this.textColor);
 		this.add(this.sfxVolInfo);
-		String status = (Global.WASD_MODE())? "ON" : "OFF";
+		String status = (Globals.WASD_MODE())? "ON" : "OFF";
 		this.wasdInfo = new JLabel("Status : " + status);
 		this.wasdInfo.setBounds(bX(), text3Y(), Constants.WASD_B_WIDTH, 30);
 		this.wasdInfo.setFont(this.textFont);
@@ -114,8 +114,8 @@ public final class Settings extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(logo, Global.W_WIDTH() / 2 - Constants.TITLE_WIDTH / 2, 
-					Global.W_HEIGHT() / 8 - Constants.TITLE_HEIGHT / 8, null);
+		g.drawImage(logo, Globals.W_WIDTH() / 2 - Constants.TITLE_WIDTH / 2, 
+					Globals.W_HEIGHT() / 8 - Constants.TITLE_HEIGHT / 8, null);
 	}
 
 	private final class MusEvent implements ChangeListener {
@@ -125,7 +125,7 @@ public final class Settings extends JPanel {
 			int value = musicVolumeSlider.getValue();
 			musicVolInfo.setText("Music Volume : " + String.valueOf(value));
 			setSoundVolume(value, true);
-			Global.setMUSIC_VOLUME(value);
+			Globals.setMUSIC_VOLUME(value);
 			musicVolInfo.repaint();
 			repaint();
 		}
@@ -139,7 +139,7 @@ public final class Settings extends JPanel {
 			int value = sfxVolumeSlider.getValue();
 			sfxVolInfo.setText("SFX Volume : " + String.valueOf(value));
 			setSoundVolume(value, false);
-			Global.setSFX_VOLUME(value);
+			Globals.setSFX_VOLUME(value);
 			sfxVolInfo.repaint();
 			repaint();
 		}
@@ -154,7 +154,7 @@ public final class Settings extends JPanel {
 		if (isMusic) {
 			Music.setMusicVolume(volume);
 			Constants.MENU_MUSIC.changeGain(volume);
-			if (Global.MAINGAME().getView()!=null) 
+			if (Globals.MAINGAME().getView()!=null) 
 				Constants.GAME_MUSIC.changeGain(volume);
 		} else {
 			SFX.setMusicVolume(volume);
@@ -162,55 +162,55 @@ public final class Settings extends JPanel {
 	}
 
 	private static final int slider1X() {
-		return Global.W_WIDTH() / 2 - (Global.W_WIDTH() / 4) / 2;
+		return Globals.W_WIDTH() / 2 - (Globals.W_WIDTH() / 4) / 2;
 	}
 
 	private static final int slider1Y() {
-		return (Global.W_HEIGHT() / 2) - ((Global.W_HEIGHT() / 12) / 2);
+		return (Globals.W_HEIGHT() / 2) - ((Globals.W_HEIGHT() / 12) / 2);
 	}
 
 	private static final int slider1W() {
-		return Global.W_WIDTH() / 4;
+		return Globals.W_WIDTH() / 4;
 	}
 
 	private static final int slider1H() {
-		return Global.W_HEIGHT() / 32;
+		return Globals.W_HEIGHT() / 32;
 	}
 	
 	private static final int slider2X() {
-		return Global.W_WIDTH() / 2 - (Global.W_WIDTH() / 4) / 2;
+		return Globals.W_WIDTH() / 2 - (Globals.W_WIDTH() / 4) / 2;
 	}
 
 	private static final int slider2Y() { 
-		return (Global.W_HEIGHT() / 2 - (Global.W_HEIGHT() / 12) / 2) + Global.W_HEIGHT() / 6;
+		return (Globals.W_HEIGHT() / 2 - (Globals.W_HEIGHT() / 12) / 2) + Globals.W_HEIGHT() / 6;
 	}
 
 	private static final int slider2W() {
-		return Global.W_WIDTH() / 4;
+		return Globals.W_WIDTH() / 4;
 	}
 
 	private static final int slider2H() {
-		return Global.W_HEIGHT() / 32;
+		return Globals.W_HEIGHT() / 32;
 	}
 
 	private static final int bX() {
-		return Global.W_WIDTH()/2 - Constants.WASD_B_WIDTH/2;
+		return Globals.W_WIDTH()/2 - Constants.WASD_B_WIDTH/2;
 	}
 
 	private static final int bY(){
-		return slider2Y() + Global.W_WIDTH() / 12;
+		return slider2Y() + Globals.W_WIDTH() / 12;
 	}
 
 	private static final int text1Y() {
-		return slider1Y() - Global.W_HEIGHT() / 16;
+		return slider1Y() - Globals.W_HEIGHT() / 16;
 	}
 
 	private static final int text2Y() {
-		return slider2Y() - Global.W_HEIGHT() / 16;
+		return slider2Y() - Globals.W_HEIGHT() / 16;
 	}
 
 	private static final int text3Y() {
-		return bY() + Global.W_HEIGHT() / 12;
+		return bY() + Globals.W_HEIGHT() / 12;
 	}
 
 }
