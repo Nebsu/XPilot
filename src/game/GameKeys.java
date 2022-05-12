@@ -29,6 +29,7 @@ public final class GameKeys implements KeyListener {
         int key = e.getKeyCode();
         if (key==KeyEvent.VK_ESCAPE) {
             try {
+                Globals.changeTopMenuState(true);
                 Constants.GAME_MUSIC.stopMusic();
                 Globals.MAINGAME().getWindow().launchMenu(true, false);
             } catch (Exception e1) {

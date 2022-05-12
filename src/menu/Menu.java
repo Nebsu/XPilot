@@ -70,7 +70,9 @@ public final class Menu extends JPanel {
 		this.start.addActionListener(e -> {
 			try {
 				if(Globals.IS_TOP_MENU()){
+					System.out.println("top");
 					Globals.MAINGAME().getWindow().launchGame(false);
+					Globals.changeTopMenuState(false);
 				}else{
 					Globals.MAINGAME().getWindow().launchGame(true);
 					Globals.MAINGAME().getLoop().resetLevel();
@@ -100,7 +102,8 @@ public final class Menu extends JPanel {
 				if (beginning)
 					System.exit(0);
 				else 
-					Globals.MAINGAME().getWindow().launchMenu(true, true);
+					Globals.changeTopMenuState(false);
+					Globals.MAINGAME().getWindow().launchMenu(false, true);
 			}
 		});
 	}
