@@ -13,7 +13,6 @@ import java.awt.image.*;
 import java.io.File;
 import java.io.IOException;
 import javax.imageio.ImageIO;
-import javax.sound.sampled.LineUnavailableException;
 import javax.swing.JPanel;
 import java.awt.geom.AffineTransform;
 
@@ -63,6 +62,7 @@ public final class GameView extends JPanel implements ActionListener {
                 drawFuelBar(g);
                 drawMissileIndicator(g);
                 drawShield(g);
+                drawBWall();
             }
             try {
                 drawMinimap(g);
@@ -93,10 +93,10 @@ public final class GameView extends JPanel implements ActionListener {
         g2 = bgImage.createGraphics();
         AffineTransform af2 = new AffineTransform();
         if (game.getShip().isVisible()) {
-            for (Missile missile : game.getMissiles()) {
+            for (int i = 0; i < game.getMissiles().size(); i++) {
                 // Paint Missile in the second image :
-                if (missile instanceof MissileDiffusion) {
-                    MissileDiffusion represent = (MissileDiffusion) missile;
+                if (game.getMissiles().get(i) instanceof MissileDiffusion) {
+                    MissileDiffusion represent = (MissileDiffusion) game.getMissiles().get(i);
                     for (MissileNormal tmp : represent.getDiffusion()) {
                         af2.setToIdentity();
                         af2.translate((int) tmp.getX(), (int) tmp.getY());
@@ -106,10 +106,10 @@ public final class GameView extends JPanel implements ActionListener {
                     }
                 } else {
                     af2.setToIdentity();
-                    af2.translate((int) missile.getX(), (int) missile.getY());
-                    af2.rotate(Math.toRadians(missile.getDirection()), missile.getImage().getWidth(this) / 2, 
-                               missile.getImage().getHeight(this) / 2);
-                    g3.drawImage(missile.getImage(), af2, null);
+                    af2.translate((int) game.getMissiles().get(i).getX(), (int) game.getMissiles().get(i).getY());
+                    af2.rotate(Math.toRadians(game.getMissiles().get(i).getDirection()), game.getMissiles().get(i).getImage().getWidth(this) / 2, 
+                    game.getMissiles().get(i).getImage().getHeight(this) / 2);
+                    g3.drawImage(game.getMissiles().get(i).getImage(), af2, null);
                 }
             }
             // Draw ennemies :
@@ -264,6 +264,12 @@ public final class GameView extends JPanel implements ActionListener {
         }
     }
 
+    public final void drawBWall(){
+        for(BreakableWall bw : game.getMap().getListeBreakableWall()){
+            bw.draw(game.getMap().getG2());
+        }
+    }
+
     public final void drawMinimap(Graphics g) throws IOException {
         BufferedImage bi = ImageIO.read(new File("ressources/images/minimap.png"));
         g.translate(Global.W_WIDTH() - 150, Global.W_HEIGHT() - 150);
@@ -277,9 +283,15 @@ public final class GameView extends JPanel implements ActionListener {
                     g.setColor(Color.YELLOW);
                     g.fillRect(i * 3, j * 3, 3, 3);
                 } else if (game.getMap().getInforMap()[i][j] == 'G') {
+                    g.setColor(Color.GREEN);
+                    g.fillRect(i * 3, j * 3, 3, 3);
+                } else if (game.getMap().getInforMap()[i][j] == 'X') {
                     g.setColor(Color.RED);
                     g.fillRect(i * 3, j * 3, 3, 3);
-                }
+                } else if (game.getMap().getInforMap()[i][j] == 'O') {
+                    g.setColor(Color.ORANGE);
+                    g.fillRect(i * 3, j * 3, 3, 3);
+                } 
                 g.drawImage(bi, (int) game.getShip().getX() / 16, (int) game.getShip().getY() / 16, null);
             }
         }

@@ -10,6 +10,7 @@ public final class Goal extends Obstacle {
         super(x, y);
     }
     
+    @Override
     public final void draw(Graphics g){
         g.setColor(Color.RED);
         Polygon polygon=new Polygon(x,y,Math.min(x.length,y.length));

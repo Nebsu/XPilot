@@ -147,6 +147,15 @@ public final class GameLoop implements Game, Runnable {
                 switchLevel();
             }
         }
+        for (BreakableWall bw : map.getListeBreakableWall()){
+            Rectangle o = new Rectangle(bw.getX()[0], bw.getY()[0], bw.getX()[1] - bw.getX()[0], 
+                                        bw.getY()[2] - bw.getY()[1]);
+            if (s.intersects(o)){
+                if(bw.getState()>0){
+                    return true;
+                }
+            }
+        }
         for (int i = 0; i < getMap().getBonuses().size(); i++) {
             Bonus bo = getMap().getBonuses().get(i);
             Rectangle r = new Rectangle(bo.getX()[0], bo.getY()[0], bo.getX()[1] - bo.getX()[0], bo.getY()[2] - bo.getY()[1]);
@@ -158,7 +167,6 @@ public final class GameLoop implements Game, Runnable {
                         getShip().setFuel(getShip().getFuel() + 500);
                     }
                 }
-                getShip().getShield().add();
                 view.erase(bo);
                 getMap().getBonuses().remove(bo);
             }
@@ -186,9 +194,9 @@ public final class GameLoop implements Game, Runnable {
         // Missile collision detection :
         for (int i = 0; i < getMissiles().size(); i++) {
             Missile m = getMissiles().get(i);
-            Rectangle r = m.getBounds();
-            Rectangle s = getShip().getBounds();
-            if (r.intersects(s)) {
+            Rectangle missiles = m.getBounds();
+            Rectangle ship = getShip().getBounds();
+            if (missiles.intersects(ship)) {
                 if (getMissiles().get(i).getShooter() == 2) {
                     getMissiles().remove(m);
                     if (getShip().getShield().isActive()) {
@@ -199,11 +207,12 @@ public final class GameLoop implements Game, Runnable {
                     }
                 }
             }
-            for (Obstacle ob : getMap().getObstacles()) {
-                Rectangle o = new Rectangle(ob.getX()[0], ob.getY()[0], ob.getX()[1] - ob.getX()[0], ob.getY()[2] - ob.getY()[1]);
-                if (r.intersects(o) && (m instanceof MissileNormal || m instanceof MissileDiffusion)) {
+            for (int j = 0; j < map.getObstacles().size(); j++) {
+                Obstacle ob = map.getObstacles().get(j);
+                Rectangle wall = new Rectangle(ob.getX()[0], ob.getY()[0], ob.getX()[1] - ob.getX()[0], ob.getY()[2] - ob.getY()[1]);
+                if (missiles.intersects(wall) && (m instanceof MissileNormal || m instanceof MissileDiffusion)) {
                     getMissiles().remove(m);
-                } else if (r.intersects(o) && (m instanceof Rocket)) {
+                } else if (missiles.intersects(wall) && ob instanceof Obstacle && (m instanceof Rocket)) {
                     int angle;
                     if (((Rocket) m).rebounce == 3) {
                         getMissiles().remove(m);
@@ -226,6 +235,29 @@ public final class GameLoop implements Game, Runnable {
                     } else if (angle > 180 && angle < 270) {
                         // ((Rocket)m).setDirection(180-angle);
                         ((Rocket) m).setDirection(360 - angle);
+                    }
+                }
+            }
+            for (int j = 0; j < map.getListeBreakableWall().size(); j++) {
+                BreakableWall bw = map.getListeBreakableWall().get(j);
+                Rectangle bwall = new Rectangle(bw.getX()[0], bw.getY()[0], bw.getX()[1] - bw.getX()[0], bw.getY()[2] - bw.getY()[1]);
+                if (missiles.intersects(bwall)){
+                    if(bw.getState() > 0){
+                        bw.setState(bw.getState()-1);
+                        getMissiles().remove(m);
+                    }else{
+                        map.getInforMap()[bw.getX()[0]/48][bw.getY()[0]/48] = '-';
+                    }
+                }
+            }
+            for (int j = 0; j < map.getEnemies().size(); j++){
+                Rectangle en = new Rectangle((int)map.getEnemies().get(j).getX(), (int)map.getEnemies().get(j).getY(), 48, 48);
+                if(missiles.intersects(en) && m.getShooter() != 2){
+                    getMissiles().remove(m);
+                    map.getEnemies().get(j).setHealth(map.getEnemies().get(j).getHealth()-50);
+                    if(map.getEnemies().get(j).getHealth() <= 0){
+                        map.getInforMap()[(int)(map.getEnemies().get(j).getX())/48][(int)(map.getEnemies().get(j).getY())/48] = '-';
+                        map.getEnemies().remove(map.getEnemies().get(j));
                     }
                 }
             }

@@ -13,6 +13,7 @@ public final class Enemy {
     private double x;
     private double y;
     private long t0, timer = 0;
+    private int health = 150;
 
     public Enemy(double x, double y) throws IOException {
         this.x = x;
@@ -24,6 +25,9 @@ public final class Enemy {
     public final BufferedImage getImage() {return image;}
     public final double getX() {return x;}
     public final double getY() {return y;}
+    public int getHealth() {return health;}
+    public void setHealth(int health) {this.health = health;
+}
 
     public final double getRad(double vx, double vy){
         return -Math.atan2(this.x - vx, this.y -vy)-Math.toRadians(90);

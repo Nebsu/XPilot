@@ -47,7 +47,7 @@ public final class Constants {
     public static final int BONUS_SPAWNRATE = 5000;
     
     // Speed and Rotation :
-    public static final int ROTATION_RATE = 8;
+    public static final int ROTATION_RATE = 6;
     public static final float MAX_SPEED = 10, BASE_SPEED = 4;
 
     // Ennemies :

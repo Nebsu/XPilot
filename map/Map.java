@@ -14,6 +14,7 @@ public final class Map {
 	
     private BufferedImage img_map;
     private LinkedList<Obstacle> ListeObstacle=new LinkedList<>();
+	private LinkedList<BreakableWall> ListeBreakableWall=new LinkedList<>();
 	private ArrayList<Bonus> bonusList = new ArrayList<>();
     private final int MAP_SIZE = 50;
     private final char[][] infor_map=new char[MAP_SIZE][MAP_SIZE];
@@ -88,16 +89,20 @@ public final class Map {
     		        ListeObstacle.add(ball);
 					ball.draw(g2);
 				}else if(infor_map[i][j]=='X'){
-					Enemy e = null;
 					try {
-						e = new Enemy(i*48, j*48);
+						Enemy e = new Enemy(i*48, j*48);
+						enemies.add(e);
 					} catch (IOException ex) {
 						throw new RuntimeException(ex);
 					}
-					enemies.add(e);
 				}else if(infor_map[i][j]== 'S'){
 					this.shipX = i*48;
 					this.shipY = j*48;
+				}else if(infor_map[i][j]== 'O'){
+					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
+    		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
+					BreakableWall wall=new BreakableWall(x,y);
+					ListeBreakableWall.add(wall);
 				}
     		}
     	}
@@ -114,6 +119,7 @@ public final class Map {
 	public final LinkedList<Enemy> getEnemies() {return enemies;}
 	public final double getShipX() {return shipX;}
 	public final double getShipY() {return shipY;}
+	public final LinkedList<BreakableWall> getListeBreakableWall() {return ListeBreakableWall;}
 
 	/** Add a bonus to the map */
 	public final void addBonus(){
