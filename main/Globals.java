@@ -4,7 +4,7 @@ package main;
 
 import game.GameLoop;
 
-public final class Global {
+public final class Globals {
 
     // Main game :
     private static GameLoop MAINGAME;

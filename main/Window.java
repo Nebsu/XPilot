@@ -20,7 +20,7 @@ public final class Window extends JFrame {
     public Window() {
         super();
         this.setTitle("Xpilot");
-        setSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
+        setSize(new Dimension(Globals.W_WIDTH(), Globals.W_HEIGHT()));
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
         this.launchMenu(true, true);	
     }
@@ -33,7 +33,7 @@ public final class Window extends JFrame {
      * @throws LineUnavailableException
      */
     public final void launchMenu(boolean music, boolean beginning) {
-        Global.changeMenuState(true);
+        Globals.changeMenuState(true);
         this.setResizable(false);
         getContentPane().removeAll();
         try {
@@ -86,11 +86,11 @@ public final class Window extends JFrame {
      */
     public final void launchGame() throws LineUnavailableException, IOException {
         Constants.MENU_MUSIC.stopMusic();
-        Global.changeMenuState(false);
+        Globals.changeMenuState(false);
         dispose();
         getContentPane().removeAll();
-        getContentPane().add(BorderLayout.CENTER, Global.MAINGAME().getView());
-        if (Global.FULLSCREEN())
+        getContentPane().add(BorderLayout.CENTER, Globals.MAINGAME().getView());
+        if (Globals.FULLSCREEN())
             Constants.DEVICE.setFullScreenWindow(this);
         pack();
         setLocationRelativeTo(null);
@@ -101,15 +101,15 @@ public final class Window extends JFrame {
 
     // Fullscreen functions :
     public final void setDimensionsToFullScreen() {
-        Global.setW_HEIGHT(Constants.MAX_HEIGHT);
-        Global.setW_WIDTH(Constants.MAX_WIDTH);
-        Global.setR_WIDTH(Constants.MAX_WIDTH / 800);
-        Global.setR_HEIGHT(Constants.MAX_HEIGHT / 600);
+        Globals.setW_HEIGHT(Constants.MAX_HEIGHT);
+        Globals.setW_WIDTH(Constants.MAX_WIDTH);
+        Globals.setR_WIDTH(Constants.MAX_WIDTH / 800);
+        Globals.setR_HEIGHT(Constants.MAX_HEIGHT / 600);
     }
 
     public final void setDimensionsToSmallScreen() {
-        Global.setW_HEIGHT(600);
-        Global.setW_WIDTH(800);
+        Globals.setW_HEIGHT(600);
+        Globals.setW_WIDTH(800);
     }
 
     public final void setSmallScreen(JPanel comp) {

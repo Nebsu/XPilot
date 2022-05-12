@@ -1,7 +1,7 @@
 package menu;
 
 import main.Constants;
-import main.Global;
+import main.Globals;
 import main.Launcher;
 
 import javax.imageio.ImageIO;
@@ -35,14 +35,14 @@ public final class Menu extends JPanel {
 		// Panel initialisation :
 		super();
 		this.beginning = b;
-		Global.changeMenuState(this.beginning);
+		Globals.changeMenuState(this.beginning);
 		this.settingsPanel = new Settings(this.beginning);
 		this.helpPanel = new Help(this.beginning);
 		setFocusable(true);
 		setBackground(Color.BLACK);
 		requestFocus();
 		this.setLayout(null);
-		this.setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
+		this.setPreferredSize(new Dimension(Globals.W_WIDTH(), Globals.W_HEIGHT()));
 		// Logo :
 		this.logo = ImageIO.read(new File("ressources/images/logo1.png"));
 		// Buttons :
@@ -52,16 +52,16 @@ public final class Menu extends JPanel {
 		this.help = new TextButton("Help");
 		String s2 = (beginning)? "Exit" : "Quit Level";
 		this.quit = new TextButton(s2);
-		this.start.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
-							 Global.W_HEIGHT()/2 - (3*Constants.BUTTON_HEIGHT/2), 
+		this.start.setBounds(Globals.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+							 Globals.W_HEIGHT()/2 - (3*Constants.BUTTON_HEIGHT/2), 
 							 Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
-		this.settings.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, Global.W_HEIGHT()/2, 
+		this.settings.setBounds(Globals.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, Globals.W_HEIGHT()/2, 
 								Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
-		this.help.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
-							Global.W_HEIGHT()/2 + (3*Constants.BUTTON_HEIGHT/2), 
+		this.help.setBounds(Globals.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+							Globals.W_HEIGHT()/2 + (3*Constants.BUTTON_HEIGHT/2), 
 							Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
-		this.quit.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
-							Global.W_HEIGHT()/2 + (6*Constants.BUTTON_HEIGHT/2), 
+		this.quit.setBounds(Globals.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+							Globals.W_HEIGHT()/2 + (6*Constants.BUTTON_HEIGHT/2), 
 							Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
 		this.add(start);
 		this.add(settings);
@@ -72,7 +72,7 @@ public final class Menu extends JPanel {
 		// Buttons action listeners :
 		this.start.addActionListener(e -> {
 			try {
-				Global.MAINGAME().getWindow().launchGame();
+				Globals.MAINGAME().getWindow().launchGame();
 			} catch (IOException | LineUnavailableException e1) {
 				e1.printStackTrace();
 				System.out.println(e1);
@@ -82,13 +82,13 @@ public final class Menu extends JPanel {
 		this.settings.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Global.MAINGAME().getWindow().settingsPanel();
+				Globals.MAINGAME().getWindow().settingsPanel();
 			}
 		});
 		this.help.addActionListener(new ActionListener() {
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Global.MAINGAME().getWindow().helpPanel();
+				Globals.MAINGAME().getWindow().helpPanel();
 			}
 		});
 		this.quit.addActionListener(new ActionListener() {
@@ -97,7 +97,7 @@ public final class Menu extends JPanel {
 				if (beginning)
 					System.exit(0);
 				else 
-					Global.MAINGAME().getWindow().launchMenu(true, true);
+					Globals.MAINGAME().getWindow().launchMenu(true, true);
 			}
 		});
 	}
@@ -107,8 +107,8 @@ public final class Menu extends JPanel {
 	@Override
 	protected void paintComponent(Graphics g) {
 		super.paintComponent(g);
-		g.drawImage(logo, Global.W_WIDTH()/2 - Constants.TITLE_WIDTH/2, 
-					Global.W_HEIGHT()/8 - Constants.TITLE_HEIGHT/8, null);
+		g.drawImage(logo, Globals.W_WIDTH()/2 - Constants.TITLE_WIDTH/2, 
+					Globals.W_HEIGHT()/8 - Constants.TITLE_HEIGHT/8, null);
 	}
 
 	// Getters :

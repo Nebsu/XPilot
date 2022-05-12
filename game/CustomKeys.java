@@ -7,7 +7,7 @@ package game;
 
 import java.awt.event.KeyEvent;
 
-import main.Global;
+import main.Globals;
 
 public final class CustomKeys {
 
@@ -29,7 +29,7 @@ public final class CustomKeys {
     public final int getFullScreen() {return fullScreen;}
 
     public final void WASD_MODE(boolean status) {
-        Global.setWASD_MODE(status);
+        Globals.setWASD_MODE(status);
         if (status) {
             this.up = KeyEvent.VK_W;
             this.left = KeyEvent.VK_A;

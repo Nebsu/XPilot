@@ -5,7 +5,7 @@ import menu.TextButton;
 import sound.SFX;
 import object.*;
 import main.Constants;
-import main.Global;
+import main.Globals;
 
 import java.awt.*;
 import java.awt.event.*;
@@ -33,7 +33,7 @@ public final class GameView extends JPanel implements ActionListener {
         this.game = game;
         setBackground(Color.BLACK);
         this.ingame = true;
-        setPreferredSize(new Dimension(Global.W_WIDTH(), Global.W_HEIGHT()));
+        setPreferredSize(new Dimension(Globals.W_WIDTH(), Globals.W_HEIGHT()));
         game.getMap().addBonus();
         try {
             this.singleShot = ImageIO.read(new File("ressources/images/overlay_single_shot.png"));
@@ -89,7 +89,7 @@ public final class GameView extends JPanel implements ActionListener {
         BufferedImage image = new BufferedImage(2400, 2400, BufferedImage.TYPE_INT_BGR);
         Graphics2D g3 = image.createGraphics();
         g3.drawImage(game.getMap().getImage(), 0, 0, null);
-        bgImage = new BufferedImage(Global.W_WIDTH(), Global.W_HEIGHT(), BufferedImage.TYPE_INT_BGR);
+        bgImage = new BufferedImage(Globals.W_WIDTH(), Globals.W_HEIGHT(), BufferedImage.TYPE_INT_BGR);
         g2 = bgImage.createGraphics();
         AffineTransform af2 = new AffineTransform();
         if (game.getShip().isVisible()) {
@@ -124,22 +124,22 @@ public final class GameView extends JPanel implements ActionListener {
                 g3.drawImage(e.getImage(),af3,null);
             }
             // The camera displays the ship's position in the second image :
-            g2.drawImage(image, (int) (-game.getShip().getX()) + Global.W_WIDTH() / 2, 
-                         (int) (-game.getShip().getY()) + Global.W_HEIGHT() / 2, null);
+            g2.drawImage(image, (int) (-game.getShip().getX()) + Globals.W_WIDTH() / 2, 
+                         (int) (-game.getShip().getY()) + Globals.W_HEIGHT() / 2, null);
             // Spaceship functions :
             af.setToIdentity();
-            af.translate(Global.W_WIDTH() / 2, Global.W_HEIGHT() / 2);
+            af.translate(Globals.W_WIDTH() / 2, Globals.W_HEIGHT() / 2);
             af.rotate(Math.toRadians(game.getShip().getRotation()), game.getShip().getImage().getWidth(this) / 2, 
                       game.getShip().getImage().getHeight(this) / 2);
             g2.drawImage(game.getShip().getImage(), af, null);
             // Ball functions :
             if (game.getMap().getBall().isTaken()) {
                 g2.setColor(Color.WHITE);
-                g2.drawOval(10, Global.W_HEIGHT() - 40, 33, 33);
-                g2.fillOval(10, Global.W_HEIGHT() - 40, 33, 33);
+                g2.drawOval(10, Globals.W_HEIGHT() - 40, 33, 33);
+                g2.fillOval(10, Globals.W_HEIGHT() - 40, 33, 33);
             } else {
                 g2.setColor(Color.WHITE);
-                g2.drawOval(10, Global.W_HEIGHT() - 40, 33, 33);
+                g2.drawOval(10, Globals.W_HEIGHT() - 40, 33, 33);
             }
             // Draw everything in g :
             g.drawImage(bgImage, 0, 0, null);
@@ -159,14 +159,14 @@ public final class GameView extends JPanel implements ActionListener {
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
         if (game.getShip().getShield().getQuantity() >= 10) {
-            g.drawString(msg, Global.W_WIDTH() - fm.stringWidth(msg) - 19, 38);
+            g.drawString(msg, Globals.W_WIDTH() - fm.stringWidth(msg) - 19, 38);
         } else {
-            g.drawString(msg, Global.W_WIDTH() - fm.stringWidth(msg) - 24, 38);
+            g.drawString(msg, Globals.W_WIDTH() - fm.stringWidth(msg) - 24, 38);
         }
         // Shield indicator :
         Polygon p = new Polygon();
         for (int i = 0; i < 6; i++)
-            p.addPoint((int) (Global.W_WIDTH() - 30 - 20 * Math.cos(i * 2 * Math.PI / 6)), 
+            p.addPoint((int) (Globals.W_WIDTH() - 30 - 20 * Math.cos(i * 2 * Math.PI / 6)), 
                        (int) (30 + 20 * Math.sin(i * 2 * Math.PI / 6)));
         g.drawPolygon(p);
         // Shield protecting ship :
@@ -174,8 +174,8 @@ public final class GameView extends JPanel implements ActionListener {
         if (game.getShip().getShield().isActive()) {
             // g.setColor(Color.WHITE);
             for (int i = 0; i < 6; i++)
-                p2.addPoint((int) (Global.W_WIDTH() / 2 + 6 + 20 * Math.cos(i * 2 * Math.PI / 6)), 
-                            (int) (Global.W_HEIGHT() / 2 + 6 + 20 * Math.sin(i * 2 * Math.PI / 6)));
+                p2.addPoint((int) (Globals.W_WIDTH() / 2 + 6 + 20 * Math.cos(i * 2 * Math.PI / 6)), 
+                            (int) (Globals.W_HEIGHT() / 2 + 6 + 20 * Math.sin(i * 2 * Math.PI / 6)));
             g.drawPolygon(p2);
         }
     }
@@ -188,15 +188,15 @@ public final class GameView extends JPanel implements ActionListener {
     private final void drawHealthBar(Graphics2D g) {
         // Base of the bar :
         g.setColor(Color.WHITE);
-        g.drawString("HP", Global.W_WIDTH() / 4 - 30, Global.W_HEIGHT() / 50 + 12);
-        g.fillRect(Global.W_WIDTH() / 4, Global.W_HEIGHT() / 50, Global.W_WIDTH() / 2, 15);
+        g.drawString("HP", Globals.W_WIDTH() / 4 - 30, Globals.W_HEIGHT() / 50 + 12);
+        g.fillRect(Globals.W_WIDTH() / 4, Globals.W_HEIGHT() / 50, Globals.W_WIDTH() / 2, 15);
         // Health bar :
         g.setColor(Color.RED);
-        float width = (Global.W_WIDTH() / 2 - 4) * ((float) game.getShip().getHealth() / (float) game.getShip().getMaxHealth());
-        g.fillRect(Global.W_WIDTH() / 4 + 2, Global.W_HEIGHT() / 50 + 2, (int) Math.round(width), 15 - 4);
+        float width = (Globals.W_WIDTH() / 2 - 4) * ((float) game.getShip().getHealth() / (float) game.getShip().getMaxHealth());
+        g.fillRect(Globals.W_WIDTH() / 4 + 2, Globals.W_HEIGHT() / 50 + 2, (int) Math.round(width), 15 - 4);
         // Number :
         g.setColor(Color.GRAY);
-        g.drawString("" + game.getShip().getHealth(), Global.W_WIDTH() / 2 - 10, Global.W_HEIGHT() / 50 + 12);
+        g.drawString("" + game.getShip().getHealth(), Globals.W_WIDTH() / 2 - 10, Globals.W_HEIGHT() / 50 + 12);
     }
 
     /**
@@ -207,15 +207,15 @@ public final class GameView extends JPanel implements ActionListener {
     private final void drawFuelBar(Graphics2D g) {
         // Base of the bar :
         g.setColor(Color.WHITE);
-        g.drawString("Fuel", Global.W_WIDTH() / 4 - 30, Global.W_HEIGHT() / 20 + 12);
-        g.fillRect(Global.W_WIDTH() / 4, Global.W_HEIGHT() / 20, Global.W_WIDTH() / 2, 15);
+        g.drawString("Fuel", Globals.W_WIDTH() / 4 - 30, Globals.W_HEIGHT() / 20 + 12);
+        g.fillRect(Globals.W_WIDTH() / 4, Globals.W_HEIGHT() / 20, Globals.W_WIDTH() / 2, 15);
         // Fuel bar :
         g.setColor(Color.GREEN);
-        float width = (Global.W_WIDTH() / 2 - 4) * ((float) game.getShip().getFuel() / (float) Constants.BASE_FUEL);
-        g.fillRect(Global.W_WIDTH() / 4 + 2, Global.W_HEIGHT() / 20 + 2, (int) Math.round(width), 15 - 4);
+        float width = (Globals.W_WIDTH() / 2 - 4) * ((float) game.getShip().getFuel() / (float) Constants.BASE_FUEL);
+        g.fillRect(Globals.W_WIDTH() / 4 + 2, Globals.W_HEIGHT() / 20 + 2, (int) Math.round(width), 15 - 4);
         // Number :
         g.setColor(Color.GRAY);
-        g.drawString("" + game.getShip().getFuel(), Global.W_WIDTH() / 2 - 10, Global.W_HEIGHT() / 20 + 12);
+        g.drawString("" + game.getShip().getFuel(), Globals.W_WIDTH() / 2 - 10, Globals.W_HEIGHT() / 20 + 12);
     }
 
     /**
@@ -272,7 +272,7 @@ public final class GameView extends JPanel implements ActionListener {
 
     public final void drawMinimap(Graphics g) throws IOException {
         BufferedImage bi = ImageIO.read(new File("ressources/images/minimap.png"));
-        g.translate(Global.W_WIDTH() - 150, Global.W_HEIGHT() - 150);
+        g.translate(Globals.W_WIDTH() - 150, Globals.W_HEIGHT() - 150);
         for (int i = 0; i < game.getMap().getInforMap().length; i++) {
             for (int j = 0; j < game.getMap().getInforMap().length; j++) {
                 if (game.getMap().getInforMap()[i][j] == '-' || game.getMap().getInforMap()[i][j] == 'X' || game.getMap().getInforMap()[i][j] == 'B' || game.getMap().getInforMap()[i][j] == 'S') {
@@ -313,12 +313,12 @@ public final class GameView extends JPanel implements ActionListener {
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
         g.setColor(Color.white);
-        g.drawString(msg, (Global.W_WIDTH() - fm.stringWidth(msg)) / 2, Global.W_HEIGHT() / 2);
+        g.drawString(msg, (Globals.W_WIDTH() - fm.stringWidth(msg)) / 2, Globals.W_HEIGHT() / 2);
         
         setLayout(null);
         TextButton replay = new TextButton("Play Again");
-        replay.setBounds(Global.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
-                             Global.W_HEIGHT() - (3*Constants.BUTTON_HEIGHT/2), 
+        replay.setBounds(Globals.W_WIDTH()/2 - Constants.BUTTON_WIDTH/2, 
+                             Globals.W_HEIGHT() - (3*Constants.BUTTON_HEIGHT/2), 
                              Constants.BUTTON_WIDTH, Constants.BUTTON_HEIGHT);
         add(replay);
         replay.addActionListener(new ActionListener() {
@@ -329,7 +329,7 @@ public final class GameView extends JPanel implements ActionListener {
                 setInGame(true);
                 try {
                     Constants.GAME_MUSIC.stopMusic();
-                    Global.MAINGAME().getWindow().launchMenu(true, true);
+                    Globals.MAINGAME().getWindow().launchMenu(true, true);
                 } catch (Exception e1) {
                     e1.printStackTrace();
                     System.out.println(e1);
