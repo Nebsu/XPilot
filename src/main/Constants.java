@@ -55,9 +55,10 @@ public final class Constants {
     // Ennemies :
     public static final int RANGE = 300;
     public static final int SHOOT_RATE = 1000;
+    public static final int DAMAGE = 50;
 
     // Missiles :
-    public static final int MAX_MISSILE_SHOT = 99;
+    public static final int MAX_MISSILE_SHOT = 50;
 
     // Fuel :
     public static final int BASE_FUEL = 5000;

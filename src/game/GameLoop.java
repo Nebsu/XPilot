@@ -147,6 +147,7 @@ public final class GameLoop implements Game, Runnable {
                 switchLevel();
             }
         }
+        // Collision vaisseau - Mur Cassable
         for (BreakableWall bw : map.getListeBreakableWall()){
             Rectangle o = new Rectangle(bw.getX()[0], bw.getY()[0], bw.getX()[1] - bw.getX()[0], 
                                         bw.getY()[2] - bw.getY()[1]);
@@ -156,6 +157,7 @@ public final class GameLoop implements Game, Runnable {
                 }
             }
         }
+        // Collision Vaisseau - Bonus
         for (int i = 0; i < getMap().getBonuses().size(); i++) {
             Bonus bo = getMap().getBonuses().get(i);
             Rectangle r = new Rectangle(bo.getX()[0], bo.getY()[0], bo.getX()[1] - bo.getX()[0], bo.getY()[2] - bo.getY()[1]);
@@ -203,7 +205,7 @@ public final class GameLoop implements Game, Runnable {
                         getShip().getShield().destroy();
                         getShip().getShield().disable();
                     } else {
-                        getShip().setHealth(getShip().getHealth() - 100);
+                        getShip().setHealth(getShip().getHealth() - Constants.DAMAGE);
                     }
                 }
             }

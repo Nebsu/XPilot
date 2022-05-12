@@ -51,14 +51,12 @@ public final class Music {
         GAIN.setValue(gain);
     }
 
-    public final void playMusic() throws LineUnavailableException, IOException {
-        if (Globals.IS_MENU()) {
-            if (!Globals.IS_TOP_MENU()) {
-                this.startPos = 0;
-                clip.setMicrosecondPosition(startPos);
-            } else {
-                clip.setMicrosecondPosition(startPos);
-            }
+    public final void playMusic(boolean start) throws LineUnavailableException, IOException {
+        if (!start) {
+            clip.setMicrosecondPosition(startPos);
+        }else{
+            this.startPos = 0;
+            clip.setMicrosecondPosition(startPos);
         }
         clip.start();
         clip.loop(Clip.LOOP_CONTINUOUSLY);

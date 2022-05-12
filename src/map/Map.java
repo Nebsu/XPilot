@@ -81,13 +81,10 @@ public final class Map {
 				}else if(infor_map[i][j]=='B'){
 					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
     		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
-					BallHolder ball= null;
-					try {
-						ball = new BallHolder(x,y);
-					} catch (IOException e) {
-						throw new RuntimeException(e);
+					this.ball = new BallHolder(x,y);
+					if(this.ball != null){
+						System.out.println("X");
 					}
-					this.ball = ball;
     		        ListeObstacle.add(ball);
 					ball.draw(g2);
 				}else if(infor_map[i][j]=='X'){

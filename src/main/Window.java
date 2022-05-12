@@ -48,7 +48,7 @@ public final class Window extends JFrame {
         this.setVisible(true);
         if (music) {
             try {
-                Constants.MENU_MUSIC.playMusic();
+                Constants.MENU_MUSIC.playMusic(false);
             } catch (LineUnavailableException | IOException e) {
                 e.printStackTrace();
                 System.out.println(e);
@@ -84,7 +84,7 @@ public final class Window extends JFrame {
      * This function is called when the user clicks the start button. 
      * It removes all the other panels from the window and replaces them with the settings game panel.
      */
-    public final void launchGame() throws LineUnavailableException, IOException {
+    public final void launchGame(boolean start) throws LineUnavailableException, IOException {
         Constants.MENU_MUSIC.stopMusic();
         Globals.changeMenuState(false);
         dispose();
@@ -96,7 +96,7 @@ public final class Window extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         repaint();
-        Constants.GAME_MUSIC.playMusic();
+        Constants.GAME_MUSIC.playMusic(start);
     }
 
     // Fullscreen functions :

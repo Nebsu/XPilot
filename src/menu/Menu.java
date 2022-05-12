@@ -69,7 +69,11 @@ public final class Menu extends JPanel {
 		// Buttons action listeners :
 		this.start.addActionListener(e -> {
 			try {
-				Globals.MAINGAME().getWindow().launchGame();
+				if(Globals.IS_TOP_MENU()){
+					Globals.MAINGAME().getWindow().launchGame(false);
+				}else{
+					Globals.MAINGAME().getWindow().launchGame(true);
+				}
 			} catch (IOException | LineUnavailableException e1) {
 				e1.printStackTrace();
 				System.out.println(e1);

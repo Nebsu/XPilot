@@ -3,13 +3,12 @@
 package src.map;
 
 import java.awt.*;
-import java.io.IOException;
 
 public final class BallHolder extends Obstacle {
 
     private boolean taken = false;
     
-    public BallHolder(int[] x, int[] y) throws IOException {
+    public BallHolder(int[] x, int[] y){
         super(x, y);
     }
     
