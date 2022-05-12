@@ -152,5 +152,4 @@ public final class SpaceShip extends Sprite {
         }
         ft0 = System.currentTimeMillis();
     }
-
 }
