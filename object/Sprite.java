@@ -56,4 +56,12 @@ public class Sprite {
         return new Rectangle((int)x, (int)y, width, height);
     }
 
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
 }

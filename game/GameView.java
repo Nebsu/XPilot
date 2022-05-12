@@ -116,8 +116,8 @@ public final class GameView extends JPanel implements ActionListener {
             for(Enemy e : game.getMap().getEnemies()){
                 AffineTransform af3 = new AffineTransform();
                 af3.setToIdentity();
-                int cx = e.getImage().getWidth()/2;
-                int cy = e.getImage().getHeight()/2;
+                int cx = e.getWidth()/2;
+                int cy = e.getHeight()/2;
                 af3.translate(cx+e.getX(), cy+e.getY());
                 af3.rotate(e.getRad(game.getShip().getX(), game.getShip().getY()));
                 af3.translate(-cx,-cy);

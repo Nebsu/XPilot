@@ -2,27 +2,20 @@ package object;
 
 import main.Constants;
 
-import java.io.File;
 import java.io.IOException;
-import java.awt.image.*;
-import javax.imageio.ImageIO;
 
-public final class Enemy {
+public final class Enemy extends Sprite{
     
-    private BufferedImage image;
-    private double x;
-    private double y;
     private long t0, timer = 0;
     private int health = 150;
 
     public Enemy(double x, double y) throws IOException {
-        this.x = x;
-        this.y = y;
-        this.image=ImageIO.read(new File("ressources/images/ship.png"));
+        super(x,y);
+        loadImage("ressources/images/ship.png");
+        getImageDimensions();
     }
 
     // Getters :
-    public final BufferedImage getImage() {return image;}
     public final double getX() {return x;}
     public final double getY() {return y;}
     public int getHealth() {return health;}

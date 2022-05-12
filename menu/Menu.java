@@ -2,13 +2,10 @@ package menu;
 
 import main.Constants;
 import main.Global;
-import main.Launcher;
 
 import javax.imageio.ImageIO;
 import javax.sound.sampled.LineUnavailableException;
 import javax.swing.*;
-
-import game.GameLoop;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
