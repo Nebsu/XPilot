@@ -37,6 +37,7 @@ public final class GameLoop implements Game, Runnable {
     private int fps, ups;
     private boolean running;
     private long nextStatTime;
+    private boolean victory = false;
 
     private int level = 1;
 
@@ -63,6 +64,8 @@ public final class GameLoop implements Game, Runnable {
     @Override public GameKeys getKeys() {return keys;}
     @Override public boolean hasGameStarted() {return gameStarted;}
     @Override public GameLoop getLoop() {return this;}
+    public int getLevel() {return this.level;}
+    public boolean getVictory() {return this.victory;}
 
     /** Game Loop */
     @Override
@@ -110,11 +113,12 @@ public final class GameLoop implements Game, Runnable {
             case 1 : this.map = new Map(Levels.LEVEL1.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
             case 2 : this.map = new Map(Levels.LEVEL2.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
             case 3 : this.map = new Map(Levels.LEVEL3.pathname); this.ship = new SpaceShip(map.getShipX(), map.getShipY());break;
-            case 4 : view.setInGame(false); break;
+            case 4 : view.setInGame(false); this.victory = true; break;
         }
     }
 
     public void resetLevel(){
+        this.victory = false;
         this.level = 0;
     }
 
@@ -143,6 +147,7 @@ public final class GameLoop implements Game, Runnable {
                 return true;
             } else if (s.intersects(o) && obstacle instanceof BallHolder) {
                 map.getBall().take();
+
             } else if (s.intersects(o) && obstacle instanceof Goal && map.getBall().isTaken()) {
                 switchLevel();
             }

@@ -82,9 +82,6 @@ public final class Map {
 					int x[]={i*48,(i+1)*48,(i+1)*48,i*48,i*48};
     		        int y[]={j*48,j*48,(j+1)*48,(j+1)*48,j*48};
 					this.ball = new BallHolder(x,y);
-					if(this.ball != null){
-						System.out.println("X");
-					}
     		        ListeObstacle.add(ball);
 					ball.draw(g2);
 				}else if(infor_map[i][j]=='X'){

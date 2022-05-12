@@ -73,6 +73,8 @@ public final class Menu extends JPanel {
 					Globals.MAINGAME().getWindow().launchGame(false);
 				}else{
 					Globals.MAINGAME().getWindow().launchGame(true);
+					Globals.MAINGAME().getLoop().resetLevel();
+                	Globals.MAINGAME().getLoop().switchLevel();
 				}
 			} catch (IOException | LineUnavailableException e1) {
 				e1.printStackTrace();

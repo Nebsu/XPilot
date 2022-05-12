@@ -63,6 +63,7 @@ public final class GameView extends JPanel implements ActionListener {
                 drawMissileIndicator(g);
                 drawShield(g);
                 drawBWall();
+                drawLevelIndicator(g);
             }
             try {
                 drawMinimap(g);
@@ -70,8 +71,7 @@ public final class GameView extends JPanel implements ActionListener {
                 e.printStackTrace();
             }
         } else {
-            drawGameOver(g);
-
+            drawGameOver(g, game.getLoop().getVictory());
         }
     }
 
@@ -264,6 +264,16 @@ public final class GameView extends JPanel implements ActionListener {
         }
     }
 
+    public final void drawLevelIndicator(Graphics2D g) {
+        String msg = "Level" + " " + game.getLoop().getLevel();
+        g.setColor(Color.WHITE);
+        Font ft = new Font("Helvetica", Font.BOLD, 15);
+        FontMetrics fm = getFontMetrics(ft);
+        g.setFont(ft);
+        g.drawString(msg , Globals.W_WIDTH() / 2 + fm.stringWidth(msg) - 71, Globals.W_HEIGHT() / 15 + 20);
+    }
+
+    // Dessine les murs cassables
     public final void drawBWall(){
         for(BreakableWall bw : game.getMap().getListeBreakableWall()){
             bw.draw(game.getMap().getG2());
@@ -307,8 +317,13 @@ public final class GameView extends JPanel implements ActionListener {
      *
      * @param g The Graphics object that we are drawing to.
      */
-    private final void drawGameOver(Graphics g) {
-        String msg = "Game Over";
+    private final void drawGameOver(Graphics g, boolean victory) {
+        String msg;
+        if(victory){
+            msg = "Congratulation !";
+        }else{
+            msg = "Game Over";
+        }
         Font ft = new Font("Helvetica", Font.BOLD, 14);
         FontMetrics fm = getFontMetrics(ft);
         g.setFont(ft);
