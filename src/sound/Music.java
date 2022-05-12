@@ -51,8 +51,8 @@ public final class Music {
         GAIN.setValue(gain);
     }
 
-    public final void playMusic(boolean start) throws LineUnavailableException, IOException {
-        if (!start) {
+    public final void playMusic(boolean reset) throws LineUnavailableException, IOException {
+        if (!reset) {
             clip.setMicrosecondPosition(startPos);
         }else{
             this.startPos = 0;
@@ -63,7 +63,7 @@ public final class Music {
     }
 
     public final void stopMusic() {
-        if (Globals.IS_MENU()) startPos = clip.getMicrosecondPosition();
+        startPos = clip.getMicrosecondPosition();
         clip.stop();
     }
 

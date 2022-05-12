@@ -84,9 +84,10 @@ public final class Window extends JFrame {
      * This function is called when the user clicks the start button. 
      * It removes all the other panels from the window and replaces them with the settings game panel.
      */
-    public final void launchGame(boolean start) throws LineUnavailableException, IOException {
+    public final void launchGame(boolean reset) throws LineUnavailableException, IOException {
         Constants.MENU_MUSIC.stopMusic();
         Globals.changeMenuState(false);
+        Globals.changeTopMenuState(false);
         dispose();
         getContentPane().removeAll();
         getContentPane().add(BorderLayout.CENTER, Globals.MAINGAME().getView());
@@ -96,7 +97,7 @@ public final class Window extends JFrame {
         setLocationRelativeTo(null);
         setVisible(true);
         repaint();
-        Constants.GAME_MUSIC.playMusic(start);
+        Constants.GAME_MUSIC.playMusic(reset);
     }
 
     // Fullscreen functions :
